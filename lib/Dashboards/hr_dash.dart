@@ -3,13 +3,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:fyp_practise_project/HR-Home/job_post.dart';
+import 'package:fyp_practise_project/HR-Home/Hr-Personal/hr_profile.dart';
+import 'package:fyp_practise_project/HR-Home/Job/job_applications.dart';
+import 'package:fyp_practise_project/HR-Home/Job/job_post.dart';
 import 'package:fyp_practise_project/login.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminDashboard extends StatefulWidget {
-  const AdminDashboard({super.key});
+  int? uid;
+  AdminDashboard({super.key, required this.uid});
 
   @override
   State<AdminDashboard> createState() => _AdminDashboardState();
@@ -42,6 +45,31 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       "MA",
                       style: TextStyle(color: Colors.black),
                     )),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.person),
+                    title: const Text('Profile'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HrPersonalInfo(uid: widget.uid),
+                        ),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.person),
+                    title: const Text('Job Applications'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              JobApplications(uid: widget.uid),
+                        ),
+                      );
+                    },
                   ),
                   ListTile(
                     leading: const Icon(Icons.work),

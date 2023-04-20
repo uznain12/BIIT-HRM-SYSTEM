@@ -15,7 +15,6 @@ class JobGetModel {
     required this.title,
     required this.description,
     required this.salary,
-    required this.uid,
     required this.lastDateOfApply,
     required this.location,
     this.user,
@@ -25,7 +24,7 @@ class JobGetModel {
   String title;
   String description;
   String salary;
-  int uid;
+
   int lastDateOfApply;
   String location;
   dynamic user;
@@ -35,7 +34,6 @@ class JobGetModel {
         title: json["Title"],
         description: json["Description"],
         salary: json["Salary"],
-        uid: json["Uid"],
         lastDateOfApply: json["LastDateOfApply"],
         location: json["Location"],
         user: json["User"],
@@ -46,7 +44,6 @@ class JobGetModel {
         "Title": title,
         "Description": description,
         "Salary": salary,
-        "Uid": uid,
         "LastDateOfApply": lastDateOfApply,
         "Location": location,
         "User": user,

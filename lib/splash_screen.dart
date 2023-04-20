@@ -42,8 +42,12 @@ class _SplashScreenState extends State<SplashScreen> {
         });
       } else if (role == 'hr') {
         Timer(Duration(seconds: 13), () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AdminDashboard()));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AdminDashboard(
+                        uid: widget.uid,
+                      )));
         });
       } else if (role == 'guard') {
         Timer(Duration(seconds: 13), () {

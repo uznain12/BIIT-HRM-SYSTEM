@@ -33,7 +33,7 @@ class ExperienceModel {
       ExperienceModel(
         expId: json["ExpID"],
         uid: json["Uid"],
-        company: json["Company"],
+        company: json["Company"] ?? '',
         title: json["Title"],
         startdate: json["Startdate"],
         enddate: json["Enddate"],

@@ -213,7 +213,9 @@ class _LoginPageState extends State<LoginPage> {
                                       MaterialPageRoute(
                                         builder: ((context) =>
                                             // ignore: prefer_const_constructors
-                                            AdminDashboard()),
+                                            AdminDashboard(
+                                              uid: uid,
+                                            )),
                                       ),
                                     );
                                   } else if (role == "guard") {
@@ -258,7 +260,9 @@ class _LoginPageState extends State<LoginPage> {
                                       MaterialPageRoute(
                                         builder: ((context) =>
                                             // ignore: prefer_const_constructors
-                                            AdminDashboard()),
+                                            AdminDashboard(
+                                              uid: uid,
+                                            )),
                                       ),
                                     );
                                   } else {
