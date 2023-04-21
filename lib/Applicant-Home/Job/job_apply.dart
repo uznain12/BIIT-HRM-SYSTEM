@@ -16,6 +16,7 @@ class ApplyJobApplicant extends StatefulWidget {
 TextEditingController _nameController = TextEditingController();
 
 class _ApplyJobApplicantState extends State<ApplyJobApplicant> {
+  bool alreadyApplied = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +44,16 @@ class _ApplyJobApplicantState extends State<ApplyJobApplicant> {
   }
 
   void ApplyJob({int? Uid}) async {
+    if (alreadyApplied) {
+      // show message to the user that they have already applied
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('You have already applied for this job'),
+        ),
+      );
+      return;
+    }
+
     var url = "http://$ip/HrmPractise02/api/JobApplication/JobApplicationPost";
     var data = {
       "Uid": widget.uid,

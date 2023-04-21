@@ -27,8 +27,8 @@ class EducationGetModel {
   String degree;
   String institute;
   String board;
-  int startdate;
-  int enddate;
+  String startdate;
+  String enddate;
   String hasaddededucation;
 
   factory EducationGetModel.fromJson(Map<String, dynamic> json) =>
@@ -38,8 +38,8 @@ class EducationGetModel {
         degree: json["Degree"],
         institute: json["Institute"],
         board: json["Board"],
-        startdate: json["Startdate"] ?? 0,
-        enddate: json["Enddate"] ?? 0,
+        startdate: json["Startdate"] ?? '',
+        enddate: json["Enddate"] ?? '',
         hasaddededucation: json["hasaddededucation"],
       );
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_practise_project/Applicant-Home/Personal/update_personal.dart';
+import 'package:fyp_practise_project/HR-Home/Job/jobapplications_detail.dart';
 import 'package:fyp_practise_project/Models/job_application_model.dart';
 
 import 'package:fyp_practise_project/uri.dart';
@@ -34,7 +35,7 @@ class _JobApplicationsState extends State<JobApplications> {
                         padding: EdgeInsets.only(
                             top: MediaQuery.of(context).size.height * 0.07),
                         child: Container(
-                          height: 100,
+                          height: 200,
                           decoration:
                               BoxDecoration(color: Colors.grey.shade300),
                           child: Padding(
@@ -195,22 +196,21 @@ class _JobApplicationsState extends State<JobApplications> {
                                 // const SizedBox(height: 4),
                                 // Text("Address: ${userlist[index].address}"),
                                 // const SizedBox(height: 4),
-                                // ElevatedButton(
-                                //     onPressed: () {
-                                //       Navigator.push(
-                                //           context,
-                                //           MaterialPageRoute(
-                                //               builder: (context) =>
-                                //                   PersonalUpdate(
-                                //                     role: userlist[index].role,
-                                //                     pass: userlist[index]
-                                //                         .password,
-                                //                     email:
-                                //                         jobapplicationlist[index].email,
-                                //                     uid: widget.uid,
-                                //                   )));
-                                //     },
-                                //     child: Text("Edit"))
+                                ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  JobApplicationDetail(
+                                                    uid: widget.uid,
+                                                    applicationid:
+                                                        jobapplicationlist[
+                                                                index]
+                                                            .jid,
+                                                  )));
+                                    },
+                                    child: Text("Detail"))
                               ],
                             ),
                           ),

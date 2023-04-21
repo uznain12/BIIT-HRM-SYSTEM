@@ -1,4 +1,4 @@
-String ip = "192.168.1.111";
+String ip = "192.168.1.106";
 // String ip = myWifiIPAdd;
 // String myWifiIPAdd = ipAd;
 String imgpath = 'http://$ip/FYP-WEB-API/Content/Uploads/';

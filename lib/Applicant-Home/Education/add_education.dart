@@ -35,98 +35,155 @@ class _AddEducationState extends State<AddEducation> {
           title: const Text("Add Your Education"),
           centerTitle: true,
         ),
-        body: Column(children: [
-          DropdownButton<String>(
-            hint: const Text(
-              "Degree",
-              style: TextStyle(fontSize: 20),
-            ),
-            isExpanded: true,
-            value: _selectedOption,
-            items: _options.map((String option) {
-              return DropdownMenuItem(
-                value: option,
-                child: Text(option),
-              );
-            }).toList(),
-            onChanged: (newValue) {
-              setState(() {
-                _selectedOption = newValue;
-              });
-            },
-          ),
-          TextFormField(
-            controller: _instituteController,
-            decoration: InputDecoration(
-              labelText: 'Institute',
-              hintText: 'Enter the name of the institute',
-            ),
-          ),
-          TextFormField(
-            controller: _boardController,
-            decoration: InputDecoration(
-              labelText: 'Board',
-              hintText: 'Enter the name of the board',
-            ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  controller: _startDateController,
-                  onTap: () async {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    final DateTime? picked = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime.now());
-                    if (picked != null) {
-                      setState(() {
-                        _startDateController.text =
-                            picked.toString().split(' ')[0];
-                      });
-                    }
+        body: Padding(
+          padding: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height * 0.07,
+              left: MediaQuery.of(context).size.height * 0.01,
+              right: MediaQuery.of(context).size.height * 0.01),
+          child: Container(
+            height: 800,
+            child: Column(children: [
+              InputDecorator(
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.school),
+                  prefixIconConstraints: BoxConstraints(
+                    minWidth: 54,
+                    minHeight: 54,
+                  ),
+                  border: OutlineInputBorder(),
+                ),
+                child: DropdownButton<String>(
+                  hint: const Text(
+                    "Degree",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  isExpanded: true,
+                  value: _selectedOption,
+                  items: _options.map((String option) {
+                    return DropdownMenuItem(
+                      value: option,
+                      child: Text(option),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedOption = newValue;
+                    });
                   },
-                  decoration: const InputDecoration(
-                    labelText: 'Start Date',
-                    prefixIcon: Icon(Icons.calendar_today),
-                    prefixIconConstraints: BoxConstraints(
-                      minWidth: 54,
-                      minHeight: 54,
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                controller: _instituteController,
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.school_sharp),
+                  prefixIconConstraints: BoxConstraints(
+                    minWidth: 54,
+                    minHeight: 54,
+                  ),
+                  labelText: 'Institute',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                controller: _boardController,
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.school),
+                  prefixIconConstraints: BoxConstraints(
+                    minWidth: 54,
+                    minHeight: 54,
+                  ),
+                  labelText: 'Board',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _startDateController,
+                      onTap: () async {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        final DateTime? picked = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime.now());
+                        if (picked != null) {
+                          setState(() {
+                            _startDateController.text =
+                                picked.toString().split(' ')[0];
+                          });
+                        }
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Start Date',
+                        prefixIcon: Icon(Icons.calendar_today),
+                        prefixIconConstraints: BoxConstraints(
+                          minWidth: 54,
+                          minHeight: 54,
+                        ),
+                        border: OutlineInputBorder(),
+                      ),
                     ),
-                    border: OutlineInputBorder(),
                   ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: TextFormField(
-                  controller: _endDateController,
-                  decoration: InputDecoration(
-                    labelText: 'End Date',
-                    hintText: 'Enter the end date',
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _endDateController,
+                      onTap: () async {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        final DateTime? picked = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime.now());
+                        if (picked != null) {
+                          setState(() {
+                            _endDateController.text =
+                                picked.toString().split(' ')[0];
+                          });
+                        }
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'End Date',
+                        prefixIcon: Icon(Icons.calendar_today),
+                        prefixIconConstraints: BoxConstraints(
+                          minWidth: 54,
+                          minHeight: 54,
+                        ),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+              ElevatedButton(
+                  onPressed: () {
+                    AddEducation(Uid: widget.uid);
+                  },
+                  child: Text("Save")),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FetchEducation(
+                                  uid: widget.uid,
+                                )));
+                  },
+                  child: Text("Check Education"))
+            ]),
           ),
-          ElevatedButton(
-              onPressed: () {
-                AddEducation(Uid: widget.uid);
-              },
-              child: Text("Save")),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FetchEducation(
-                              uid: widget.uid,
-                            )));
-              },
-              child: Text("Check Education"))
-        ]));
+        ));
   }
 
   void AddEducation({int? Uid}) async {

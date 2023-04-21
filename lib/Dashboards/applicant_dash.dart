@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 
 import 'package:fyp_practise_project/Applicant-Home/app_profile.dart';
 import 'package:fyp_practise_project/Applicant-Home/Job/job_get.dart';
+import 'package:fyp_practise_project/Models/login_signup_model.dart';
 import 'package:fyp_practise_project/login.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fyp_practise_project/uri.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ApplicantDashboard extends StatefulWidget {
   int? uid;
@@ -16,6 +20,8 @@ class ApplicantDashboard extends StatefulWidget {
   @override
   State<ApplicantDashboard> createState() => _ApplicantDashboardState();
 }
+
+List<LoginModel> userlist = [];
 
 class _ApplicantDashboardState extends State<ApplicantDashboard> {
   int _selectedIndex = 0;
@@ -70,6 +76,7 @@ class _ApplicantDashboardState extends State<ApplicantDashboard> {
           },
         ),
         drawer: Drawer(
+          width: 250,
           backgroundColor: Colors.white,
           child: ListView(
             // ignore: prefer_const_literals_to_create_immutables
@@ -77,11 +84,16 @@ class _ApplicantDashboardState extends State<ApplicantDashboard> {
               UserAccountsDrawerHeader(
                 decoration: BoxDecoration(color: Colors.blue),
                 accountName: Text(
-                  "   Umer Akram",
+                  "${userlist.isNotEmpty ? userlist[0].fname : ''} ${userlist.isNotEmpty ? userlist[0].lname : ''}",
                   style: TextStyle(fontSize: 20),
                 ),
-                accountEmail: Text("umer123@gmail.coms"),
-                currentAccountPicture: CircleAvatar(child: Text("U")),
+                accountEmail: Center(
+                    child: Text(
+                  "Welcome To Dashboard ",
+                  style: TextStyle(fontSize: 20),
+                )),
+                // currentAccountPicture:
+                //     Center(child: CircleAvatar(child: Text(""))),
               ),
               ListTile(
                 leading: const Icon(Icons.person),
@@ -249,5 +261,22 @@ class _ApplicantDashboardState extends State<ApplicantDashboard> {
             )
           ],
         ));
+  }
+
+  Future<List<LoginModel>> fetchcuser(int id) async {
+    //response keyword khud sa bnaya ha
+    final response = await http.get(Uri.parse(
+        'http://$ip/HrmPractise02/api/User/UserGet?id=$id')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
+    var Data = jsonDecode(response.body
+        .toString()); // decode kar ka data variable ma store kar rahay hn
+    if (response.statusCode == 200) {
+      userlist.clear();
+      for (Map<String, dynamic> index in Data) {
+        userlist.add(LoginModel.frommap(index));
+      }
+      return userlist;
+    } else {
+      return userlist;
+    }
   }
 }

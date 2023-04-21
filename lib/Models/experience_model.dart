@@ -17,7 +17,9 @@ class ExperienceModel {
     required this.company,
     required this.title,
     required this.startdate,
+    required this.currentwork,
     required this.enddate,
+    required this.otherskill,
     required this.hasexperienced,
   });
 
@@ -25,8 +27,10 @@ class ExperienceModel {
   int uid;
   String company;
   String title;
-  int startdate;
-  int enddate;
+  String startdate;
+  String currentwork;
+  String enddate;
+  String otherskill;
   String hasexperienced;
 
   factory ExperienceModel.fromJson(Map<String, dynamic> json) =>
@@ -37,6 +41,8 @@ class ExperienceModel {
         title: json["Title"],
         startdate: json["Startdate"],
         enddate: json["Enddate"],
+        currentwork: json["currentwork"] ?? '',
+        otherskill: json["otherskill"] ?? '',
         hasexperienced: json["hasexperienced"] ?? '',
       );
 

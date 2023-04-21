@@ -31,11 +31,14 @@ class _AppPersonalInfoState extends State<AppPersonalInfo> {
                     itemBuilder: ((context, index) {
                       return Padding(
                         padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.07),
+                            top: MediaQuery.of(context).size.height * 0.07,
+                            left: MediaQuery.of(context).size.height * 0.02,
+                            right: MediaQuery.of(context).size.height * 0.02),
                         child: Container(
-                          height: 400,
-                          decoration:
-                              BoxDecoration(color: Colors.grey.shade300),
+                          height: 500,
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade300,
+                              borderRadius: BorderRadius.circular(10)),
                           child: Padding(
                             padding: EdgeInsets.only(
                                 top: MediaQuery.of(context).size.height * 0.03),
@@ -55,138 +58,175 @@ class _AppPersonalInfoState extends State<AppPersonalInfo> {
                                     ),
                                   ),
                                 ),
-                                RichText(
-                                  text: TextSpan(
-                                      style: DefaultTextStyle.of(context).style,
-                                      children: [
-                                        const TextSpan(
-                                          text: "First Name: ",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: MediaQuery.of(context).size.width *
+                                          0.1),
+                                  child: RichText(
+                                    text: TextSpan(
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: [
+                                          const TextSpan(
+                                            text: "Name:         ",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
-                                        TextSpan(
-                                          text: "${userlist[index].fname}",
-                                          style: const TextStyle(
-                                            fontStyle: FontStyle.italic,
+                                          TextSpan(
+                                            text:
+                                                "${userlist[index].fname} ${userlist[index].lname}",
+                                            style: const TextStyle(
+                                              fontStyle: FontStyle.italic,
+                                            ),
                                           ),
-                                        ),
-                                      ]),
+                                        ]),
+                                  ),
                                 ),
                                 // Text("First Name: ${userlist[index].fname}"),
                                 const SizedBox(height: 4),
-                                RichText(
-                                  text: TextSpan(
-                                      style: DefaultTextStyle.of(context).style,
-                                      children: [
-                                        const TextSpan(
-                                          text: "Last Name:   ",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: "${userlist[index].lname}",
-                                          style: const TextStyle(
-                                            fontStyle: FontStyle.italic,
-                                          ),
-                                        ),
-                                      ]),
-                                ),
+                                // RichText(
+                                //   text: TextSpan(
+                                //       style: DefaultTextStyle.of(context).style,
+                                //       children: [
+                                //         const TextSpan(
+                                //           text: "Last Name:   ",
+                                //           style: TextStyle(
+                                //             fontWeight: FontWeight.bold,
+                                //           ),
+                                //         ),
+                                //         TextSpan(
+                                //           text: "${userlist[index].lname}",
+                                //           style: const TextStyle(
+                                //             fontStyle: FontStyle.italic,
+                                //           ),
+                                //         ),
+                                //       ]),
+                                // ),
                                 const SizedBox(height: 4),
-                                RichText(
-                                  text: TextSpan(
-                                      style: DefaultTextStyle.of(context).style,
-                                      children: [
-                                        const TextSpan(
-                                          text: "Number:        ",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: MediaQuery.of(context).size.width *
+                                          0.1),
+                                  child: RichText(
+                                    text: TextSpan(
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: [
+                                          const TextSpan(
+                                            text: "Number:        ",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
-                                        TextSpan(
-                                          text: "${userlist[index].mobile}",
-                                          style: const TextStyle(
-                                            fontStyle: FontStyle.italic,
+                                          TextSpan(
+                                            text: "${userlist[index].mobile}",
+                                            style: const TextStyle(
+                                              fontStyle: FontStyle.italic,
+                                            ),
                                           ),
-                                        ),
-                                      ]),
+                                        ]),
+                                  ),
                                 ),
-                                const SizedBox(height: 4),
-                                RichText(
-                                  text: TextSpan(
-                                      style: DefaultTextStyle.of(context).style,
-                                      children: [
-                                        const TextSpan(
-                                          text: "CNIC:             ",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                const SizedBox(height: 8),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: MediaQuery.of(context).size.width *
+                                          0.1),
+                                  child: RichText(
+                                    text: TextSpan(
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: [
+                                          const TextSpan(
+                                            text: "CNIC:             ",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
-                                        TextSpan(
-                                          text: "${userlist[index].cnic}",
-                                          style: const TextStyle(
-                                            fontStyle: FontStyle.italic,
+                                          TextSpan(
+                                            text: "${userlist[index].cnic}",
+                                            style: const TextStyle(
+                                              fontStyle: FontStyle.italic,
+                                            ),
                                           ),
-                                        ),
-                                      ]),
+                                        ]),
+                                  ),
                                 ),
-                                const SizedBox(height: 4),
-                                RichText(
-                                  text: TextSpan(
-                                      style: DefaultTextStyle.of(context).style,
-                                      children: [
-                                        const TextSpan(
-                                          text: "Date Of Birth: ",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                const SizedBox(height: 8),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: MediaQuery.of(context).size.width *
+                                          0.1),
+                                  child: RichText(
+                                    text: TextSpan(
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: [
+                                          const TextSpan(
+                                            text: "Date Of Birth: ",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
-                                        TextSpan(
-                                          text: "${userlist[index].dob}",
-                                          style: const TextStyle(
-                                            fontStyle: FontStyle.italic,
+                                          TextSpan(
+                                            text: "${userlist[index].dob}",
+                                            style: const TextStyle(
+                                              fontStyle: FontStyle.italic,
+                                            ),
                                           ),
-                                        ),
-                                      ]),
+                                        ]),
+                                  ),
                                 ),
-                                const SizedBox(height: 4),
-                                RichText(
-                                  text: TextSpan(
-                                      style: DefaultTextStyle.of(context).style,
-                                      children: [
-                                        const TextSpan(
-                                          text: "Gender : ",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                const SizedBox(height: 8),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: MediaQuery.of(context).size.width *
+                                          0.1),
+                                  child: RichText(
+                                    text: TextSpan(
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: [
+                                          const TextSpan(
+                                            text: "Gender : ",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
-                                        TextSpan(
-                                          text: "${userlist[index].gender}",
-                                          style: const TextStyle(
-                                            fontStyle: FontStyle.italic,
+                                          TextSpan(
+                                            text: "${userlist[index].gender}",
+                                            style: const TextStyle(
+                                              fontStyle: FontStyle.italic,
+                                            ),
                                           ),
-                                        ),
-                                      ]),
+                                        ]),
+                                  ),
                                 ),
-                                const SizedBox(height: 4),
-                                RichText(
-                                  text: TextSpan(
-                                      style: DefaultTextStyle.of(context).style,
-                                      children: [
-                                        const TextSpan(
-                                          text: "Address : ",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                const SizedBox(height: 8),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: MediaQuery.of(context).size.width *
+                                          0.1),
+                                  child: RichText(
+                                    text: TextSpan(
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: [
+                                          const TextSpan(
+                                            text: "Address : ",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
-                                        TextSpan(
-                                          text: "${userlist[index].address}",
-                                          style: const TextStyle(
-                                            fontStyle: FontStyle.italic,
+                                          TextSpan(
+                                            text: "${userlist[index].address}",
+                                            style: const TextStyle(
+                                              fontStyle: FontStyle.italic,
+                                            ),
                                           ),
-                                        ),
-                                      ]),
+                                        ]),
+                                  ),
                                 ),
 
                                 // Text("Last Name: ${userlist[index].lname}"),
@@ -202,23 +242,29 @@ class _AppPersonalInfoState extends State<AppPersonalInfo> {
                                 // Text("Gender: ${userlist[index].gender}"),
                                 // const SizedBox(height: 4),
                                 // Text("Address: ${userlist[index].address}"),
-                                // const SizedBox(height: 4),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  PersonalUpdate(
-                                                    role: userlist[index].role,
-                                                    pass: userlist[index]
-                                                        .password,
-                                                    email:
-                                                        userlist[index].email,
-                                                    uid: widget.uid,
-                                                  )));
-                                    },
-                                    child: Text("Edit"))
+                                const SizedBox(height: 30),
+                                Center(
+                                  child: SizedBox(
+                                    width: 200,
+                                    child: ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PersonalUpdate(
+                                                        role: userlist[index]
+                                                            .role,
+                                                        pass: userlist[index]
+                                                            .password,
+                                                        email: userlist[index]
+                                                            .email,
+                                                        uid: widget.uid,
+                                                      )));
+                                        },
+                                        child: Text("Edit")),
+                                  ),
+                                )
                               ],
                             ),
                           ),
