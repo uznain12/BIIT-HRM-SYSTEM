@@ -38,10 +38,10 @@ class ExperienceModel {
         expId: json["ExpID"],
         uid: json["Uid"],
         company: json["Company"] ?? '',
-        title: json["Title"],
-        startdate: json["Startdate"],
-        enddate: json["Enddate"],
+        title: json["Title"] ?? '',
+        startdate: json["Startdate"] ?? '',
         currentwork: json["currentwork"] ?? '',
+        enddate: json["Enddate"] ?? '',
         otherskill: json["otherskill"] ?? '',
         hasexperienced: json["hasexperienced"] ?? '',
       );
@@ -52,7 +52,9 @@ class ExperienceModel {
         "Company": company,
         "Title": title,
         "Startdate": startdate,
+        "currentwork": currentwork,
         "Enddate": enddate,
+        "otherskill": otherskill,
         "hasexperienced": hasexperienced,
       };
 }

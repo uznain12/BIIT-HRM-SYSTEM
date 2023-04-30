@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_practise_project/Dashboards/applicant_dash.dart';
 
 import 'package:fyp_practise_project/uri.dart';
 import 'package:http/http.dart' as http;
@@ -29,7 +30,7 @@ class _ApplyJobApplicantState extends State<ApplyJobApplicant> {
           TextFormField(
             controller: _nameController,
             decoration: InputDecoration(
-              labelText: 'Institute',
+              labelText: 'Name',
               hintText: 'Enter the name of the institute',
             ),
           ),
@@ -60,6 +61,7 @@ class _ApplyJobApplicantState extends State<ApplyJobApplicant> {
       "Jid": widget.jid,
 
       "name": _nameController.text,
+      "status": "pending"
       // Change this to the appropriate value
     };
     var boddy = jsonEncode(data);
@@ -69,6 +71,24 @@ class _ApplyJobApplicantState extends State<ApplyJobApplicant> {
           body: boddy, headers: {"Content-Type": "application/json"});
       var dataa = jsonDecode(response.body);
       print(dataa);
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text('Thank you'),
+          content: Text('Your application has been submitted.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      ).then((_) => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ApplicantDashboard(uid: widget.uid))));
     } catch (e) {
       print('Error occurred: $e');
     }

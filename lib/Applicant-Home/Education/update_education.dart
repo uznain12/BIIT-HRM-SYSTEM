@@ -73,8 +73,26 @@ class _EducationUpdateState extends State<EducationUpdate> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   controller: _startController,
+                  onTap: () async {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    final DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime.now());
+                    if (picked != null) {
+                      setState(() {
+                        _startController.text = picked.toString().split(' ')[0];
+                      });
+                    }
+                  },
                   decoration: const InputDecoration(
                     labelText: 'Start Date',
+                    prefixIcon: Icon(Icons.calendar_today),
+                    prefixIconConstraints: BoxConstraints(
+                      minWidth: 54,
+                      minHeight: 54,
+                    ),
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -83,8 +101,26 @@ class _EducationUpdateState extends State<EducationUpdate> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   controller: _endController,
+                  onTap: () async {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    final DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime.now());
+                    if (picked != null) {
+                      setState(() {
+                        _endController.text = picked.toString().split(' ')[0];
+                      });
+                    }
+                  },
                   decoration: const InputDecoration(
-                    labelText: 'End Date',
+                    labelText: 'Start Date',
+                    prefixIcon: Icon(Icons.calendar_today),
+                    prefixIconConstraints: BoxConstraints(
+                      minWidth: 54,
+                      minHeight: 54,
+                    ),
                     border: OutlineInputBorder(),
                   ),
                 ),

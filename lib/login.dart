@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import 'package:fyp_practise_project/Dashboards/applicant_dash.dart';
 import 'package:fyp_practise_project/Dashboards/employee_dash.dart';
@@ -28,7 +29,8 @@ class _LoginPageState extends State<LoginPage> {
 
   TextEditingController _passcontroller = TextEditingController();
   bool vis = true;
-  bool circular = false;
+
+  bool _showSpinner = false;
 
   @override
   Widget build(BuildContext context) {
@@ -153,128 +155,150 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           SizedBox(height: 10),
-                          ElevatedButton(
-                            onPressed: () async {
-                              LoginModel u = LoginModel();
-                              u.email = _emailcontroller.text;
-                              u.password = _passcontroller.text;
+                          ModalProgressHUD(
+                            inAsyncCall: _showSpinner,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                LoginModel u = LoginModel();
+                                u.email = _emailcontroller.text;
+                                u.password = _passcontroller.text;
 
-                              String? response = await u.login();
-                              if (response == null) {
-                                print("No value");
-                              } else if (response == "\"false \"") {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: const Text(
-                                          "Invalid email or password"),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          child: const Text("OK"),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
+                                String? response = await u.login();
+                                if (response == null) {
+                                  print("No value");
+                                } else if (response == "\"false \"") {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text(
+                                            "Invalid email or password"),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            child: const Text("OK"),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  try {
+                                    dynamic map = jsonDecode(response);
+                                    String role = map["role"].toLowerCase();
+                                    int? uid = map["Uid"];
+
+                                    if (role == "applicant") {
+                                      SharedPreferences sp =
+                                          await SharedPreferences.getInstance();
+                                      sp.setString('email',
+                                          _emailcontroller.text.toString());
+                                      sp.setString('role', "applicant");
+                                      sp.setBool('islogin', true);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: ((context) =>
+                                              // ignore: prefer_const_constructors
+                                              ApplicantDashboard(uid: uid)),
                                         ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              } else {
-                                try {
-                                  dynamic map = jsonDecode(response);
-                                  String role = map["role"].toLowerCase();
-                                  int? uid = map["Uid"];
-
-                                  if (role == "applicant") {
-                                    SharedPreferences sp =
-                                        await SharedPreferences.getInstance();
-                                    sp.setString('email',
-                                        _emailcontroller.text.toString());
-                                    sp.setString('role', "applicant");
-                                    sp.setBool('islogin', true);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: ((context) =>
-                                            // ignore: prefer_const_constructors
-                                            ApplicantDashboard(uid: uid)),
-                                      ),
-                                    );
-                                  } else if (role == "hr") {
-                                    SharedPreferences sp =
-                                        await SharedPreferences.getInstance();
-                                    sp.setString('email',
-                                        _emailcontroller.text.toString());
-                                    sp.setString('role', "hr");
-                                    sp.setBool('islogin', true);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: ((context) =>
-                                            // ignore: prefer_const_constructors
-                                            AdminDashboard(
-                                              uid: uid,
-                                            )),
-                                      ),
-                                    );
-                                  } else if (role == "guard") {
-                                    SharedPreferences sp =
-                                        await SharedPreferences.getInstance();
-                                    sp.setString('email',
-                                        _emailcontroller.text.toString());
-                                    sp.setString('role', "guard");
-                                    sp.setBool('islogin', true);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: ((context) =>
-                                            // ignore: prefer_const_constructors
-                                            GuardDashboard()),
-                                      ),
-                                    );
-                                  } else if (role == "employee") {
-                                    SharedPreferences sp =
-                                        await SharedPreferences.getInstance();
-                                    sp.setString('email',
-                                        _emailcontroller.text.toString());
-                                    sp.setString('role', "employee");
-                                    sp.setBool('islogin', true);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: ((context) =>
-                                            // ignore: prefer_const_constructors
-                                            HiredEmployeeDashboard()),
-                                      ),
-                                    );
-                                  } else if (role == "hod") {
-                                    SharedPreferences sp =
-                                        await SharedPreferences.getInstance();
-                                    sp.setString('email',
-                                        _emailcontroller.text.toString());
-                                    sp.setString('role', "hod");
-                                    sp.setBool('islogin', true);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: ((context) =>
-                                            // ignore: prefer_const_constructors
-                                            AdminDashboard(
-                                              uid: uid,
-                                            )),
-                                      ),
-                                    );
-                                  } else {
+                                      );
+                                    } else if (role == "hr") {
+                                      SharedPreferences sp =
+                                          await SharedPreferences.getInstance();
+                                      sp.setString('email',
+                                          _emailcontroller.text.toString());
+                                      sp.setString('role', "hr");
+                                      sp.setBool('islogin', true);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: ((context) =>
+                                              // ignore: prefer_const_constructors
+                                              AdminDashboard(
+                                                uid: uid,
+                                              )),
+                                        ),
+                                      );
+                                    } else if (role == "guard") {
+                                      SharedPreferences sp =
+                                          await SharedPreferences.getInstance();
+                                      sp.setString('email',
+                                          _emailcontroller.text.toString());
+                                      sp.setString('role', "guard");
+                                      sp.setBool('islogin', true);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: ((context) =>
+                                              // ignore: prefer_const_constructors
+                                              GuardDashboard()),
+                                        ),
+                                      );
+                                    } else if (role == "employee") {
+                                      SharedPreferences sp =
+                                          await SharedPreferences.getInstance();
+                                      sp.setString('email',
+                                          _emailcontroller.text.toString());
+                                      sp.setString('role', "employee");
+                                      sp.setBool('islogin', true);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: ((context) =>
+                                              // ignore: prefer_const_constructors
+                                              HiredEmployeeDashboard()),
+                                        ),
+                                      );
+                                    } else if (role == "hod") {
+                                      SharedPreferences sp =
+                                          await SharedPreferences.getInstance();
+                                      sp.setString('email',
+                                          _emailcontroller.text.toString());
+                                      sp.setString('role', "hod");
+                                      sp.setBool('islogin', true);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: ((context) =>
+                                              // ignore: prefer_const_constructors
+                                              AdminDashboard(
+                                                uid: uid,
+                                              )),
+                                        ),
+                                      );
+                                    } else {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text(
+                                                "Invalid credentials"),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                child: const Text("OK"),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
+                                  } catch (e) {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
-                                          title:
-                                              const Text("Invalid credentials"),
+                                          title: const Text("Error"),
+                                          content: const Text(
+                                              "No User Found Please Sign Up First"),
                                           actions: <Widget>[
                                             TextButton(
-                                              child: const Text("OK"),
+                                              child: Text("OK"),
                                               onPressed: () {
                                                 Navigator.of(context).pop();
                                               },
@@ -284,48 +308,29 @@ class _LoginPageState extends State<LoginPage> {
                                       },
                                     );
                                   }
-                                } catch (e) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text("Error"),
-                                        content: const Text(
-                                            "No User Found Please Sign Up First"),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: Text("OK"),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
                                 }
-                              }
-                            },
-                            child: Container(
-                              width: 410,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Colors.blue.shade300,
-                                    Colors.purple.shade300,
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
+                              },
+                              child: Container(
+                                width: 410,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.blue.shade300,
+                                      Colors.purple.shade300,
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  "Login",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                                child: const Center(
+                                  child: Text(
+                                    "Login",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               ),
                             ),

@@ -7,15 +7,15 @@ import 'package:fyp_practise_project/uri.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class JobApplications extends StatefulWidget {
+class ApplicantApplications extends StatefulWidget {
   int? uid;
-  JobApplications({super.key, required this.uid});
+  ApplicantApplications({super.key, required this.uid});
 
   @override
-  State<JobApplications> createState() => _JobApplicationsState();
+  State<ApplicantApplications> createState() => _ApplicantApplicationsState();
 }
 
-class _JobApplicationsState extends State<JobApplications> {
+class _ApplicantApplicationsState extends State<ApplicantApplications> {
   List<JobApplicationModel> jobapplicationlist = [];
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class _JobApplicationsState extends State<JobApplications> {
           centerTitle: true,
         ),
         body: FutureBuilder(
-            future: fetchcuser(),
+            future: fetchcuser(widget.uid!),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
@@ -33,13 +33,16 @@ class _JobApplicationsState extends State<JobApplications> {
                     itemBuilder: ((context, index) {
                       return Padding(
                         padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.03),
+                            top: MediaQuery.of(context).size.height * 0.02,
+                            left: MediaQuery.of(context).size.width * 0.03,
+                            right: MediaQuery.of(context).size.width * 0.03),
                         child: Container(
-                          height: 150,
+                          height: 100,
                           decoration: BoxDecoration(
-                              color: Colors.grey.shade300,
-                              border:
-                                  Border.all(width: 4, color: Colors.black)),
+                            color: Colors.grey.shade300,
+                            border: Border.all(width: 4, color: Colors.black),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                           child: Padding(
                             padding: EdgeInsets.only(
                                 top: MediaQuery.of(context).size.height * 0.03),
@@ -77,8 +80,7 @@ class _JobApplicationsState extends State<JobApplications> {
                                             DefaultTextStyle.of(context).style,
                                         children: [
                                           const TextSpan(
-                                            text:
-                                                "Job Title :                 ",
+                                            text: "Job Name :     ",
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -104,18 +106,17 @@ class _JobApplicationsState extends State<JobApplications> {
                                             DefaultTextStyle.of(context).style,
                                         children: [
                                           const TextSpan(
-                                            text: "Applicant Name :    ",
+                                            text: "Status :            ",
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                           TextSpan(
                                             text:
-                                                "${jobapplicationlist[index].user!.fname} "
-                                                " ${jobapplicationlist[index].user!.lname}",
+                                                "${jobapplicationlist[index].status} ",
                                             style: const TextStyle(
-                                              fontStyle: FontStyle.italic,
-                                            ),
+                                                fontStyle: FontStyle.italic,
+                                                color: Colors.green),
                                           ),
                                         ]),
                                   ),
@@ -211,26 +212,26 @@ class _JobApplicationsState extends State<JobApplications> {
                                 // const SizedBox(height: 4),
                                 // Text("Address: ${userlist[index].address}"),
                                 // const SizedBox(height: 4),
-                                Center(
-                                  child: SizedBox(
-                                    width: 200,
-                                    child: ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      JobApplicationDetail(
-                                                        uid: widget.uid,
-                                                        applicationid:
-                                                            jobapplicationlist[
-                                                                    index]
-                                                                .jid,
-                                                      )));
-                                        },
-                                        child: Text("Detail")),
-                                  ),
-                                )
+                                // Center(
+                                //   child: SizedBox(
+                                //     width: 200,
+                                //     child: ElevatedButton(
+                                //         onPressed: () {
+                                //           Navigator.push(
+                                //               context,
+                                //               MaterialPageRoute(
+                                //                   builder: (context) =>
+                                //                       JobApplicationDetail(
+                                //                         uid: widget.uid,
+                                //                         applicationid:
+                                //                             jobapplicationlist[
+                                //                                     index]
+                                //                                 .jid,
+                                //                       )));
+                                //         },
+                                //         child: Text("Detail")),
+                                //   ),
+                                // )
                               ],
                             ),
                           ),
@@ -243,10 +244,10 @@ class _JobApplicationsState extends State<JobApplications> {
             }));
   }
 
-  Future<List<JobApplicationModel>> fetchcuser() async {
+  Future<List<JobApplicationModel>> fetchcuser(int id) async {
     //response keyword khud sa bnaya ha
     final response = await http.get(Uri.parse(
-        'http://$ip/HrmPractise02/api/JobApplication/AllJobApplicationGet')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
+        'http://$ip/HrmPractise02/api/JobApplication/JobApplicationGet?appid=$id')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
     var Data = jsonDecode(response.body
         .toString()); // decode kar ka data variable ma store kar rahay hn
     if (response.statusCode == 200) {

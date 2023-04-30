@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_practise_project/Applicant-Home/Experience/update_experience.dart';
 import 'package:fyp_practise_project/Models/experience_model.dart';
 
 import 'package:fyp_practise_project/uri.dart';
@@ -146,7 +147,19 @@ class _FetchExperienceState extends State<FetchExperience> {
                               Column(
                                 children: [
                                   IconButton(
-                                      onPressed: () {}, icon: Icon(Icons.edit)),
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ExperienceUpdate(
+                                                      expId:
+                                                          experiencelist[index]
+                                                              .expId,
+                                                      uid: widget.uid,
+                                                    )));
+                                      },
+                                      icon: Icon(Icons.edit)),
                                   IconButton(
                                     onPressed: () {
                                       showDialog(
@@ -193,7 +206,7 @@ class _FetchExperienceState extends State<FetchExperience> {
   Future<List<ExperienceModel>> fetchexperience(int id) async {
     //response keyword khud sa bnaya ha
     final response = await http.get(Uri.parse(
-        'http://$ip/HrmPractise02/api/Expereince/ExperienceGet?id=$id')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
+        'http://$ip/HrmPractise02/api/Expereince/ExperienceGet?expId=$id')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
     var Data = jsonDecode(response.body
         .toString()); // decode kar ka data variable ma store kar rahay hn
     if (response.statusCode == 200) {

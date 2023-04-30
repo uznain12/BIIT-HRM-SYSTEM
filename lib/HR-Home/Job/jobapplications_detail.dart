@@ -46,7 +46,9 @@ class _JobApplicationDetailState extends State<JobApplicationDetail> {
         centerTitle: true,
       ),
       body: Container(
-        decoration: BoxDecoration(color: Colors.white),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(width: 2, color: Colors.black)),
         child: SingleChildScrollView(
             child: SizedBox(
           height: MediaQuery.of(context).size.height,

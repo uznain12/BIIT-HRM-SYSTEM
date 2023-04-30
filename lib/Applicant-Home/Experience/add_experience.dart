@@ -22,11 +22,13 @@ class AddExperience extends StatefulWidget {
 //   'Bachelor',
 //   'Master',
 // ]; // op
-
+bool isworking = false;
 TextEditingController _companyController = TextEditingController();
 TextEditingController _titleController = TextEditingController();
 TextEditingController _startDateController = TextEditingController();
 TextEditingController _endDateController = TextEditingController();
+TextEditingController _OtherskillController = TextEditingController();
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _AddExperienceState extends State<AddExperience> {
   @override
@@ -36,95 +38,236 @@ class _AddExperienceState extends State<AddExperience> {
           title: const Text("Add Your Education"),
           centerTitle: true,
         ),
-        body: Padding(
-          padding:
-              EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.03),
-          child: Column(children: [
-            // DropdownButton<String>(
-            //   hint: const Text(
-            //     "Degree",
-            //     style: TextStyle(fontSize: 20),
-            //   ),
-            //   isExpanded: true,
-            //   value: _selectedOption,
-            //   items: _options.map((String option) {
-            //     return DropdownMenuItem(
-            //       value: option,
-            //       child: Text(option),
-            //     );
-            //   }).toList(),
-            //   onChanged: (newValue) {
-            //     setState(() {
-            //       _selectedOption = newValue;
-            //     });
-            //   },
-            // ),
-            TextFormField(
-              controller: _companyController,
-              decoration: InputDecoration(
-                labelText: 'Company',
-                hintText: 'Enter the name of the institute',
+        body: SingleChildScrollView(
+          child: Padding(
+            padding:
+                EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.03),
+            child: Padding(
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.05,
+                  left: MediaQuery.of(context).size.height * 0.01,
+                  right: MediaQuery.of(context).size.height * 0.01),
+              child: Container(
+                child: Form(
+                  key: _formKey,
+                  child: Column(children: [
+                    // DropdownButton<String>(
+                    //   hint: const Text(
+                    //     "Degree",
+                    //     style: TextStyle(fontSize: 20),
+                    //   ),
+                    //   isExpanded: true,
+                    //   value: _selectedOption,
+                    //   items: _options.map((String option) {
+                    //     return DropdownMenuItem(
+                    //       value: option,
+                    //       child: Text(option),
+                    //     );
+                    //   }).toList(),
+                    //   onChanged: (newValue) {
+                    //     setState(() {
+                    //       _selectedOption = newValue;
+                    //     });
+                    //   },
+                    // ),
+
+                    TextFormField(
+                      controller: _companyController,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.business),
+                        prefixIconConstraints: BoxConstraints(
+                          minWidth: 54,
+                          minHeight: 54,
+                        ),
+                        labelText: 'Company',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Name Of Company';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+
+                    TextFormField(
+                      controller: _titleController,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.work),
+                        prefixIconConstraints: BoxConstraints(
+                          minWidth: 54,
+                          minHeight: 54,
+                        ),
+                        labelText: 'Job Title',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter name of your job';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _startDateController,
+                      onTap: () async {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        final DateTime? picked = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime.now());
+                        if (picked != null) {
+                          setState(() {
+                            _startDateController.text =
+                                picked.toString().split(' ')[0];
+                          });
+                        }
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Start Date',
+                        prefixIcon: Icon(Icons.calendar_today),
+                        prefixIconConstraints: BoxConstraints(
+                          minWidth: 54,
+                          minHeight: 54,
+                        ),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please Select Start Date';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 30,
+                        ),
+                        Checkbox(
+                          value: isworking,
+                          onChanged: (value) {
+                            setState(() {
+                              isworking = value!;
+                            });
+                          },
+                        ),
+                        const Text(
+                          'Working Now',
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 20),
+                    Visibility(
+                      visible: !isworking,
+                      child: TextFormField(
+                        controller: _endDateController,
+                        onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          final DateTime? picked = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1900),
+                              lastDate: DateTime.now());
+                          if (picked != null) {
+                            setState(() {
+                              _endDateController.text =
+                                  picked.toString().split(' ')[0];
+                            });
+                          }
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'End Date',
+                          prefixIcon: Icon(Icons.calendar_today),
+                          prefixIconConstraints: BoxConstraints(
+                            minWidth: 54,
+                            minHeight: 54,
+                          ),
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please Select End Date';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _OtherskillController,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.construction),
+                        prefixIconConstraints: BoxConstraints(
+                          minWidth: 54,
+                          minHeight: 54,
+                        ),
+                        labelText: 'Any Other Skill',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter other skill if you have';
+                        }
+                        return null;
+                      },
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate() && isworking) {
+                            AddExperience(Uid: widget.uid);
+                          }
+                        },
+                        child: Text("Save")),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FetchExperience(
+                                        uid: widget.uid,
+                                      )));
+                        },
+                        child: Text("Check Experience"))
+                  ]),
+                ),
               ),
             ),
-            TextFormField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                labelText: 'Job Title',
-                hintText: 'Enter the name of the board',
-              ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _startDateController,
-                    decoration: InputDecoration(
-                      labelText: 'Start date',
-                      hintText: 'Enter the start date',
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: TextFormField(
-                    controller: _endDateController,
-                    decoration: InputDecoration(
-                      labelText: 'End Date',
-                      hintText: 'Enter the end date',
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  AddEducation(Uid: widget.uid);
-                },
-                child: Text("Save")),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => FetchExperience(
-                                uid: widget.uid,
-                              )));
-                },
-                child: Text("Check Experience"))
-          ]),
+          ),
         ));
   }
 
-  void AddEducation({int? Uid}) async {
+  void AddExperience({int? Uid}) async {
     var url = "http://$ip/HrmPractise02/api/Expereince/ExperiencePost";
     var data = {
       "Uid": widget.uid,
-      "Institute": _companyController.text,
-      "Board": _titleController.text,
+      "Company": _companyController.text,
+      "Title": _titleController.text,
       "Startdate": _startDateController.text,
+      "currentwork": "currently working",
       "Enddate": _endDateController.text,
+      "otherskill": _OtherskillController.text,
       // "Degree": _selectedOption,
-      "hasaddededucation": "true", // Change this to the appropriate value
+      "hasexperienced": "true", // Change this to the appropriate value
     };
     var boddy = jsonEncode(data);
     var urlParse = Uri.parse(url);

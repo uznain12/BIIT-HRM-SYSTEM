@@ -47,8 +47,10 @@ class User {
   dynamic image;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        educations: List<Education>.from(
-            json["Educations"].map((x) => Education.fromJson(x))),
+        educations: json["Educations"] != null
+            ? List<Education>.from(
+                json["Educations"].map((x) => Education.fromJson(x)))
+            : [],
         experiences: List<Experience>.from(
             json["Experiences"].map((x) => Experience.fromJson(x))),
         jobApplications: List<JobApplicationModel>.from(json["JobApplications"]
@@ -95,6 +97,8 @@ class JobApplicationModel {
     required this.jid,
     required this.uid,
     required this.name,
+    required this.status,
+    required this.DocumentPath,
   });
 
   Job job;
@@ -103,16 +107,19 @@ class JobApplicationModel {
   int jid;
   int uid;
   String name;
+  String status;
+  String DocumentPath;
 
   factory JobApplicationModel.fromJson(Map<String, dynamic> json) =>
       JobApplicationModel(
-        job: Job.fromJson(json["Job"]),
-        user: json["User"] == null ? null : User.fromJson(json["User"]),
-        jobApplicationId: json["JobApplicationID"],
-        jid: json["Jid"],
-        uid: json["Uid"],
-        name: json["name"],
-      );
+          job: Job.fromJson(json["Job"]),
+          user: json["User"] == null ? null : User.fromJson(json["User"]),
+          jobApplicationId: json["JobApplicationID"],
+          jid: json["Jid"],
+          uid: json["Uid"],
+          name: json["name"],
+          status: json["status"],
+          DocumentPath: json["DocumentPath"] ?? '');
 
   Map<String, dynamic> toJson() => {
         "Job": job.toJson(),
@@ -121,8 +128,54 @@ class JobApplicationModel {
         "Jid": jid,
         "Uid": uid,
         "name": name,
+        "status": status,
       };
 }
+
+// class Education {
+//   Education({
+//     required this.eduId,
+//     required this.uid,
+//     required this.degree,
+//     required this.institute,
+//     required this.board,
+//     this.startdate,
+//     this.enddate,
+//     required this.hasaddededucation,
+//   });
+
+//   int eduId;
+//   int uid;
+//   Degree degree;
+//   String institute;
+//   Board board;
+//   int? startdate;
+//   int? enddate;
+//   Hasaddededucation hasaddededucation;
+
+//   factory Education.fromJson(Map<String, dynamic> json) => Education(
+//         eduId: json["EduID"],
+//         uid: json["Uid"],
+//         degree: degreeValues.map[json["Degree"]]!,
+//         institute: json["Institute"],
+//         board: boardValues.map[json["Board"]]!,
+//         startdate: json["Startdate"],
+//         enddate: json["Enddate"],
+//         hasaddededucation:
+//             hasaddededucationValues.map[json["hasaddededucation"]]!,
+//       );
+
+//   Map<String, dynamic> toJson() => {
+//         "EduID": eduId,
+//         "Uid": uid,
+//         "Degree": degreeValues.reverse[degree],
+//         "Institute": institute,
+//         "Board": boardValues.reverse[board],
+//         "Startdate": startdate,
+//         "Enddate": enddate,
+//         "hasaddededucation": hasaddededucationValues.reverse[hasaddededucation],
+//       };
+// }
 
 class Education {
   Education({
@@ -131,89 +184,79 @@ class Education {
     required this.degree,
     required this.institute,
     required this.board,
-    this.startdate,
-    this.enddate,
+    required this.startdate,
+    required this.enddate,
     required this.hasaddededucation,
   });
 
   int eduId;
   int uid;
-  Degree degree;
+  String degree;
   String institute;
-  Board board;
-  int? startdate;
-  int? enddate;
-  Hasaddededucation hasaddededucation;
+  String board;
+  String startdate;
+  String enddate;
+  String hasaddededucation;
 
   factory Education.fromJson(Map<String, dynamic> json) => Education(
         eduId: json["EduID"],
-        uid: json["Uid"],
-        degree: degreeValues.map[json["Degree"]]!,
+        uid: json["Uid"] ?? 0,
+        degree: json["Degree"],
         institute: json["Institute"],
-        board: boardValues.map[json["Board"]]!,
-        startdate: json["Startdate"],
-        enddate: json["Enddate"],
-        hasaddededucation:
-            hasaddededucationValues.map[json["hasaddededucation"]]!,
+        board: json["Board"],
+        startdate: json["Startdate"] ?? '',
+        enddate: json["Enddate"] ?? '',
+        hasaddededucation: json["hasaddededucation"],
       );
 
   Map<String, dynamic> toJson() => {
         "EduID": eduId,
         "Uid": uid,
-        "Degree": degreeValues.reverse[degree],
+        "Degree": degree,
         "Institute": institute,
-        "Board": boardValues.reverse[board],
+        "Board": board,
         "Startdate": startdate,
         "Enddate": enddate,
-        "hasaddededucation": hasaddededucationValues.reverse[hasaddededucation],
+        "hasaddededucation": hasaddededucation,
       };
 }
-
-enum Board { MBD, SSA, EMPTY }
-
-final boardValues =
-    EnumValues({"": Board.EMPTY, "MBD": Board.MBD, "ssa": Board.SSA});
-
-enum Degree { KALYAR, UZNAIN, MASTER }
-
-final degreeValues = EnumValues({
-  "Kalyar": Degree.KALYAR,
-  "Master": Degree.MASTER,
-  "Uznain": Degree.UZNAIN
-});
-
-enum Hasaddededucation { TRUE }
-
-final hasaddededucationValues =
-    EnumValues({"true      ": Hasaddededucation.TRUE});
+// To parse this JSON data, do
+//
+//     final experienceModel = experienceModelFromJson(jsonString);
 
 class Experience {
   Experience({
     required this.expId,
     required this.uid,
-    this.company,
-    this.title,
+    required this.company,
+    required this.title,
     required this.startdate,
+    required this.currentwork,
     required this.enddate,
-    this.hasexperienced,
+    required this.otherskill,
+    required this.hasexperienced,
   });
 
   int expId;
   int uid;
-  dynamic company;
-  dynamic title;
-  int startdate;
-  int enddate;
-  dynamic hasexperienced;
+  String company;
+  String title;
+  String startdate;
+  String currentwork;
+  String enddate;
+  String otherskill;
+  String hasexperienced;
 
   factory Experience.fromJson(Map<String, dynamic> json) => Experience(
         expId: json["ExpID"],
         uid: json["Uid"],
-        company: json["Company"],
-        title: json["Title"],
-        startdate: json["Startdate"],
-        enddate: json["Enddate"],
-        hasexperienced: json["hasexperienced"],
+        company: json["Company"] ?? '',
+        title: json["Title"] ?? '',
+        startdate: json["Startdate"] ?? '',
+        currentwork: json["currentwork"] ?? '',
+        enddate: json["Enddate"] ?? '',
+        otherskill: json["otherskill"] ?? '',
+        hasexperienced: json["hasexperienced"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -222,14 +265,15 @@ class Experience {
         "Company": company,
         "Title": title,
         "Startdate": startdate,
+        "currentwork": currentwork,
         "Enddate": enddate,
+        "otherskill": otherskill,
         "hasexperienced": hasexperienced,
       };
 }
 
 class Job {
   Job({
-    required this.jobApplies,
     required this.jobApplications,
     required this.jid,
     required this.title,
@@ -239,7 +283,6 @@ class Job {
     required this.location,
   });
 
-  List<JobApply> jobApplies;
   List<dynamic> jobApplications;
   int jid;
   String title;
@@ -249,8 +292,6 @@ class Job {
   String location;
 
   factory Job.fromJson(Map<String, dynamic> json) => Job(
-        jobApplies: List<JobApply>.from(
-            json["JobApplies"].map((x) => JobApply.fromJson(x))),
         jobApplications:
             List<dynamic>.from(json["JobApplications"].map((x) => x)),
         jid: json["Jid"],
@@ -262,7 +303,6 @@ class Job {
       );
 
   Map<String, dynamic> toJson() => {
-        "JobApplies": List<dynamic>.from(jobApplies.map((x) => x.toJson())),
         "JobApplications": List<dynamic>.from(jobApplications.map((x) => x)),
         "Jid": jid,
         "Title": title,

@@ -26,6 +26,7 @@ TextEditingController _instituteController = TextEditingController();
 TextEditingController _boardController = TextEditingController();
 TextEditingController _startDateController = TextEditingController();
 TextEditingController _endDateController = TextEditingController();
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _AddEducationState extends State<AddEducation> {
   @override
@@ -35,153 +36,190 @@ class _AddEducationState extends State<AddEducation> {
           title: const Text("Add Your Education"),
           centerTitle: true,
         ),
-        body: Padding(
-          padding: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height * 0.07,
-              left: MediaQuery.of(context).size.height * 0.01,
-              right: MediaQuery.of(context).size.height * 0.01),
-          child: Container(
-            height: 800,
-            child: Column(children: [
-              InputDecorator(
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.school),
-                  prefixIconConstraints: BoxConstraints(
-                    minWidth: 54,
-                    minHeight: 54,
-                  ),
-                  border: OutlineInputBorder(),
-                ),
-                child: DropdownButton<String>(
-                  hint: const Text(
-                    "Degree",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  isExpanded: true,
-                  value: _selectedOption,
-                  items: _options.map((String option) {
-                    return DropdownMenuItem(
-                      value: option,
-                      child: Text(option),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedOption = newValue;
-                    });
-                  },
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                controller: _instituteController,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.school_sharp),
-                  prefixIconConstraints: BoxConstraints(
-                    minWidth: 54,
-                    minHeight: 54,
-                  ),
-                  labelText: 'Institute',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                controller: _boardController,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.school),
-                  prefixIconConstraints: BoxConstraints(
-                    minWidth: 54,
-                    minHeight: 54,
-                  ),
-                  labelText: 'Board',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: _startDateController,
-                      onTap: () async {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        final DateTime? picked = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime.now());
-                        if (picked != null) {
-                          setState(() {
-                            _startDateController.text =
-                                picked.toString().split(' ')[0];
-                          });
-                        }
-                      },
-                      decoration: const InputDecoration(
-                        labelText: 'Start Date',
-                        prefixIcon: Icon(Icons.calendar_today),
-                        prefixIconConstraints: BoxConstraints(
-                          minWidth: 54,
-                          minHeight: 54,
-                        ),
-                        border: OutlineInputBorder(),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.07,
+                left: MediaQuery.of(context).size.height * 0.01,
+                right: MediaQuery.of(context).size.height * 0.01),
+            child: Container(
+              height: 800,
+              child: Form(
+                key: _formKey,
+                child: Column(children: [
+                  InputDecorator(
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.school),
+                      prefixIconConstraints: BoxConstraints(
+                        minWidth: 54,
+                        minHeight: 54,
                       ),
+                      border: OutlineInputBorder(),
+                    ),
+                    child: DropdownButtonFormField<String>(
+                      hint: const Text(
+                        "Degree",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      isExpanded: true,
+                      value: _selectedOption,
+                      items: _options.map((String option) {
+                        return DropdownMenuItem(
+                          value: option,
+                          child: Text(option),
+                        );
+                      }).toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedOption = newValue;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select a degree';
+                        }
+                        return null;
+                      },
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextFormField(
-                      controller: _endDateController,
-                      onTap: () async {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        final DateTime? picked = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime.now());
-                        if (picked != null) {
-                          setState(() {
-                            _endDateController.text =
-                                picked.toString().split(' ')[0];
-                          });
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: _instituteController,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.school_sharp),
+                      prefixIconConstraints: BoxConstraints(
+                        minWidth: 54,
+                        minHeight: 54,
+                      ),
+                      labelText: 'Institute',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your Institute';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: _boardController,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.school),
+                      prefixIconConstraints: BoxConstraints(
+                        minWidth: 54,
+                        minHeight: 54,
+                      ),
+                      labelText: 'Board',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your Board';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _startDateController,
+                          onTap: () async {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            final DateTime? picked = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime.now());
+                            if (picked != null) {
+                              setState(() {
+                                _startDateController.text =
+                                    picked.toString().split(' ')[0];
+                              });
+                            }
+                          },
+                          decoration: const InputDecoration(
+                            labelText: 'Start Date',
+                            prefixIcon: Icon(Icons.calendar_today),
+                            prefixIconConstraints: BoxConstraints(
+                              minWidth: 54,
+                              minHeight: 54,
+                            ),
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please Select Start Date';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: TextFormField(
+                          controller: _endDateController,
+                          onTap: () async {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            final DateTime? picked = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime.now());
+                            if (picked != null) {
+                              setState(() {
+                                _endDateController.text =
+                                    picked.toString().split(' ')[0];
+                              });
+                            }
+                          },
+                          decoration: const InputDecoration(
+                            labelText: 'End Date',
+                            prefixIcon: Icon(Icons.calendar_today),
+                            prefixIconConstraints: BoxConstraints(
+                              minWidth: 54,
+                              minHeight: 54,
+                            ),
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please Select End Date';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          AddEducation(Uid: widget.uid);
                         }
                       },
-                      decoration: const InputDecoration(
-                        labelText: 'End Date',
-                        prefixIcon: Icon(Icons.calendar_today),
-                        prefixIconConstraints: BoxConstraints(
-                          minWidth: 54,
-                          minHeight: 54,
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ],
+                      child: Text("Save")),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FetchEducation(
+                                      uid: widget.uid,
+                                    )));
+                      },
+                      child: Text("Check Education"))
+                ]),
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    AddEducation(Uid: widget.uid);
-                  },
-                  child: Text("Save")),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => FetchEducation(
-                                  uid: widget.uid,
-                                )));
-                  },
-                  child: Text("Check Education"))
-            ]),
+            ),
           ),
         ));
   }
