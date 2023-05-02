@@ -17,6 +17,8 @@ class JobGetModel {
     required this.salary,
     required this.lastDateOfApply,
     required this.location,
+    required this.experience,
+    required this.qualification,
     this.user,
   });
 
@@ -25,8 +27,10 @@ class JobGetModel {
   String description;
   String salary;
 
-  int lastDateOfApply;
+  String lastDateOfApply;
   String location;
+  String experience;
+  String qualification;
   dynamic user;
 
   factory JobGetModel.fromJson(Map<String, dynamic> json) => JobGetModel(
@@ -36,6 +40,8 @@ class JobGetModel {
         salary: json["Salary"],
         lastDateOfApply: json["LastDateOfApply"],
         location: json["Location"],
+        experience: json["experience"] ?? '',
+        qualification: json["qualification"] ?? '',
         user: json["User"],
       );
 
@@ -46,6 +52,8 @@ class JobGetModel {
         "Salary": salary,
         "LastDateOfApply": lastDateOfApply,
         "Location": location,
+        "experience": experience,
+        "qualification": qualification,
         "User": user,
       };
 }

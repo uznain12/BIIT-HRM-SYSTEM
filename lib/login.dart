@@ -234,7 +234,9 @@ class _LoginPageState extends State<LoginPage> {
                                         MaterialPageRoute(
                                           builder: ((context) =>
                                               // ignore: prefer_const_constructors
-                                              GuardDashboard()),
+                                              GuardDashboard(
+                                                uid: uid,
+                                              )),
                                         ),
                                       );
                                     } else if (role == "employee") {
@@ -249,7 +251,9 @@ class _LoginPageState extends State<LoginPage> {
                                         MaterialPageRoute(
                                           builder: ((context) =>
                                               // ignore: prefer_const_constructors
-                                              HiredEmployeeDashboard()),
+                                              HiredEmployeeDashboard(
+                                                uid: uid,
+                                              )),
                                         ),
                                       );
                                     } else if (role == "hod") {

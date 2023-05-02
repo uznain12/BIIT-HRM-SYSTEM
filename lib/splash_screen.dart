@@ -51,15 +51,21 @@ class _SplashScreenState extends State<SplashScreen> {
         });
       } else if (role == 'guard') {
         Timer(Duration(seconds: 13), () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => GuardDashboard()));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => GuardDashboard(
+                        uid: widget.uid,
+                      )));
         });
       } else if (role == 'employee') {
         Timer(Duration(seconds: 3), () {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => HiredEmployeeDashboard()));
+                  builder: (context) => HiredEmployeeDashboard(
+                        uid: widget.uid,
+                      )));
         });
       }
     } else {

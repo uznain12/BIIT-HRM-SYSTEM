@@ -281,6 +281,8 @@ class Job {
     required this.salary,
     required this.lastDateOfApply,
     required this.location,
+    required this.experience,
+    required this.qualification,
   });
 
   List<dynamic> jobApplications;
@@ -288,8 +290,10 @@ class Job {
   String title;
   String description;
   String salary;
-  int lastDateOfApply;
+  String lastDateOfApply;
   String location;
+  String experience;
+  String qualification;
 
   factory Job.fromJson(Map<String, dynamic> json) => Job(
         jobApplications:
@@ -300,6 +304,8 @@ class Job {
         salary: json["Salary"],
         lastDateOfApply: json["LastDateOfApply"],
         location: json["Location"],
+        experience: json["experience"] ?? '',
+        qualification: json["qualification"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -310,6 +316,8 @@ class Job {
         "Salary": salary,
         "LastDateOfApply": lastDateOfApply,
         "Location": location,
+        "experience": experience,
+        "qualification": qualification,
       };
 }
 

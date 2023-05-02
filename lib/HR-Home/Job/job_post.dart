@@ -1,238 +1,286 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_practise_project/Applicant-Home/Education/fetch_education.dart';
+import 'package:fyp_practise_project/uri.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
-import 'package:intl/intl.dart';
+import 'dart:convert';
 
+// ignore: must_be_immutable
 class JobPost extends StatefulWidget {
-  const JobPost({super.key});
+  JobPost({
+    super.key,
+  });
+  // const AddEducation({super.key});
 
   @override
   State<JobPost> createState() => _JobPostState();
 }
 
-// Controllers
+String? _selectedqualification;
+List<String> _qualificationoption = [
+  'Matric',
+  'Inter',
+  'Bachelor',
+  'Master',
+]; // op
 
-TextEditingController _jtitlecontroller = new TextEditingController();
-TextEditingController _jexperiencecontroller = new TextEditingController();
-TextEditingController _jqualificationcontroller = new TextEditingController();
-TextEditingController _jvacanciescontroller = new TextEditingController();
-TextEditingController _datecontroller = new TextEditingController();
+String? _title;
+List<String> _titleoptions = [
+  'Teacher',
+  'Assistant Teacher',
+  'Guard',
+  'Lab Attendant',
+  'Professor',
+]; //
 
-void newjob(String title, experience, qualification, vacancies, date) async {
-  try {
-    Response responce = await post(
-        Uri.parse('http://192.168.43.117/HrmFypApi/api/ApplicantInfo/JobPost'),
-        body: {
-          'j_title': title,
-          'j_exp': experience,
-          'j_qualification': qualification,
-          'nov': vacancies,
-          'due_date': date,
-        });
-
-    if (responce.statusCode == 200) {
-      print("job posted succesfully");
-    } else {
-      print('Failed');
-    }
-  } catch (e) {
-    print(e.toString());
-  }
-}
+TextEditingController _salaryController = TextEditingController();
+TextEditingController _experienceController = TextEditingController();
+TextEditingController _lastDateofapplyController = TextEditingController();
+TextEditingController _locationController = TextEditingController();
+TextEditingController _descriptionController = TextEditingController();
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _JobPostState extends State<JobPost> {
-  String gval = "none";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        title: const Padding(
-          padding: EdgeInsets.only(left: 50),
-          child: Text(
-            'JOB POST',
-            style: TextStyle(
-                fontFamily: 'RobotoSlab-Black',
-                fontSize: 25,
-                color: Colors.white,
-                fontWeight: FontWeight.w900),
-          ),
+        appBar: AppBar(
+          title: const Text("Add Job Credentials"),
+          centerTitle: true,
         ),
-      ),
-      body: Stack(children: [
-        Container(
-          color: Colors.white,
-        ),
-        SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 50, left: 30, right: 30),
-                child: TextFormField(
-                  controller: _jtitlecontroller,
-                  style: const TextStyle(fontSize: 15),
-                  decoration: InputDecoration(
-                      fillColor: Colors.grey.shade100,
-                      filled: true,
-                      labelText: 'Job Title',
-                      hintText: '',
-                      hintStyle: null,
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      labelStyle:
-                          const TextStyle(fontSize: 25, color: Colors.black),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                ),
-              ),
-              Container(
-                height: 70,
-                width: 410,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
-                  child: TextFormField(
-                    controller: _jexperiencecontroller,
-                    style: const TextStyle(fontSize: 15),
-                    decoration: InputDecoration(
-                        fillColor: Colors.grey.shade100,
-                        filled: true,
-                        labelText: 'Job Experience',
-                        hintText: '',
-                        hintStyle: TextStyle(fontSize: 15),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelStyle:
-                            TextStyle(fontSize: 25, color: Colors.black),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10))),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.07,
+                left: MediaQuery.of(context).size.height * 0.01,
+                right: MediaQuery.of(context).size.height * 0.01),
+            child: Container(
+              child: Form(
+                key: _formKey,
+                child: Column(children: [
+                  InputDecorator(
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.school),
+                      prefixIconConstraints: BoxConstraints(
+                        minWidth: 54,
+                        minHeight: 54,
+                      ),
+                      border: OutlineInputBorder(),
+                    ),
+                    child: DropdownButtonFormField<String>(
+                      hint: const Text(
+                        "Job Title",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      isExpanded: true,
+                      value: _title,
+                      items: _titleoptions.map((String option) {
+                        return DropdownMenuItem(
+                          value: option,
+                          child: Text(option),
+                        );
+                      }).toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          _title = newValue;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select Job Title';
+                        }
+                        return null;
+                      },
+                    ),
                   ),
-                ),
-              ),
-              Container(
-                height: 70,
-                width: 410,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
-                  child: TextFormField(
-                    controller: _jqualificationcontroller,
-                    style: const TextStyle(fontSize: 15),
-                    decoration: InputDecoration(
-                        fillColor: Colors.grey.shade100,
-                        filled: true,
-                        labelText: 'Job Qualification',
-                        hintText: '',
-                        hintStyle: const TextStyle(fontSize: 15),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelStyle:
-                            const TextStyle(fontSize: 25, color: Colors.black),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10))),
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-              ),
-              Container(
-                height: 70,
-                width: 410,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
-                  child: TextFormField(
-                    controller: _jvacanciescontroller,
-                    style: const TextStyle(fontSize: 15),
-                    decoration: InputDecoration(
-                        fillColor: Colors.grey.shade100,
-                        filled: true,
-                        labelText: 'Number Of Vacancies',
-                        hintText: '',
-                        hintStyle: const TextStyle(fontSize: 15),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelStyle:
-                            const TextStyle(fontSize: 25, color: Colors.black),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10))),
+                  InputDecorator(
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.school),
+                      prefixIconConstraints: BoxConstraints(
+                        minWidth: 54,
+                        minHeight: 54,
+                      ),
+                      border: OutlineInputBorder(),
+                    ),
+                    child: DropdownButtonFormField<String>(
+                      hint: const Text(
+                        "Qualification",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      isExpanded: true,
+                      value: _selectedqualification,
+                      items: _qualificationoption.map((String option) {
+                        return DropdownMenuItem(
+                          value: option,
+                          child: Text(option),
+                        );
+                      }).toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedqualification = newValue;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select Required Qualification';
+                        }
+                        return null;
+                      },
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: 70,
-                width: 410,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
-                  child: TextFormField(
-                    controller: _datecontroller,
-                    style: const TextStyle(fontSize: 15),
-                    decoration: InputDecoration(
-                        fillColor: Colors.grey.shade100,
-                        filled: true,
-                        labelText: 'Due date',
-                        hintText: '',
-                        hintStyle: const TextStyle(fontSize: 15),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelStyle:
-                            const TextStyle(fontSize: 25, color: Colors.black),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10))),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: _salaryController,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.school_sharp),
+                      prefixIconConstraints: BoxConstraints(
+                        minWidth: 54,
+                        minHeight: 54,
+                      ),
+                      labelText: 'Salary',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Basic';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: _experienceController,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.school),
+                      prefixIconConstraints: BoxConstraints(
+                        minWidth: 54,
+                        minHeight: 54,
+                      ),
+                      labelText: 'Experience',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Required Experience';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: _lastDateofapplyController,
                     onTap: () async {
-                      DateTime? pickeddate = await showDatePicker(
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      final DateTime? picked = await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2050));
-                      if (pickeddate != null) {
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime.now());
+                      if (picked != null) {
                         setState(() {
-                          DateTime now = DateTime.now();
-                          _datecontroller.text =
-                              DateFormat('dd-MM-yyyy').format(now);
+                          _lastDateofapplyController.text =
+                              picked.toString().split(' ')[0];
                         });
                       }
                     },
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 200, right: 0, top: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: Colors.grey.shade100,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(9.9),
-                            side: const BorderSide(
-                              color: Colors.black,
-                              width: 2.0,
-                            ),
-                          )),
-                      onPressed: () {
-                        newjob(
-                            _jtitlecontroller.text.toString(),
-                            _jexperiencecontroller.text.toString(),
-                            _jqualificationcontroller.text.toString(),
-                            _jvacanciescontroller.text.toString(),
-                            _datecontroller.text.toString());
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return const AlertDialog(
-                                title: Text("Success"),
-                                content: Text("Job posted successfully"),
-                                actions: <Widget>[],
-                              );
-                            });
-                      },
-                      child: const Text(
-                        'POST',
-                        style: TextStyle(fontSize: 27, color: Colors.black),
+                    decoration: const InputDecoration(
+                      labelText: 'Last Date Of Apply',
+                      prefixIcon: Icon(Icons.calendar_today),
+                      prefixIconConstraints: BoxConstraints(
+                        minWidth: 54,
+                        minHeight: 54,
                       ),
+                      border: OutlineInputBorder(),
                     ),
-                  ],
-                ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please Select Last Date ';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: _locationController,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.school_sharp),
+                      prefixIconConstraints: BoxConstraints(
+                        minWidth: 54,
+                        minHeight: 54,
+                      ),
+                      labelText: 'Location',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please Enter Your  Job Location ';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: _descriptionController,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.school_sharp),
+                      prefixIconConstraints: BoxConstraints(
+                        minWidth: 54,
+                        minHeight: 54,
+                      ),
+                      labelText: 'Description',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Description';
+                      }
+                      return null;
+                    },
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          JobPost();
+                        }
+                      },
+                      child: Text("Save")),
+                ]),
               ),
-            ],
+            ),
           ),
-        )
-      ]),
-    );
+        ));
+  }
+
+  void JobPost() async {
+    var url = "http://$ip/HrmPractise02/api/Job/JobPost";
+    var data = {
+      "Title": _title,
+      "qualification": _selectedqualification,
+      "Salary": _salaryController.text,
+      "experience": _experienceController.text,
+      "LastDateOfApply": _lastDateofapplyController.text,
+      "Location": _locationController.text,
+      "Description": _descriptionController.text,
+
+      // Change this to the appropriate value
+    };
+    var boddy = jsonEncode(data);
+    var urlParse = Uri.parse(url);
+    try {
+      http.Response response = await http.post(urlParse,
+          body: boddy, headers: {"Content-Type": "application/json"});
+      var dataa = jsonDecode(response.body);
+      print(dataa);
+    } catch (e) {
+      print('Error occurred: $e');
+    }
   }
 }

@@ -45,6 +45,7 @@ dependencies:
   json_serializable: 
   shared_preferences: ^2.1.0
   persistent_bottom_nav_bar:
+  file_picker: ^5.2.11
   
 dev_dependencies:
   flutter_test:
@@ -74,6 +75,8 @@ flutter:
     - images/splash.jpg
     - images/biitlogo-removebg.png
     - images/background.jpg
+    - images/hrbackground.jpg
+    - images/hrrbackground.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

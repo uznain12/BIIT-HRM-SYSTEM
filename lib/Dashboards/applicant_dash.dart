@@ -42,6 +42,14 @@ class _ApplicantDashboardState extends State<ApplicantDashboard> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    fetchcuser(widget.uid!).then((_) {
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -83,19 +91,25 @@ class _ApplicantDashboardState extends State<ApplicantDashboard> {
             // ignore: prefer_const_literals_to_create_immutables
             children: [
               UserAccountsDrawerHeader(
-                decoration: BoxDecoration(color: Colors.blue),
-                accountName: Text(
-                  "${userlist.isNotEmpty ? userlist[0].fname : ''} ${userlist.isNotEmpty ? userlist[0].lname : ''}",
-                  style: TextStyle(fontSize: 20),
-                ),
-                accountEmail: Center(
-                    child: Text(
-                  "Welcome To Dashboard ",
-                  style: TextStyle(fontSize: 20),
-                )),
-                // currentAccountPicture:
-                //     Center(child: CircleAvatar(child: Text(""))),
-              ),
+                  decoration: BoxDecoration(color: Colors.blue),
+                  accountName: Text(
+                    "${userlist.isNotEmpty ? userlist[0].fname : ''} ${userlist.isNotEmpty ? userlist[0].lname : ''}",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  accountEmail:
+                      Text("${userlist.isNotEmpty ? userlist[0].email : ''}"),
+                  currentAccountPicture: CircleAvatar(
+                    child: userlist.isNotEmpty && userlist[0].image.isNotEmpty
+                        ? ClipOval(
+                            child: Image(
+                                fit: BoxFit.cover,
+                                height: 100,
+                                width: 100,
+                                image: NetworkImage(
+                                    imagepath + userlist[0].image)),
+                          )
+                        : const SizedBox.shrink(),
+                  )),
               ListTile(
                 leading: const Icon(Icons.person),
                 title: const Text('Profile'),

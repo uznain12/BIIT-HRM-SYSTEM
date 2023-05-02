@@ -1,262 +1,343 @@
 // ignore_for_file: prefer_const_constructors
-
+import 'package:fyp_practise_project/Guard-Home/checkin.dart';
+import 'package:fyp_practise_project/Guard-Home/checkout.dart';
+import 'package:fyp_practise_project/uri.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:fyp_practise_project/login.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fyp_practise_project/Models/login_signup_model.dart';
 
 class GuardDashboard extends StatefulWidget {
-  const GuardDashboard({super.key});
+  int? uid;
+  GuardDashboard({required this.uid});
 
   @override
   State<GuardDashboard> createState() => _GuardDashboardState();
 }
 
+List<LoginModel> userlist = [];
+List<LoginModel> userlistbyrole = [];
+
 class _GuardDashboardState extends State<GuardDashboard> {
+  Map<int, bool> userCheckStatus =
+      {}; // New map to store the check-in/check-out status
+
+  @override
+  void initState() {
+    super.initState();
+    fetchcuser(widget.uid!).then((_) {
+      setState(() {});
+    });
+  }
+
+  String _searchQuery = ''; // User for search
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blue.shade400,
-        ),
-        drawer: Drawer(
-          width: 200,
-          // ignore: sort_child_properties_last
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              UserAccountsDrawerHeader(
+      appBar: AppBar(
+        title: Center(child: Text("")),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          // ignore: prefer_const_literals_to_create_immutables
+          children: [
+            UserAccountsDrawerHeader(
                 decoration: BoxDecoration(color: Colors.blue),
                 accountName: Text(
-                  "   Murtaza Ali",
+                  "${userlist.isNotEmpty ? userlist[0].fname : ''} ${userlist.isNotEmpty ? userlist[0].lname : ''}",
                   style: TextStyle(fontSize: 20),
                 ),
-                accountEmail: Text("Ali@gmail.coms"),
-                currentAccountPicture: CircleAvatar(child: Text("U")),
-              ),
-              ListTile(
-                leading: const Icon(Icons.person),
-                title: const Text('Profile'),
-                onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => ApplicantProfile(),
-                  //   ),
-                  // );
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.settings),
-                title: const Text('Setting'),
-                onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => ApplicantApplyApplications(),
-                  //   ),
-                  // );
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.logout),
-                title: const Text(
-                  'Log Out',
-                  style: TextStyle(fontSize: 20),
-                ),
-                onTap: () async {
-                  SharedPreferences sp = await SharedPreferences.getInstance();
-                  sp.clear();
-                  // ignore: use_build_context_synchronously
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoginPage(),
-                    ),
-                  );
-                },
-              )
-            ],
-          ),
-          backgroundColor: Colors.white,
-          elevation: 4.0,
-        ),
-        body: Stack(
-          children: [
-            Container(
-              color: Colors.grey.shade100,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 600),
-              child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.blue.shade900,
-                      borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(50),
-                          bottomRight: Radius.circular(50)))),
-            ),
-            Padding(
-                padding: const EdgeInsets.only(top: 40, left: 110),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        width: 5,
-                        color: Colors.black,
-                        style: BorderStyle.solid),
-                  ),
-                  child: const Text(
-                    '    Dashboard \n   Guard   side',
-                    style: TextStyle(
-                        fontFamily: 'RobotoSlab-Black',
-                        fontSize: 25,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w900),
-                  ),
+                accountEmail:
+                    Text("${userlist.isNotEmpty ? userlist[0].email : ''}"),
+                currentAccountPicture: CircleAvatar(
+                  child: userlist.isNotEmpty && userlist[0].image.isNotEmpty
+                      ? ClipOval(
+                          child: Image(
+                              fit: BoxFit.cover,
+                              height: 100,
+                              width: 100,
+                              image:
+                                  NetworkImage(imagepath + userlist[0].image)),
+                        )
+                      : const SizedBox.shrink(),
                 )),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.25,
-                  left: MediaQuery.of(context).size.height * 0.09),
-              child: Column(
-                children: [
-                  SingleChildScrollView(
-                    child: Row(
-                      children: [
-                        Container(
-                          color: Colors.blue,
-                          child: const Image(
-                              height: 100,
-                              width: 100,
-                              image: AssetImage('images/user2.png')),
-                        ),
-                        SizedBox(
-                          width: 40,
-                        ),
-                        Container(
-                          color: Colors.blue,
-                          child: const Image(
-                              height: 100,
-                              width: 100,
-                              image: AssetImage('images/user3.png')),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 0,
-                  ),
-                  Padding(
-                      padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.height * 0),
-                      child: SingleChildScrollView(
-                        child: Row(
-                          children: [
-                            TextButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "Mr.Aftab",
-                                  style: TextStyle(
-                                      fontSize: 21,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.underline),
-                                )),
-                            SizedBox(
-                              width: 40,
-                            ),
-                            TextButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "Mr.Ahsan",
-                                  style: TextStyle(
-                                      fontSize: 21,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.underline),
-                                )),
-                          ],
-                        ),
-                      )),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        color: Colors.blue,
-                        child: GestureDetector(
-                          onTap: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) =>
-                            //             GuardmanageAttendnace()));
-                          },
-                          child: const Image(
-                              height: 100,
-                              width: 100,
-                              image: AssetImage('images/user1 (1).png')),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 40,
-                      ),
-                      Container(
-                        color: Colors.blue,
-                        child: const Image(
-                            height: 100,
-                            width: 100,
-                            image: AssetImage('images/user2.png')),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 0,
-                  ),
-                  Padding(
-                      padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.height * 0),
-                      child: SingleChildScrollView(
-                        child: Row(
-                          children: [
-                            TextButton(
-                                onPressed: () {
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) =>
-                                  //             GuardmanageAttendnace()));
-                                },
-                                child: Text(
-                                  "Mr.Shahid",
-                                  style: TextStyle(
-                                      fontSize: 21,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.underline),
-                                )),
-                            SizedBox(
-                              width: 40,
-                            ),
-                            TextButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "Mr.Amir",
-                                  style: TextStyle(
-                                      fontSize: 21,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.underline),
-                                )),
-                          ],
-                        ),
-                      )),
-                ],
+            ListTile(
+              leading: const Icon(Icons.present_to_all),
+              title: const Text(
+                'Attendance ',
+                style: TextStyle(fontSize: 20),
               ),
-            )
+              onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => EmployeeAttendenceScreen(),
+                //   ),
+                // );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.leave_bags_at_home),
+              title: const Text(
+                'Leaves',
+                style: TextStyle(fontSize: 20),
+              ),
+              onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => EmployeeLeaveScreen(),
+                //   ),
+                // );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text(
+                'Leave Request',
+                style: TextStyle(fontSize: 20),
+              ),
+              onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => EmployeeLeaveReqScreen(),
+                //   ),
+                // );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text(
+                'Setting',
+                style: TextStyle(fontSize: 20),
+              ),
+              onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => EmployeeLeaveReqScreen(),
+                //   ),
+                // );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text(
+                'Log Out',
+                style: TextStyle(fontSize: 20),
+              ),
+              onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => ApplicantProfile(),
+                //   ),
+                // );
+              },
+            ),
           ],
-        ));
+        ),
+      ),
+      body: Stack(
+        children: [
+          // Background image container
+          Container(
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('images/background.jpg'),
+                    fit: BoxFit.fill)),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: TextField(
+              decoration: InputDecoration(
+                labelText: 'Search',
+                hintText: 'Enter Emplyee name',
+                prefixIcon: Icon(Icons.search),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: BorderSide(color: Colors.black, width: 1.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                ),
+                fillColor: Colors.white,
+                filled: true,
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
+            ),
+          ),
+
+          // FutureBuilder to fetch data asynchronously
+          Padding(
+            padding: const EdgeInsets.only(top: 100, left: 10, right: 10),
+            child: Container(
+              // decoration: BoxDecoration(color: Colors.black),
+              child: FutureBuilder(
+                  future: fetchcuserbyrole(),
+                  builder: (context, snapshot) {
+                    // If the snapshot has data, build the grid
+                    if (snapshot.hasData) {
+                      return GridView.builder(
+                          itemCount: userlistbyrole.length,
+                          // Define the grid with 2 columns and spacing
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount:
+                                2, // Ya isko 2 kiya matlab 1 line ma 2 records show hongay
+                            crossAxisSpacing:
+                                10, // ya 1 line ma 2 records ka darmayan space di ha
+                            mainAxisSpacing:
+                                10, // or ya line 1 or line 2 ka records ma space di ha
+                            childAspectRatio: 3 / 2,
+                          ),
+                          itemBuilder: (context, index) {
+                            if (_searchQuery.isNotEmpty &&
+                                !((userlistbyrole[index].fname?.toLowerCase() ??
+                                            '') +
+                                        ' ' +
+                                        (userlistbyrole[index]
+                                                .lname
+                                                ?.toLowerCase() ??
+                                            ''))
+                                    .contains(_searchQuery.toLowerCase())) {
+                              return const SizedBox.shrink();
+                            }
+
+                            // Initialize the check status for each user if not already initialized
+                            if (userCheckStatus[userlistbyrole[index].uid] ==
+                                null) {
+                              userCheckStatus[userlistbyrole[index].uid!] =
+                                  false;
+                            }
+                            // Create a card for each employee
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  // Toggle the check-in/check-out status for the user
+                                  userCheckStatus[userlistbyrole[index].uid!] =
+                                      !userCheckStatus[
+                                          userlistbyrole[index].uid]!;
+                                });
+
+                                if (userCheckStatus[
+                                    userlistbyrole[index].uid]!) {
+                                  // Navigate to check-in screen
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => GuardCheckIn(
+                                              selectedEmployee:
+                                                  userlistbyrole[index])));
+                                } else {
+                                  // Navigate to check-out screen
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => GuardCheckOut(
+                                              selectedEmployee:
+                                                  userlistbyrole[index])));
+                                }
+                              },
+                              child: Card(
+                                color:
+                                    userCheckStatus[userlistbyrole[index].uid]!
+                                        ? Colors.green
+                                        : Colors.red,
+                                // color: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                elevation:
+                                    10, // ya shadow ka liya use hota ka hmara card zara backgroud sa utha utha huva nazr ay
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      height: 90,
+                                      // decoration:
+                                      //     // BoxDecoration(color: Colors.black),
+                                      child: userlistbyrole[index]
+                                              .image
+                                              .isNotEmpty
+                                          ? ClipOval(
+                                              child: Image(
+                                                  fit: BoxFit.cover,
+                                                  height: 100,
+                                                  width: 100,
+                                                  image: NetworkImage(
+                                                      imagepath +
+                                                          userlistbyrole[index]
+                                                              .image)),
+                                            )
+                                          // If the employee doesn't have an image, display an empty person icon
+                                          : const Icon(Icons.person, size: 100),
+                                    ),
+                                    // If the employee has an image, display it in a circular format
+
+                                    // Display the employee's name
+                                    Text(
+                                      "${userlistbyrole[index].fname} ${userlistbyrole[index].lname}",
+                                      style: TextStyle(
+                                          fontSize: 15, color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                    } else {
+                      // If the snapshot doesn't have data, display a CircularProgressIndicator
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  }),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<List<LoginModel>> fetchcuser(int id) async {
+    //response keyword khud sa bnaya ha
+    final response = await http.get(Uri.parse(
+        'http://$ip/HrmPractise02/api/User/UserGet?id=$id')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
+    var Data = jsonDecode(response.body
+        .toString()); // decode kar ka data variable ma store kar rahay hn
+    if (response.statusCode == 200) {
+      userlist.clear();
+      for (Map<String, dynamic> index in Data) {
+        userlist.add(LoginModel.frommap(index));
+      }
+      return userlist;
+    } else {
+      return userlist;
+    }
+  }
+
+  Future<List<LoginModel>> fetchcuserbyrole() async {
+    //response keyword khud sa bnaya ha
+    final response = await http.get(Uri.parse(
+        'http://$ip/HrmPractise02/api/User/UserroleGet')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
+    var Data = jsonDecode(response.body
+        .toString()); // decode kar ka data variable ma store kar rahay hn
+    if (response.statusCode == 200) {
+      userlistbyrole.clear();
+      for (Map<String, dynamic> index in Data) {
+        userlistbyrole.add(LoginModel.frommap(index));
+      }
+      return userlistbyrole;
+    } else {
+      return userlistbyrole;
+    }
   }
 }
