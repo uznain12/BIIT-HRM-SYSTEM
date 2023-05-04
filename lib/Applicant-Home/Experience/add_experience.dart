@@ -35,7 +35,7 @@ class _AddExperienceState extends State<AddExperience> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Add Your Education"),
+          title: const Text("Add Your Experience"),
           centerTitle: true,
         ),
         body: SingleChildScrollView(

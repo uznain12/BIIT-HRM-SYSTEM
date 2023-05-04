@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:fyp_practise_project/Applicant-Home/Personal/update_personal.dart';
 import 'package:fyp_practise_project/Models/login_signup_model.dart';
 import 'package:fyp_practise_project/uri.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class GuardCheckIn extends StatefulWidget {
-  // int? uid;
-  // int? employeeuid;
-  final LoginModel selectedEmployee;
+  final LoginModel
+      selectedEmployee; //selected employee jis pa click ki ha woi open hoga iskay hrough jesay user ko id ki base pa la ka atay hn usi tarah
   GuardCheckIn({Key? key, required this.selectedEmployee}) : super(key: key);
 
   @override
@@ -17,14 +15,30 @@ class GuardCheckIn extends StatefulWidget {
 
 class _GuardCheckInState extends State<GuardCheckIn> {
   List<LoginModel> userlist = [];
-  late Future<LoginModel> selectedEmployee;
+  late Future<LoginModel>
+      selectedEmployee; //card ma jis employee par click kiya uski information fetch karnay ka liya use kiya
+  final TextEditingController _checkintimeController = TextEditingController();
+  final TextEditingController _checkindateController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _checkintimeController.text = TimeOfDay.now().format(context);
+    _checkindateController.text = DateTime.now().toString().split(' ')[0];
+  }
 
   @override
   Widget build(BuildContext context) {
-    LoginModel selectedEmployee = widget.selectedEmployee;
+    LoginModel selectedEmployee = widget
+        .selectedEmployee; // Selected Employee ko lanay ka liya idr hamay ya lgana paray ga
     return Scaffold(
         appBar: AppBar(
-          title: Text("Guard Check In Screen"),
+          title: const Text("Attendance Check In Screen"),
           centerTitle: true,
         ),
         body: FutureBuilder(
@@ -40,7 +54,7 @@ class _GuardCheckInState extends State<GuardCheckIn> {
                             left: MediaQuery.of(context).size.height * 0.02,
                             right: MediaQuery.of(context).size.height * 0.02),
                         child: Container(
-                          height: 500,
+                          height: 600,
                           decoration: BoxDecoration(
                               color: Colors.grey.shade300,
                               borderRadius: BorderRadius.circular(10)),
@@ -68,8 +82,9 @@ class _GuardCheckInState extends State<GuardCheckIn> {
                                                 image: NetworkImage(imagepath +
                                                     userlist[index].image)),
                                           )
-                                        : const SizedBox.shrink(),
+                                        : Icon(Icons.person),
                                   )),
+                              // existing code
                               Padding(
                                 padding: EdgeInsets.only(
                                     top: MediaQuery.of(context).size.height *
@@ -107,16 +122,17 @@ class _GuardCheckInState extends State<GuardCheckIn> {
                                     ),
                                     const SizedBox(height: 8),
                                     Padding(
-                                      padding: EdgeInsets.only(
-                                          left: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.1),
-                                      child: RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
+                                        padding: EdgeInsets.only(
+                                            left: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.1),
+                                        child: RichText(
+                                            text: TextSpan(
+                                                style:
+                                                    DefaultTextStyle.of(context)
+                                                        .style,
+                                                children: [
                                               const TextSpan(
                                                 text: "Number:        ",
                                                 style: TextStyle(
@@ -130,62 +146,113 @@ class _GuardCheckInState extends State<GuardCheckIn> {
                                                   fontStyle: FontStyle.italic,
                                                 ),
                                               ),
-                                            ]),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
+                                            ]))),
+                                    // existing code
+                                    const SizedBox(height: 38),
                                     Padding(
-                                      padding: EdgeInsets.only(
-                                          left: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.1),
-                                      child: RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: "CNIC:             ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: "${userlist[index].cnic}",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: TextFormField(
+                                        controller: _checkintimeController,
+                                        decoration: InputDecoration(
+                                          prefixIcon: Icon(Icons.access_time),
+                                          labelText: 'Check-in Time',
+                                          labelStyle: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blue),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            borderSide: const BorderSide(
+                                                color: Colors.blue, width: 2.0),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                10), // Adjust the corner radius
+                                            borderSide: const BorderSide(
+                                                color: Colors.blue, width: 2.0),
+                                          ),
+                                        ),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter check-in time';
+                                          }
+                                          return null;
+                                        },
+                                        onTap: () async {
+                                          TimeOfDay? selectedTime =
+                                              await showTimePicker(
+                                            context: context,
+                                            initialTime: TimeOfDay.now(),
+                                          );
+                                          if (selectedTime != null) {
+                                            _checkintimeController.text =
+                                                selectedTime.format(context);
+                                          }
+                                        },
                                       ),
                                     ),
-                                    const SizedBox(height: 30),
-                                    // Center(
-                                    //   child: SizedBox(
-                                    //     width: 200,
-                                    //     child: ElevatedButton(
-                                    //         onPressed: () {
-                                    //           Navigator.push(
-                                    //               context,
-                                    //               MaterialPageRoute(
-                                    //                   builder: (context) =>
-                                    //                       PersonalUpdate(
-                                    //                         role:
-                                    //                             userlist[index]
-                                    //                                 .role,
-                                    //                         pass:
-                                    //                             userlist[index]
-                                    //                                 .password,
-                                    //                         email:
-                                    //                             userlist[index]
-                                    //                                 .email,
-                                    //                         uid: widget.uid,
-                                    //                       )));
-                                    //         },
-                                    //         child: Text("Edit")),
-                                    //   ),
-                                    // )
+
+                                    Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: TextFormField(
+                                        controller: _checkindateController,
+                                        decoration: InputDecoration(
+                                          prefixIcon:
+                                              Icon(Icons.calendar_today),
+                                          labelText: 'Check-in Date',
+                                          labelStyle: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blue),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            borderSide: const BorderSide(
+                                                color: Colors.blue, width: 2.0),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                10), // Adjust the corner radius
+                                            borderSide: const BorderSide(
+                                                color: Colors.blue, width: 2.0),
+                                          ),
+                                        ),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter check-in date';
+                                          }
+
+                                          return null;
+                                        },
+                                        onTap: () async {
+                                          DateTime? selectedDate =
+                                              await showDatePicker(
+                                            context: context,
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime(2000),
+                                            lastDate: DateTime(2100),
+                                          );
+                                          if (selectedDate != null) {
+                                            _checkindateController.text =
+                                                selectedDate
+                                                    .toString()
+                                                    .split(' ')[0];
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Center(
+                                      child: ElevatedButton(
+                                          onPressed: () {
+                                            AddAttendance(
+                                                Uid: widget
+                                                    .selectedEmployee.uid);
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text("CHECK IN")),
+                                    )
                                   ],
                                 ),
                               ),
@@ -212,6 +279,28 @@ class _GuardCheckInState extends State<GuardCheckIn> {
       return userlist.first; // return the first user in the list
     } else {
       throw Exception("Failed to fetch employee by UID");
+    }
+  }
+
+  void AddAttendance({int? Uid}) async {
+    var url = "http://$ip/HrmPractise02/api/Attendance/AttendancePost";
+    var data = {
+      "Uid": widget.selectedEmployee.uid,
+      "checkin": _checkintimeController.text,
+      "date": _checkindateController.text,
+
+      // "Degree": _selectedOption,
+      "hasexperienced": "true", // Change this to the appropriate value
+    };
+    var boddy = jsonEncode(data);
+    var urlParse = Uri.parse(url);
+    try {
+      http.Response response = await http.post(urlParse,
+          body: boddy, headers: {"Content-Type": "application/json"});
+      var dataa = jsonDecode(response.body);
+      print(dataa);
+    } catch (e) {
+      print('Error occurred: $e');
     }
   }
 }

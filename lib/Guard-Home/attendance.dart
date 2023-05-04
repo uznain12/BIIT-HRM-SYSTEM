@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:fyp_practise_project/Guard-Home/attendance.dart';
 import 'package:fyp_practise_project/Guard-Home/attendance_report.dart';
 import 'package:fyp_practise_project/Guard-Home/checkin.dart';
 import 'package:fyp_practise_project/Guard-Home/checkout.dart';
@@ -13,21 +12,20 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fyp_practise_project/Models/login_signup_model.dart';
 
-class GuardDashboard extends StatefulWidget {
+class AttendanceMainPage extends StatefulWidget {
   int? uid;
-  GuardDashboard({required this.uid});
+  AttendanceMainPage({required this.uid});
 
   @override
-  State<GuardDashboard> createState() => _GuardDashboardState();
+  State<AttendanceMainPage> createState() => _AttendanceMainPageState();
 }
 
 List<LoginModel> userlist = [];
 List<LoginModel> userlistbyrole = [];
 List<Attendancemodel> attendancelist = [];
 
-class _GuardDashboardState extends State<GuardDashboard> {
-  Map<int, bool> userCheckStatus =
-      {}; // New map to store the check-in/check-out status
+class _AttendanceMainPageState extends State<AttendanceMainPage> {
+  // New map to store the check-in/check-out status
 
   @override
   void initState() {
@@ -44,119 +42,6 @@ class _GuardDashboardState extends State<GuardDashboard> {
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text("")),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          // ignore: prefer_const_literals_to_create_immutables
-          children: [
-            UserAccountsDrawerHeader(
-                decoration: BoxDecoration(color: Colors.blue),
-                accountName: Text(
-                  "${userlist.isNotEmpty ? userlist[0].fname : ''} ${userlist.isNotEmpty ? userlist[0].lname : ''}",
-                  style: TextStyle(fontSize: 20),
-                ),
-                accountEmail:
-                    Text("${userlist.isNotEmpty ? userlist[0].email : ''}"),
-                currentAccountPicture: CircleAvatar(
-                  child: userlist.isNotEmpty && userlist[0].image.isNotEmpty
-                      ? ClipOval(
-                          child: Image(
-                              fit: BoxFit.cover,
-                              height: 100,
-                              width: 100,
-                              image:
-                                  NetworkImage(imagepath + userlist[0].image)),
-                        )
-                      : const SizedBox.shrink(),
-                )),
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('Profile'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UserPersonalInfo(uid: widget.uid),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('Attendance'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AttendanceMainPage(
-                      uid: widget.uid,
-                    ),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.leave_bags_at_home),
-              title: const Text(
-                'Leaves',
-                style: TextStyle(fontSize: 20),
-              ),
-              onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => EmployeeLeaveScreen(),
-                //   ),
-                // );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text(
-                'Leave Request',
-                style: TextStyle(fontSize: 20),
-              ),
-              onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => EmployeeLeaveReqScreen(),
-                //   ),
-                // );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text(
-                'Setting',
-                style: TextStyle(fontSize: 20),
-              ),
-              onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => EmployeeLeaveReqScreen(),
-                //   ),
-                // );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text(
-                'Log Out',
-                style: TextStyle(fontSize: 20),
-              ),
-              onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => ApplicantProfile(),
-                //   ),
-                // );
-              },
-            ),
-          ],
-        ),
       ),
       body: Stack(
         children: [
@@ -229,46 +114,18 @@ class _GuardDashboardState extends State<GuardDashboard> {
                               return const SizedBox.shrink();
                             }
 
-                            // Initialize the check status for each user if not already initialized
-                            if (userCheckStatus[userlistbyrole[index].uid] ==
-                                null) {
-                              userCheckStatus[userlistbyrole[index].uid!] =
-                                  false;
-                            }
                             // Create a card for each employee
                             return InkWell(
                               onTap: () {
-                                setState(() {
-                                  // Toggle the check-in/check-out status for the user
-                                  userCheckStatus[userlistbyrole[index].uid!] =
-                                      !userCheckStatus[
-                                          userlistbyrole[index].uid]!;
-                                });
-
-                                if (userCheckStatus[
-                                    userlistbyrole[index].uid]!) {
-                                  // Navigate to check-in screen
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => GuardCheckIn(
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AttendanceReport(
                                               selectedEmployee:
-                                                  userlistbyrole[index])));
-                                } else {
-                                  // Navigate to check-out screen
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => GuardCheckOut(
-                                              selectedEmployee:
-                                                  userlistbyrole[index])));
-                                }
+                                                  userlistbyrole[index],
+                                            )));
                               },
                               child: Card(
-                                color:
-                                    userCheckStatus[userlistbyrole[index].uid]!
-                                        ? Colors.green
-                                        : Colors.red,
                                 // color: Colors.black,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20.0),
