@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'package:fyp_practise_project/Login-SignUp/signup.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import 'package:fyp_practise_project/Dashboards/applicant_dash.dart';
@@ -360,7 +361,13 @@ class _LoginPageState extends State<LoginPage> {
                                   height: 10,
                                 ),
                                 ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ApplicantSignup()));
+                                  },
                                   child: Container(
                                     width: 200,
                                     height: 40,

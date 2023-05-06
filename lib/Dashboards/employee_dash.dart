@@ -1,4 +1,10 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:fyp_practise_project/Employee-Home/apply_for_leave.dart';
+import 'package:fyp_practise_project/Employee-Home/attendance.dart';
+import 'package:fyp_practise_project/Employee-Home/leave_application.dart';
+import 'package:fyp_practise_project/HR-Home/Job/job_applications.dart';
+import 'package:fyp_practise_project/HR-Home/Job/job_post.dart';
+import 'package:fyp_practise_project/Login-SignUp/login.dart';
 import 'package:fyp_practise_project/uri.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -6,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fyp_practise_project/Models/login_signup_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HiredEmployeeDashboard extends StatefulWidget {
   int? uid;
@@ -29,8 +36,10 @@ class _HiredEmployeeDashboardState extends State<HiredEmployeeDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Center(child: Text("")),
+        appBar: AppBar(centerTitle: true,
+          title: Text(
+            "Welcome  ${userlist.isNotEmpty ? userlist[0].fname : ''} ${userlist.isNotEmpty ? userlist[0].lname : ''}",
+          ),
         ),
         drawer: Drawer(
           child: ListView(
@@ -103,15 +112,12 @@ class _HiredEmployeeDashboardState extends State<HiredEmployeeDashboard> {
               ),
               ListTile(
                 leading: const Icon(Icons.settings),
-                title: const Text(
-                  'Setting',
-                  style: TextStyle(fontSize: 20),
-                ),
+                title: const Text('Setting'),
                 onTap: () {
                   // Navigator.push(
                   //   context,
                   //   MaterialPageRoute(
-                  //     builder: (context) => EmployeeLeaveReqScreen(),
+                  //     builder: (context) => ApplicantApplyApplications(),
                   //   ),
                   // );
                 },
@@ -122,15 +128,18 @@ class _HiredEmployeeDashboardState extends State<HiredEmployeeDashboard> {
                   'Log Out',
                   style: TextStyle(fontSize: 20),
                 ),
-                onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => ApplicantProfile(),
-                  //   ),
-                  // );
+                onTap: () async {
+                  SharedPreferences sp = await SharedPreferences.getInstance();
+                  sp.clear();
+                  // ignore: use_build_context_synchronously
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginPage(),
+                    ),
+                  );
                 },
-              ),
+              )
             ],
           ),
         ),
@@ -138,196 +147,242 @@ class _HiredEmployeeDashboardState extends State<HiredEmployeeDashboard> {
         body: Stack(
           children: [
             Container(
-              color: Colors.white,
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('images/background.jpg'),
+                      fit: BoxFit.fill)),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 600),
-              child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.blue.shade900,
-                      borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(50),
-                          bottomRight: Radius.circular(50)))),
-            ),
-            Padding(
-                padding: const EdgeInsets.only(top: 50, left: 110),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        width: 5,
-                        color: Colors.black,
-                        style: BorderStyle.solid),
-                  ),
-                  child: const Text(
-                    '    Dashboard \n Employee side',
-                    style: TextStyle(
-                        fontFamily: 'RobotoSlab-Black',
-                        fontSize: 25,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w900),
-                  ),
-                )),
-            Padding(
-              padding: const EdgeInsets.only(top: 770),
-              child: Container(
-                  decoration: const BoxDecoration(
-                      color: Color(0xFFFBE7C6),
-                      borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(50),
-                          topLeft: Radius.circular(50)))),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 350),
-              child: Column(children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 0, left: 15),
-                      child: Container(
-                        height: 40,
-                        width: 50,
-                        // ignore: prefer_const_constructors
-                        child: Image(
-                            height: 200,
-                            width: 200,
-                            // ignore: prefer_const_constructors
-                            image: AssetImage('images/attendanceicon.png')),
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.15,
+                  left: MediaQuery.of(context).size.width * 0.05),
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EmployeeApplyLeave(
+                                    uid: widget.uid,
+                                  )));
+                    },
+                    child: Container(
+                      height: 150,
+                      width: 150,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: LinearGradient(
+                          colors: [Colors.grey.shade400, Colors.grey.shade200],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade500,
+                            blurRadius: 5,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
                       ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) =>
-                        //             EmployeeAttendenceScreen()));
-                      },
-                      style: TextButton.styleFrom(
-                          backgroundColor: Colors.grey.shade200,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(9.9),
-                            side: const BorderSide(
-                                color: Colors.black, width: 5.0),
-                          )),
-                      child: const Text(
-                        'ATTENDANCE',
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'RobotoSlab-Black',
-                            color: Colors.blue,
-                            fontWeight: FontWeight.w900),
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20, left: 15),
-                      child: Container(
-                        height: 30,
-                        width: 50,
-                        // ignore: prefer_const_constructors
-                        child: Image(
-                            height: 100,
-                            width: 150,
-                            // ignore: prefer_const_constructors
-                            image: AssetImage('images/LeavesIcon.png')),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 17, left: 5),
-                      child: TextButton(
-                        onPressed: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) =>
-                          //             EmployeeLeaveScreen()));
-                        },
-                        style: TextButton.styleFrom(
-                            backgroundColor: Colors.grey.shade200,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(9.9),
-                              side: const BorderSide(
-                                  color: Colors.black, width: 5.0),
-                            )),
-                        child: const Text(
-                          'LEAVES',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'RobotoSlab-Black',
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.event_note,
+                              size: 60,
                               color: Colors.blue,
-                              fontWeight: FontWeight.w900),
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            Text(
+                              "Apply For Leave",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'RobotoSlab-VariableFont_wght'),
+                            ),
+                          ],
                         ),
                       ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20, left: 15),
-                      child: Container(
-                        height: 30,
-                        width: 50,
-                        // ignore: prefer_const_constructors
-                        child: Image(
-                            height: 200,
-                            width: 200,
-                            // ignore: prefer_const_constructors
-                            image: AssetImage('images/LeavesIcon.png')),
-                      ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15),
-                      child: TextButton(
-                        onPressed: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) =>
-                          //             EmployeeLeaveReqScreen()));
-                        },
-                        style: TextButton.styleFrom(
-                            backgroundColor: Colors.grey.shade200,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(9.9),
-                              side: const BorderSide(
-                                  color: Colors.black, width: 5.0),
-                            )),
-                        child: const Text(
-                          'LEAVE REQUEST',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'RobotoSlab-Black',
+                  ),
+                  SizedBox(
+                    width: 30,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EmployeeLeaveApplication(
+                                    uid: widget.uid,
+                                  )));
+                    },
+                    child: Container(
+                      height: 150,
+                      width: 150,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: LinearGradient(
+                          colors: [Colors.grey.shade400, Colors.grey.shade200],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade500,
+                            blurRadius: 5,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.calendar_today_rounded,
+                              size: 60,
                               color: Colors.blue,
-                              fontWeight: FontWeight.w900),
+                            ),
+                            Text(
+                              "Leave Applications",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'RobotoSlab-VariableFont_wght'),
+                            ),
+                          ],
                         ),
                       ),
-                    )
-                  ],
-                ),
-              ]),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.39,
+                  left: MediaQuery.of(context).size.width * 0.05),
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => EmployeeAttendanceReport(
+                      //               uid: widget.uid,
+                      //             )));
+                    },
+                    child: Container(
+                      height: 150,
+                      width: 150,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: LinearGradient(
+                          colors: [Colors.grey.shade400, Colors.grey.shade200],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade500,
+                            blurRadius: 5,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.event,
+                              size: 60,
+                              color: Colors.blue,
+                            ),
+                            Text(
+                              "Attendance",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: 'RobotoSlab-VariableFont_wght',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 30,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => JobPost()));
+                    },
+                    child: Container(
+                      height: 150,
+                      width: 150,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: LinearGradient(
+                          colors: [Colors.grey.shade400, Colors.grey.shade200],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade500,
+                            blurRadius: 5,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.work_outline_rounded,
+                              size: 60,
+                              color: Colors.blue,
+                            ),
+                            Text(
+                              "Job Post",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: 'RobotoSlab-VariableFont_wght',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             )
           ],
         ));
   }
+}
 
-  Future<List<LoginModel>> fetchcuser(int id) async {
-    //response keyword khud sa bnaya ha
-    final response = await http.get(Uri.parse(
-        'http://$ip/HrmPractise02/api/User/UserGet?id=$id')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
-    var Data = jsonDecode(response.body
-        .toString()); // decode kar ka data variable ma store kar rahay hn
-    if (response.statusCode == 200) {
-      userlist.clear();
-      for (Map<String, dynamic> index in Data) {
-        userlist.add(LoginModel.frommap(index));
-      }
-      return userlist;
-    } else {
-      return userlist;
+Future<List<LoginModel>> fetchcuser(int id) async {
+  //response keyword khud sa bnaya ha
+  final response = await http.get(Uri.parse(
+      'http://$ip/HrmPractise02/api/User/UserGet?id=$id')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
+  var Data = jsonDecode(response.body
+      .toString()); // decode kar ka data variable ma store kar rahay hn
+  if (response.statusCode == 200) {
+    userlist.clear();
+    for (Map<String, dynamic> index in Data) {
+      userlist.add(LoginModel.frommap(index));
     }
+    return userlist;
+  } else {
+    return userlist;
   }
 }

@@ -1,23 +1,23 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:fyp_practise_project/Models/attendance_model.dart';
+import 'package:fyp_practise_project/Models/Attendance_Model.dart';
 
 import 'package:fyp_practise_project/uri.dart';
 
 import 'package:http/http.dart' as http;
 
 class AttendanceReportDeatil extends StatefulWidget {
+  int? uid;
   DateTime? Date;
-  AttendanceReportDeatil({super.key, required this.Date});
+  AttendanceReportDeatil({super.key, required this.Date, required this.uid});
 
   @override
   State<AttendanceReportDeatil> createState() => _AttendanceReportDeatilState();
 }
 
 class _AttendanceReportDeatilState extends State<AttendanceReportDeatil> {
-  List<Attendancemodel> attendancedetaillist = [];
-  List<AttendanceRecord> attendancerecordlist = [];
+  List<AttendanceWithIdModel> attendancewithidlist = [];
 
   late Widget _widget;
   @override
@@ -25,6 +25,7 @@ class _AttendanceReportDeatilState extends State<AttendanceReportDeatil> {
     super.initState();
     _widget = AttendanceReportDeatil(
       Date: widget.Date,
+      uid: widget.uid,
     );
   }
 
@@ -44,14 +45,14 @@ class _AttendanceReportDeatilState extends State<AttendanceReportDeatil> {
             child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: FutureBuilder(
-              future: getattendancedetails(),
+              future: attendancebyid(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(
                     children: [
                       Expanded(
                         child: ListView.builder(
-                          itemCount: attendancerecordlist.length,
+                          itemCount: attendancewithidlist.length,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: EdgeInsets.only(
@@ -82,7 +83,7 @@ class _AttendanceReportDeatilState extends State<AttendanceReportDeatil> {
                                       const SizedBox(height: 4),
                                       Center(
                                         child: Text(
-                                          "Date: ${attendancerecordlist[index].date}",
+                                          "Date: ${attendancewithidlist[index].date}",
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16,
@@ -90,27 +91,24 @@ class _AttendanceReportDeatilState extends State<AttendanceReportDeatil> {
                                         ),
                                       ),
                                       const SizedBox(height: 12),
-                                      for (var record
-                                          in attendancerecordlist[index]
-                                              .records)
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              "Time In: ${record.checkin}",
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                              ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Time In: ${attendancewithidlist[index].checkin}",
+                                            style: const TextStyle(
+                                              fontSize: 16,
                                             ),
-                                            Text(
-                                              "Time Out: ${record.checkout ?? '-'}",
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                              ),
+                                          ),
+                                          Text(
+                                            "Time Out: ${attendancewithidlist[index].checkout ?? '-'}",
+                                            style: const TextStyle(
+                                              fontSize: 16,
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
+                                      ),
                                       const SizedBox(height: 6),
                                     ],
                                   ),
@@ -131,33 +129,79 @@ class _AttendanceReportDeatilState extends State<AttendanceReportDeatil> {
     );
   }
 
-  Future<List<AttendanceRecord>> getattendancedetails() async {
+  Future<List<AttendanceWithIdModel>> attendancebyid() async {
     final response = await http.get(Uri.parse(
-        'http://$ip/HrmPractise02/api/Attendance/ByDateAttendanceGet?Date=${widget.Date}'));
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
+        'http://$ip/HrmPractise02/api/Attendance/WithDateAndIDAttendanceGet?Date=${widget.Date}&uid=${widget.uid}'));
+    var Data = jsonDecode(response.body.toString());
+
     if (response.statusCode == 200) {
-      attendancerecordlist.clear();
-      var data = jsonDecode(response.body.toString());
-      if (data is List) {
-        for (Map<String, dynamic> index in data) {
-          attendancerecordlist.add(AttendanceRecord.fromJson(index));
-        }
-        return attendancerecordlist;
-      } else {
-        print('Invalid response format');
+      attendancewithidlist.clear();
+
+      for (Map<String, dynamic> index in Data) {
+        attendancewithidlist.add(AttendanceWithIdModel.fromJson(index));
       }
+      return attendancewithidlist;
     } else {
-      print('Request failed with status: ${response.statusCode}');
+      return attendancewithidlist;
     }
-    return attendancerecordlist;
-    // ignore: prefer_typing_uninitialized_variables
   }
-}
 
+  // }
 
-// // 
+  // Future<List<AttendanceWithIdModel>> attendancebyid() async {
+  //   final response = await http.get(Uri.parse(
+  //       'http://$ip/HrmPractise02/api/Attendance/WithDateAndIDAttendanceGet?Date=${widget.Date}&uid=${widget.uid}'));
+  //   var Data = jsonDecode(response.body.toString());
 
+  //   if (response.statusCode == 200) {
+  //     attendancewithidlist.clear();
+
+  //     Set<String> uniqueDates = {}; // Create a set to store unique dates
+  //     List<Map<String, dynamic>> uniqueData =
+  //         []; // Create a list to store unique records
+
+  //     for (Map<String, dynamic> index in Data) {
+  //       // Check if the date is already in the set
+  //       if (!uniqueDates.contains(index['date'])) {
+  //         uniqueDates.add(index['date']); // Add the date to the set
+  //         uniqueData.add(index); // Add the record to the unique records list
+  //       }
+  //     }
+
+  //     for (Map<String, dynamic> index in uniqueData) {
+  //       attendancewithidlist.add(AttendanceWithIdModel.fromJson(index));
+  //     }
+  //     return attendancewithidlist;
+  //   } else {
+  //     return attendancewithidlist;
+  //   }
+  // }
+
+//   Future<List<AttendanceRecord>> getattendancedetails() async {
+//     final response = await http.get(Uri.parse(
+//         'http://$ip/HrmPractise02/api/Attendance/WithDateAndIDAttendanceGet?Date=${widget.Date}&uid=${widget.uid}'));
+//     print('Response status: ${response.statusCode}');
+//     print('Response body: ${response.body}');
+//     if (response.statusCode == 200) {
+//       attendancerecordlist.clear();
+//       var data = jsonDecode(response.body.toString());
+//       if (data is List) {
+//         for (Map<String, dynamic> index in data) {
+//           attendancerecordlist.add(AttendanceRecord.fromJson(index));
+//         }
+//         return attendancerecordlist;
+//       } else {
+//         print('Invalid response format');
+//       }
+//     } else {
+//       print('Request failed with status: ${response.statusCode}');
+//     }
+//     return attendancerecordlist;
+//     // ignore: prefer_typing_uninitialized_variables
+//   }
+// }
+
+// //
 
 // import 'dart:convert';
 
@@ -334,3 +378,4 @@ class _AttendanceReportDeatilState extends State<AttendanceReportDeatil> {
 //     };
 // //   }
 // }
+}

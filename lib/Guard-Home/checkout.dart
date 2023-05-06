@@ -276,25 +276,4 @@ class _GuardCheckOutState extends State<GuardCheckOut> {
       throw Exception("Failed to fetch employee by UID");
     }
   }
-
-  // void UpdateAttendaceWithCheckout({int? Attendanceid}) async {
-  //   var url = "http://$ip/HrmPractise02/api/Education/UpdateEducation";
-  //   var data = {
-  //     "Attendanceid":widget.attendanceid,
-
-  //     "Uid": widget.selectedEmployee.uid,
-
-  //    hange this to the appropriate value
-  //   };
-  //   var boddy = jsonEncode(data);
-  //   var urlParse = Uri.parse(url);
-  //   try {
-  //     http.Response response = await http.put(urlParse,
-  //         body: boddy, headers: {"Content-Type": "application/json"});
-  //     var dataa = jsonDecode(response.body);
-  //     print(dataa);
-  //   } catch (e) {
-  //     print('Error occurred: $e');
-  //   }
-  // }
 }

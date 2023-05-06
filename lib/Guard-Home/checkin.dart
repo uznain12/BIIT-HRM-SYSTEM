@@ -19,6 +19,7 @@ class _GuardCheckInState extends State<GuardCheckIn> {
       selectedEmployee; //card ma jis employee par click kiya uski information fetch karnay ka liya use kiya
   final TextEditingController _checkintimeController = TextEditingController();
   final TextEditingController _checkindateController = TextEditingController();
+  bool _isInitial = true;
 
   @override
   void initState() {
@@ -28,8 +29,11 @@ class _GuardCheckInState extends State<GuardCheckIn> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _checkintimeController.text = TimeOfDay.now().format(context);
-    _checkindateController.text = DateTime.now().toString().split(' ')[0];
+    if (_isInitial) {
+      _checkintimeController.text = TimeOfDay.now().format(context);
+      _checkindateController.text = DateTime.now().toString().split(' ')[0];
+      _isInitial = false;
+    }
   }
 
   @override
@@ -288,9 +292,7 @@ class _GuardCheckInState extends State<GuardCheckIn> {
       "Uid": widget.selectedEmployee.uid,
       "checkin": _checkintimeController.text,
       "date": _checkindateController.text,
-
-      // "Degree": _selectedOption,
-      "hasexperienced": "true", // Change this to the appropriate value
+      "status": "present"
     };
     var boddy = jsonEncode(data);
     var urlParse = Uri.parse(url);

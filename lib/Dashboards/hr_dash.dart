@@ -1,14 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:http/http.dart' as http;
 import 'package:fyp_practise_project/Applicant-Home/Job/job_get.dart';
+import 'package:fyp_practise_project/Models/login_signup_model.dart';
 import 'package:fyp_practise_project/User_Persoanl_Profile/users_get_profile.dart';
 import 'package:fyp_practise_project/HR-Home/Job/job_applications.dart';
 import 'package:fyp_practise_project/HR-Home/Job/job_post.dart';
-import 'package:fyp_practise_project/login.dart';
-
+import 'package:fyp_practise_project/Login-SignUp/login.dart';
+import 'package:fyp_practise_project/uri.dart';
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminDashboard extends StatefulWidget {
@@ -19,30 +20,50 @@ class AdminDashboard extends StatefulWidget {
   State<AdminDashboard> createState() => _AdminDashboardState();
 }
 
+List<LoginModel> userlist = [];
+
 class _AdminDashboardState extends State<AdminDashboard> {
+  @override
+  void initState() {
+    super.initState();
+    fetchcuser(widget.uid!).then((_) {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Center(child: Text("HR Side")),
+          title: Center(
+              child: Text(
+            "Welcome  ${userlist.isNotEmpty ? userlist[0].fname : ''} ${userlist.isNotEmpty ? userlist[0].lname : ''}",
+          )),
         ),
         drawer: Drawer(
           child: ListView(
             // ignore: prefer_const_literals_to_create_immutables
             children: [
               UserAccountsDrawerHeader(
-                decoration: BoxDecoration(color: Colors.blue),
-                accountName: Text(
-                  "Muhammad Amir",
-                  style: TextStyle(fontSize: 20),
-                ),
-                accountEmail: Text("Amir1@gmail.com"),
-                currentAccountPicture: CircleAvatar(
-                    child: Text(
-                  "MA",
-                  style: TextStyle(color: Colors.black),
-                )),
-              ),
+                  decoration: BoxDecoration(color: Colors.blue),
+                  accountName: Text(
+                    "${userlist.isNotEmpty ? userlist[0].fname : ''} ${userlist.isNotEmpty ? userlist[0].lname : ''}",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  accountEmail:
+                      Text("${userlist.isNotEmpty ? userlist[0].email : ''}"),
+                  currentAccountPicture: CircleAvatar(
+                    child: userlist.isNotEmpty && userlist[0].image.isNotEmpty
+                        ? ClipOval(
+                            child: Image(
+                                fit: BoxFit.cover,
+                                height: 100,
+                                width: 100,
+                                image: NetworkImage(
+                                    imagepath + userlist[0].image)),
+                          )
+                        : const SizedBox.shrink(),
+                  )),
               ListTile(
                 leading: const Icon(Icons.person),
                 title: const Text('Profile'),
@@ -383,5 +404,22 @@ class _AdminDashboardState extends State<AdminDashboard> {
             )
           ],
         ));
+  }
+
+  Future<List<LoginModel>> fetchcuser(int id) async {
+    //response keyword khud sa bnaya ha
+    final response = await http.get(Uri.parse(
+        'http://$ip/HrmPractise02/api/User/UserGet?id=$id')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
+    var Data = jsonDecode(response.body
+        .toString()); // decode kar ka data variable ma store kar rahay hn
+    if (response.statusCode == 200) {
+      userlist.clear();
+      for (Map<String, dynamic> index in Data) {
+        userlist.add(LoginModel.frommap(index));
+      }
+      return userlist;
+    } else {
+      return userlist;
+    }
   }
 }

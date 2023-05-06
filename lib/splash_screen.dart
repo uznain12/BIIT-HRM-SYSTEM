@@ -5,7 +5,7 @@ import 'package:fyp_practise_project/Dashboards/applicant_dash.dart';
 import 'package:fyp_practise_project/Dashboards/employee_dash.dart';
 import 'package:fyp_practise_project/Dashboards/guard_dash.dart';
 import 'package:fyp_practise_project/Dashboards/hr_dash.dart';
-import 'package:fyp_practise_project/login.dart';
+import 'package:fyp_practise_project/Login-SignUp/login.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 

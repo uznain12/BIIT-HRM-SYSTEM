@@ -1,15 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:fyp_practise_project/Guard-Home/attendance_report.dart';
-import 'package:fyp_practise_project/Guard-Home/checkin.dart';
-import 'package:fyp_practise_project/Guard-Home/checkout.dart';
-import 'package:fyp_practise_project/Models/attendance_model.dart';
-import 'package:fyp_practise_project/User_Persoanl_Profile/users_get_profile.dart';
+
 import 'package:fyp_practise_project/uri.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:fyp_practise_project/Models/login_signup_model.dart';
 
 class AttendanceMainPage extends StatefulWidget {
@@ -22,7 +17,6 @@ class AttendanceMainPage extends StatefulWidget {
 
 List<LoginModel> userlist = [];
 List<LoginModel> userlistbyrole = [];
-List<Attendancemodel> attendancelist = [];
 
 class _AttendanceMainPageState extends State<AttendanceMainPage> {
   // New map to store the check-in/check-out status
@@ -99,7 +93,7 @@ class _AttendanceMainPageState extends State<AttendanceMainPage> {
                                 10, // ya 1 line ma 2 records ka darmayan space di ha
                             mainAxisSpacing:
                                 10, // or ya line 1 or line 2 ka records ma space di ha
-                            childAspectRatio: 3 / 2,
+                            childAspectRatio: 3 / 2.5,
                           ),
                           itemBuilder: (context, index) {
                             if (_searchQuery.isNotEmpty &&
@@ -211,23 +205,6 @@ class _AttendanceMainPageState extends State<AttendanceMainPage> {
       return userlistbyrole;
     } else {
       return userlistbyrole;
-    }
-  }
-
-  Future<List<Attendancemodel>> FetchAttendance() async {
-    //response keyword khud sa bnaya ha
-    final response = await http.get(Uri.parse(
-        'http://$ip/HrmPractise02/api/Education/EducationGet')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
-    var Data = jsonDecode(response.body
-        .toString()); // decode kar ka data variable ma store kar rahay hn
-    if (response.statusCode == 200) {
-      attendancelist.clear();
-      for (Map<String, dynamic> index in Data) {
-        attendancelist.add(Attendancemodel.fromJson(index));
-      }
-      return attendancelist;
-    } else {
-      return attendancelist;
     }
   }
 }

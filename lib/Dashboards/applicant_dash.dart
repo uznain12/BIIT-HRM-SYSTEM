@@ -6,7 +6,7 @@ import 'package:fyp_practise_project/Applicant-Home/Personal/applicant_applicati
 import 'package:fyp_practise_project/Applicant-Home/app_profile.dart';
 import 'package:fyp_practise_project/Applicant-Home/Job/job_get.dart';
 import 'package:fyp_practise_project/Models/login_signup_model.dart';
-import 'package:fyp_practise_project/login.dart';
+import 'package:fyp_practise_project/Login-SignUp/login.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fyp_practise_project/uri.dart';

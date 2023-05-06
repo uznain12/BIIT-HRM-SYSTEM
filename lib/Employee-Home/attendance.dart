@@ -1,3 +1,218 @@
+// import 'dart:convert';
+// import 'dart:math';
+// import 'dart:convert';
+// import 'dart:io';
+// import 'package:flutter/material.dart';
+// import 'package:fyp_practise_project/Guard-Home/attendance_report_detail.dart';
+// import 'package:intl/intl.dart'; // Add this import for date formatting
+
+// import 'package:fyp_practise_project/uri.dart';
+// import 'package:http/http.dart' as http;
+
+// class EmployeeAttendanceReport extends StatefulWidget {
+//   int? uid;
+//   EmployeeAttendanceReport({Key? key, required this.uid}) : super(key: key);
+//   // const ApplicantApplyJob({super.key});
+
+//   @override
+//   State<EmployeeAttendanceReport> createState() =>
+//       _EmployeeAttendanceReportState();
+// }
+
+// class _EmployeeAttendanceReportState extends State<EmployeeAttendanceReport> {
+//   // List<AllAttendanceModel> allattendancelist = [];
+//   List<AttendanceRecord> attendancereordlist = [];
+
+//   void _filterAttendance() {
+//     if (mounted) {
+//       setState(() {
+//         attendancereordlist = attendancereordlist.where((record) {
+//           DateTime recordDate = record.date;
+//           return recordDate.isAfter(_startDate) &&
+//               recordDate.isBefore(_endDate);
+//         }).toList();
+//       });
+//     }
+//   }
+
+//   String _formatDate(DateTime date) {
+//     return DateFormat('yyyy-MM-dd').format(date);
+//   }
+
+//   late Widget _widget;
+//   @override
+//   void initState() {
+//     super.initState();
+//     _widget = EmployeeAttendanceReport(uid: widget.uid);
+//   }
+
+//   DateTime _startDate = DateTime(2000); // date filter ka liya use hoi ha
+//   DateTime _endDate = DateTime(2024); // date filter ka liya use hoi ha
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.transparent,
+//       appBar: AppBar(
+//         centerTitle: true,
+//         title: const Text(
+//           'Attendance Report',
+//           style: TextStyle(
+//               fontFamily: 'RobotoSlab-Black',
+//               fontSize: 25,
+//               color: Colors.white,
+//               fontWeight: FontWeight.w900),
+//         ),
+//       ),
+//       body: Container(
+//         decoration: BoxDecoration(color: Colors.white),
+//         child: SingleChildScrollView(
+//             child: SizedBox(
+//           height: MediaQuery.of(context).size.height,
+//           child: FutureBuilder(
+//               future: attendancebyid(widget.uid!),
+//               builder: (context, snapshot) {
+//                 if (snapshot.hasData) {
+//                   return Column(
+//                     children: [
+//                       Row(
+//                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                         children: [
+//                           ElevatedButton(
+//                             onPressed: () async {
+//                               final DateTime? pickedDate = await showDatePicker(
+//                                 context: context,
+//                                 initialDate: _startDate,
+//                                 firstDate: DateTime(2000),
+//                                 lastDate: DateTime(2400),
+//                               );
+//                               if (pickedDate != null &&
+//                                   pickedDate != _startDate) {
+//                                 setState(() {
+//                                   _startDate = pickedDate;
+//                                   _filterAttendance();
+//                                 });
+//                               }
+//                             },
+//                             child: Text("From: ${_formatDate(_startDate)}"),
+//                           ),
+//                           ElevatedButton(
+//                             onPressed: () async {
+//                               final DateTime? pickedDate = await showDatePicker(
+//                                 context: context,
+//                                 initialDate: _endDate,
+//                                 firstDate: DateTime(2000),
+//                                 lastDate: DateTime(2400),
+//                               );
+//                               if (pickedDate != null &&
+//                                   pickedDate != _endDate) {
+//                                 setState(() {
+//                                   _endDate = pickedDate;
+//                                   _filterAttendance();
+//                                 });
+//                               }
+//                             },
+//                             child: Text("To: ${_formatDate(_endDate)}"),
+//                           ),
+//                         ],
+//                       ),
+//                       Expanded(
+//                         child: ListView.builder(
+//                           itemCount: attendancereordlist.length,
+//                           itemBuilder: (context, index) {
+//                             return Padding(
+//                               padding: EdgeInsets.only(
+//                                 top: MediaQuery.of(context).size.height * 0.02,
+//                                 left: MediaQuery.of(context).size.width * 0.02,
+//                                 right: MediaQuery.of(context).size.width * 0.02,
+//                               ),
+//                               child: Container(
+//                                 decoration: BoxDecoration(
+//                                   color: Colors.grey.shade300,
+//                                   border: Border.all(
+//                                     width: 2,
+//                                     color: Colors.black,
+//                                   ),
+//                                 ),
+//                                 child: Row(
+//                                   children: [
+//                                     Column(
+//                                       mainAxisAlignment:
+//                                           MainAxisAlignment.start,
+//                                       crossAxisAlignment:
+//                                           CrossAxisAlignment.start,
+//                                       children: [
+//                                         const SizedBox(height: 8),
+//                                         Padding(
+//                                           padding: EdgeInsets.only(
+//                                               left: MediaQuery.of(context)
+//                                                       .size
+//                                                       .width *
+//                                                   0.1),
+//                                           child: RichText(
+//                                             text: TextSpan(
+//                                                 style:
+//                                                     DefaultTextStyle.of(context)
+//                                                         .style,
+//                                                 children: [
+//                                                   const TextSpan(
+//                                                     text: "Date:        ",
+//                                                     style: TextStyle(
+//                                                       fontWeight:
+//                                                           FontWeight.bold,
+//                                                     ),
+//                                                   ),
+//                                                   TextSpan(
+//                                                     text:
+//                                                         "${attendancereordlist[index].date}",
+//                                                     style: const TextStyle(
+//                                                       fontStyle:
+//                                                           FontStyle.italic,
+//                                                     ),
+//                                                   ),
+//                                                 ]),
+//                                           ),
+//                                         ),
+//                                       ],
+//                                     ),
+//                                     const Spacer(),
+//                                     // IconButton(
+//                                     //   onPressed: () {
+//                                     //     // Handle edit job
+
+//                                     //     Navigator.push(
+//                                     //         context,
+//                                     //         MaterialPageRoute(
+//                                     //             builder: (context) =>
+//                                     //                 AttendanceReportDeatil(
+//                                     //                     Date:
+//                                     //                         attendancereordlist[
+//                                     //                                 index]
+//                                     //                             .date)));
+//                                     //   },
+//                                     //   icon: const Icon(
+//                                     //     Icons.details,
+//                                     //   ),
+//                                     //   tooltip: 'Job Details',
+//                                     // ),
+//                                   ],
+//                                 ),
+//                               ),
+//                             );
+//                           },
+//                         ),
+//                       ),
+//                     ],
+//                   );
+//                 } else {
+//                   return Center(child: CircularProgressIndicator());
+//                 }
+//               }),
+//         )),
+//       ),
+//     );
+//   }
+// }
+
 import 'dart:convert';
 import 'dart:math';
 import 'dart:convert';

@@ -1,10 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:fyp_practise_project/Guard-Home/attendance.dart';
 import 'package:fyp_practise_project/Guard-Home/attendance_report.dart';
+
 import 'package:fyp_practise_project/Guard-Home/checkin.dart';
+
 import 'package:fyp_practise_project/Guard-Home/checkout.dart';
-import 'package:fyp_practise_project/Models/attendance_model.dart';
+
 import 'package:fyp_practise_project/User_Persoanl_Profile/users_get_profile.dart';
+import 'package:fyp_practise_project/Login-SignUp/login.dart';
 import 'package:fyp_practise_project/uri.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -12,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fyp_practise_project/Models/login_signup_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GuardDashboard extends StatefulWidget {
   int? uid;
@@ -23,7 +27,6 @@ class GuardDashboard extends StatefulWidget {
 
 List<LoginModel> userlist = [];
 List<LoginModel> userlistbyrole = [];
-List<Attendancemodel> attendancelist = [];
 
 class _GuardDashboardState extends State<GuardDashboard> {
   Map<int, bool> userCheckStatus =
@@ -43,7 +46,10 @@ class _GuardDashboardState extends State<GuardDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text("")),
+        centerTitle: true,
+        title: Text(
+          "Welcome: ${userlist.isNotEmpty ? userlist[0].fname : ''} ${userlist.isNotEmpty ? userlist[0].lname : ''}",
+        ),
       ),
       drawer: Drawer(
         child: ListView(
@@ -96,46 +102,13 @@ class _GuardDashboardState extends State<GuardDashboard> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.leave_bags_at_home),
-              title: const Text(
-                'Leaves',
-                style: TextStyle(fontSize: 20),
-              ),
-              onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => EmployeeLeaveScreen(),
-                //   ),
-                // );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text(
-                'Leave Request',
-                style: TextStyle(fontSize: 20),
-              ),
-              onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => EmployeeLeaveReqScreen(),
-                //   ),
-                // );
-              },
-            ),
-            ListTile(
               leading: const Icon(Icons.settings),
-              title: const Text(
-                'Setting',
-                style: TextStyle(fontSize: 20),
-              ),
+              title: const Text('Setting'),
               onTap: () {
                 // Navigator.push(
                 //   context,
                 //   MaterialPageRoute(
-                //     builder: (context) => EmployeeLeaveReqScreen(),
+                //     builder: (context) => ApplicantApplyApplications(),
                 //   ),
                 // );
               },
@@ -146,15 +119,18 @@ class _GuardDashboardState extends State<GuardDashboard> {
                 'Log Out',
                 style: TextStyle(fontSize: 20),
               ),
-              onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => ApplicantProfile(),
-                //   ),
-                // );
+              onTap: () async {
+                SharedPreferences sp = await SharedPreferences.getInstance();
+                sp.clear();
+                // ignore: use_build_context_synchronously
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                  ),
+                );
               },
-            ),
+            )
           ],
         ),
       ),
@@ -214,7 +190,7 @@ class _GuardDashboardState extends State<GuardDashboard> {
                                 10, // ya 1 line ma 2 records ka darmayan space di ha
                             mainAxisSpacing:
                                 10, // or ya line 1 or line 2 ka records ma space di ha
-                            childAspectRatio: 3 / 2,
+                            childAspectRatio: 3 / 2.5,
                           ),
                           itemBuilder: (context, index) {
                             if (_searchQuery.isNotEmpty &&
@@ -354,23 +330,6 @@ class _GuardDashboardState extends State<GuardDashboard> {
       return userlistbyrole;
     } else {
       return userlistbyrole;
-    }
-  }
-
-  Future<List<Attendancemodel>> FetchAttendance() async {
-    //response keyword khud sa bnaya ha
-    final response = await http.get(Uri.parse(
-        'http://$ip/HrmPractise02/api/Education/EducationGet')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
-    var Data = jsonDecode(response.body
-        .toString()); // decode kar ka data variable ma store kar rahay hn
-    if (response.statusCode == 200) {
-      attendancelist.clear();
-      for (Map<String, dynamic> index in Data) {
-        attendancelist.add(Attendancemodel.fromJson(index));
-      }
-      return attendancelist;
-    } else {
-      return attendancelist;
     }
   }
 }
