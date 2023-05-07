@@ -81,33 +81,18 @@ class _AttendanceReportDeatilState extends State<AttendanceReportDeatil> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       const SizedBox(height: 4),
-                                      Center(
-                                        child: Text(
-                                          "Date: ${attendancewithidlist[index].date}",
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                          ),
+                                      const SizedBox(height: 12),
+                                      Text(
+                                        "Time In: ${attendancewithidlist[index].checkin}",
+                                        style: const TextStyle(
+                                          fontSize: 16,
                                         ),
                                       ),
-                                      const SizedBox(height: 12),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Time In: ${attendancewithidlist[index].checkin}",
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          Text(
-                                            "Time Out: ${attendancewithidlist[index].checkout ?? '-'}",
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ],
+                                      Text(
+                                        "Time Out: ${attendancewithidlist[index].checkout ?? '-'}",
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
                                       ),
                                       const SizedBox(height: 6),
                                     ],

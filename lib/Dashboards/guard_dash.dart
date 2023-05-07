@@ -5,6 +5,7 @@ import 'package:fyp_practise_project/Guard-Home/attendance_report.dart';
 import 'package:fyp_practise_project/Guard-Home/checkin.dart';
 
 import 'package:fyp_practise_project/Guard-Home/checkout.dart';
+import 'package:fyp_practise_project/Models/attendance_model.dart';
 
 import 'package:fyp_practise_project/User_Persoanl_Profile/users_get_profile.dart';
 import 'package:fyp_practise_project/Login-SignUp/login.dart';
@@ -27,6 +28,7 @@ class GuardDashboard extends StatefulWidget {
 
 List<LoginModel> userlist = [];
 List<LoginModel> userlistbyrole = [];
+List<AttendanceWithIdModel> attendancewithidlist = [];
 
 class _GuardDashboardState extends State<GuardDashboard> {
   Map<int, bool> userCheckStatus =
@@ -213,31 +215,42 @@ class _GuardDashboardState extends State<GuardDashboard> {
                             }
                             // Create a card for each employee
                             return InkWell(
-                              onTap: () {
+                              onTap: () async {
                                 setState(() {
-                                  // Toggle the check-in/check-out status for the user
                                   userCheckStatus[userlistbyrole[index].uid!] =
                                       !userCheckStatus[
                                           userlistbyrole[index].uid]!;
                                 });
 
+                                AttendanceWithIdModel?
+                                    attendanceData = //Ya Bhot Important line ha iska matlab ha ka jo hum na data attendance model ka get kiya wo userlist by employee ko provide kar diya ha
+                                    await fetchAttendanceByUid(
+                                        userlistbyrole[index].uid!);
+
                                 if (userCheckStatus[
                                     userlistbyrole[index].uid]!) {
-                                  // Navigate to check-in screen
+                                  // ignore: use_build_context_synchronously
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => GuardCheckIn(
                                               selectedEmployee:
-                                                  userlistbyrole[index])));
+                                                  userlistbyrole[index],
+                                              isCheckIn: true)));
                                 } else {
-                                  // Navigate to check-out screen
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => GuardCheckOut(
-                                              selectedEmployee:
-                                                  userlistbyrole[index])));
+                                  if (attendanceData != null) {
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => GuardCheckOut(
+                                                checkin: attendanceData.checkin,
+                                                Attendanceid:
+                                                    attendanceData.attendanceid,
+                                                selectedEmployee:
+                                                    userlistbyrole[index],
+                                                isCheckIn: false)));
+                                  }
                                 }
                               },
                               child: Card(
@@ -330,6 +343,35 @@ class _GuardDashboardState extends State<GuardDashboard> {
       return userlistbyrole;
     } else {
       return userlistbyrole;
+    }
+  }
+
+  //ya jo function bnaya ha is ka bgair attendance update nai ho sakti iska matlab ya ha ka current user jo chehckin huva uski id ka base pa get kar ka hum na on tap ma provide kiya card ka ontap ma
+
+  Future<AttendanceWithIdModel?> fetchAttendanceByUid(int id) async {
+    final response = await http.get(Uri.parse(
+        'http://$ip/HrmPractise02/api/Attendance/AttendanceGet?uid=$id'));
+    if (response.statusCode == 200) {
+      var Data = jsonDecode(response.body.toString());
+
+      if (response.statusCode == 200) {
+        attendancewithidlist.clear();
+
+        if (Data is List<dynamic>) {
+          for (Map<String, dynamic> index in Data) {
+            attendancewithidlist.add(AttendanceWithIdModel.fromJson(index));
+          }
+          // Return the last attendance record if the list is not empty
+          return attendancewithidlist.isNotEmpty
+              ? attendancewithidlist.last
+              : null;
+        } else {
+          print('Unexpected data format');
+          return null;
+        }
+      } else {
+        return null;
+      }
     }
   }
 }

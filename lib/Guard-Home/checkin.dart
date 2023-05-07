@@ -5,9 +5,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class GuardCheckIn extends StatefulWidget {
+  final bool isCheckIn;
   final LoginModel
       selectedEmployee; //selected employee jis pa click ki ha woi open hoga iskay hrough jesay user ko id ki base pa la ka atay hn usi tarah
-  GuardCheckIn({Key? key, required this.selectedEmployee}) : super(key: key);
+  GuardCheckIn(
+      {Key? key, required this.selectedEmployee, this.isCheckIn = true})
+      : super(key: key);
 
   @override
   State<GuardCheckIn> createState() => _GuardCheckInState();
@@ -249,13 +252,16 @@ class _GuardCheckInState extends State<GuardCheckIn> {
                                     const SizedBox(height: 16),
                                     Center(
                                       child: ElevatedButton(
-                                          onPressed: () {
-                                            AddAttendance(
-                                                Uid: widget
-                                                    .selectedEmployee.uid);
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text("CHECK IN")),
+                                        onPressed: () {
+                                          AddAttendance(
+                                              Uid: widget.selectedEmployee.uid,
+                                              isCheckIn: widget.isCheckIn);
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text(widget.isCheckIn
+                                            ? "CHECK IN"
+                                            : "CHECK OUT"),
+                                      ),
                                     )
                                   ],
                                 ),
@@ -286,7 +292,7 @@ class _GuardCheckInState extends State<GuardCheckIn> {
     }
   }
 
-  void AddAttendance({int? Uid}) async {
+  void AddAttendance({int? Uid, bool isCheckIn = true}) async {
     var url = "http://$ip/HrmPractise02/api/Attendance/AttendancePost";
     var data = {
       "Uid": widget.selectedEmployee.uid,
