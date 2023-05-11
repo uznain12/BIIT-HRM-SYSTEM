@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:fyp_practise_project/Applicant-Home/Personal/applicant_applications.dart';
+import 'package:fyp_practise_project/Applicant-Home/Job/applicant_applications.dart';
 
 import 'package:fyp_practise_project/Applicant-Home/app_profile.dart';
 import 'package:fyp_practise_project/Applicant-Home/Job/job_get.dart';

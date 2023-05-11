@@ -36,7 +36,8 @@ class _HiredEmployeeDashboardState extends State<HiredEmployeeDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(centerTitle: true,
+        appBar: AppBar(
+          centerTitle: true,
           title: Text(
             "Welcome  ${userlist.isNotEmpty ? userlist[0].fname : ''} ${userlist.isNotEmpty ? userlist[0].lname : ''}",
           ),
@@ -269,12 +270,12 @@ class _HiredEmployeeDashboardState extends State<HiredEmployeeDashboard> {
                 children: [
                   InkWell(
                     onTap: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => EmployeeAttendanceReport(
-                      //               uid: widget.uid,
-                      //             )));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EmployeeAttendanceReport(
+                                    uid: widget.uid,
+                                  )));
                     },
                     child: Container(
                       height: 150,

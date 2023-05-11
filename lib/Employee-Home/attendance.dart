@@ -1,218 +1,3 @@
-// import 'dart:convert';
-// import 'dart:math';
-// import 'dart:convert';
-// import 'dart:io';
-// import 'package:flutter/material.dart';
-// import 'package:fyp_practise_project/Guard-Home/attendance_report_detail.dart';
-// import 'package:intl/intl.dart'; // Add this import for date formatting
-
-// import 'package:fyp_practise_project/uri.dart';
-// import 'package:http/http.dart' as http;
-
-// class EmployeeAttendanceReport extends StatefulWidget {
-//   int? uid;
-//   EmployeeAttendanceReport({Key? key, required this.uid}) : super(key: key);
-//   // const ApplicantApplyJob({super.key});
-
-//   @override
-//   State<EmployeeAttendanceReport> createState() =>
-//       _EmployeeAttendanceReportState();
-// }
-
-// class _EmployeeAttendanceReportState extends State<EmployeeAttendanceReport> {
-//   // List<AllAttendanceModel> allattendancelist = [];
-//   List<AttendanceRecord> attendancereordlist = [];
-
-//   void _filterAttendance() {
-//     if (mounted) {
-//       setState(() {
-//         attendancereordlist = attendancereordlist.where((record) {
-//           DateTime recordDate = record.date;
-//           return recordDate.isAfter(_startDate) &&
-//               recordDate.isBefore(_endDate);
-//         }).toList();
-//       });
-//     }
-//   }
-
-//   String _formatDate(DateTime date) {
-//     return DateFormat('yyyy-MM-dd').format(date);
-//   }
-
-//   late Widget _widget;
-//   @override
-//   void initState() {
-//     super.initState();
-//     _widget = EmployeeAttendanceReport(uid: widget.uid);
-//   }
-
-//   DateTime _startDate = DateTime(2000); // date filter ka liya use hoi ha
-//   DateTime _endDate = DateTime(2024); // date filter ka liya use hoi ha
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.transparent,
-//       appBar: AppBar(
-//         centerTitle: true,
-//         title: const Text(
-//           'Attendance Report',
-//           style: TextStyle(
-//               fontFamily: 'RobotoSlab-Black',
-//               fontSize: 25,
-//               color: Colors.white,
-//               fontWeight: FontWeight.w900),
-//         ),
-//       ),
-//       body: Container(
-//         decoration: BoxDecoration(color: Colors.white),
-//         child: SingleChildScrollView(
-//             child: SizedBox(
-//           height: MediaQuery.of(context).size.height,
-//           child: FutureBuilder(
-//               future: attendancebyid(widget.uid!),
-//               builder: (context, snapshot) {
-//                 if (snapshot.hasData) {
-//                   return Column(
-//                     children: [
-//                       Row(
-//                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                         children: [
-//                           ElevatedButton(
-//                             onPressed: () async {
-//                               final DateTime? pickedDate = await showDatePicker(
-//                                 context: context,
-//                                 initialDate: _startDate,
-//                                 firstDate: DateTime(2000),
-//                                 lastDate: DateTime(2400),
-//                               );
-//                               if (pickedDate != null &&
-//                                   pickedDate != _startDate) {
-//                                 setState(() {
-//                                   _startDate = pickedDate;
-//                                   _filterAttendance();
-//                                 });
-//                               }
-//                             },
-//                             child: Text("From: ${_formatDate(_startDate)}"),
-//                           ),
-//                           ElevatedButton(
-//                             onPressed: () async {
-//                               final DateTime? pickedDate = await showDatePicker(
-//                                 context: context,
-//                                 initialDate: _endDate,
-//                                 firstDate: DateTime(2000),
-//                                 lastDate: DateTime(2400),
-//                               );
-//                               if (pickedDate != null &&
-//                                   pickedDate != _endDate) {
-//                                 setState(() {
-//                                   _endDate = pickedDate;
-//                                   _filterAttendance();
-//                                 });
-//                               }
-//                             },
-//                             child: Text("To: ${_formatDate(_endDate)}"),
-//                           ),
-//                         ],
-//                       ),
-//                       Expanded(
-//                         child: ListView.builder(
-//                           itemCount: attendancereordlist.length,
-//                           itemBuilder: (context, index) {
-//                             return Padding(
-//                               padding: EdgeInsets.only(
-//                                 top: MediaQuery.of(context).size.height * 0.02,
-//                                 left: MediaQuery.of(context).size.width * 0.02,
-//                                 right: MediaQuery.of(context).size.width * 0.02,
-//                               ),
-//                               child: Container(
-//                                 decoration: BoxDecoration(
-//                                   color: Colors.grey.shade300,
-//                                   border: Border.all(
-//                                     width: 2,
-//                                     color: Colors.black,
-//                                   ),
-//                                 ),
-//                                 child: Row(
-//                                   children: [
-//                                     Column(
-//                                       mainAxisAlignment:
-//                                           MainAxisAlignment.start,
-//                                       crossAxisAlignment:
-//                                           CrossAxisAlignment.start,
-//                                       children: [
-//                                         const SizedBox(height: 8),
-//                                         Padding(
-//                                           padding: EdgeInsets.only(
-//                                               left: MediaQuery.of(context)
-//                                                       .size
-//                                                       .width *
-//                                                   0.1),
-//                                           child: RichText(
-//                                             text: TextSpan(
-//                                                 style:
-//                                                     DefaultTextStyle.of(context)
-//                                                         .style,
-//                                                 children: [
-//                                                   const TextSpan(
-//                                                     text: "Date:        ",
-//                                                     style: TextStyle(
-//                                                       fontWeight:
-//                                                           FontWeight.bold,
-//                                                     ),
-//                                                   ),
-//                                                   TextSpan(
-//                                                     text:
-//                                                         "${attendancereordlist[index].date}",
-//                                                     style: const TextStyle(
-//                                                       fontStyle:
-//                                                           FontStyle.italic,
-//                                                     ),
-//                                                   ),
-//                                                 ]),
-//                                           ),
-//                                         ),
-//                                       ],
-//                                     ),
-//                                     const Spacer(),
-//                                     // IconButton(
-//                                     //   onPressed: () {
-//                                     //     // Handle edit job
-
-//                                     //     Navigator.push(
-//                                     //         context,
-//                                     //         MaterialPageRoute(
-//                                     //             builder: (context) =>
-//                                     //                 AttendanceReportDeatil(
-//                                     //                     Date:
-//                                     //                         attendancereordlist[
-//                                     //                                 index]
-//                                     //                             .date)));
-//                                     //   },
-//                                     //   icon: const Icon(
-//                                     //     Icons.details,
-//                                     //   ),
-//                                     //   tooltip: 'Job Details',
-//                                     // ),
-//                                   ],
-//                                 ),
-//                               ),
-//                             );
-//                           },
-//                         ),
-//                       ),
-//                     ],
-//                   );
-//                 } else {
-//                   return Center(child: CircularProgressIndicator());
-//                 }
-//               }),
-//         )),
-//       ),
-//     );
-//   }
-// }
-
 import 'dart:convert';
 import 'dart:math';
 import 'dart:convert';
@@ -220,39 +5,55 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fyp_practise_project/Guard-Home/attendance_report_detail.dart';
 import 'package:fyp_practise_project/Models/Attendance_Model.dart';
-// import 'package:fyp_practise_project/Models/allattendance_model.dart';
-
-import 'package:fyp_practise_project/Models/login_signup_model.dart';
+import 'package:intl/intl.dart'; // Add this import for date formatting
 
 import 'package:fyp_practise_project/uri.dart';
 import 'package:http/http.dart' as http;
 
-class AttendanceReport extends StatefulWidget {
-  final LoginModel selectedEmployee;
-  AttendanceReport({Key? key, required this.selectedEmployee})
-      : super(key: key);
+class EmployeeAttendanceReport extends StatefulWidget {
+  int? uid;
+  EmployeeAttendanceReport({Key? key, required this.uid}) : super(key: key);
   // const ApplicantApplyJob({super.key});
 
   @override
-  State<AttendanceReport> createState() => _AttendanceReportState();
+  State<EmployeeAttendanceReport> createState() =>
+      _EmployeeAttendanceReportState();
 }
 
-class _AttendanceReportState extends State<AttendanceReport> {
+class _EmployeeAttendanceReportState extends State<EmployeeAttendanceReport> {
+  // List<AllAttendanceModel> allattendancelist = [];
   List<AttendanceWithIdModel> attendancewithidlist = [];
-  late Future<LoginModel> selectedEmployee;
 
-  String _searchQuery = ''; // User for search
+  void _filterAttendance() {
+    if (mounted) {
+      setState(() {
+        attendancewithidlist = attendancewithidlist.where((record) {
+          DateTime recordDate = DateTime.parse(record.date.toIso8601String());
+          return recordDate.isAfter(_startDate) &&
+              recordDate.isBefore(_endDate);
+        }).toList();
+      });
+    }
+  }
 
-  // Bottom navbar
+  String _formatDate(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
+  }
+
   late Widget _widget;
   @override
   void initState() {
     super.initState();
+    _widget = EmployeeAttendanceReport(uid: widget.uid);
   }
+
+  DateTime _startDate = DateTime(2000); // date filter ka liya use hoi ha
+  DateTime _endDate = DateTime(2024); // date filter ka liya use hoi ha
+
+// for month year select
 
   @override
   Widget build(BuildContext context) {
-    LoginModel selectedEmployee = widget.selectedEmployee;
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -272,11 +73,52 @@ class _AttendanceReportState extends State<AttendanceReport> {
             child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: FutureBuilder(
-              future: attendancebyid(widget.selectedEmployee.uid!),
+              future: attendancebyid(widget.uid!),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(
                     children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () async {
+                              final DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: _startDate,
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2400),
+                              );
+                              if (pickedDate != null &&
+                                  pickedDate != _startDate) {
+                                setState(() {
+                                  _startDate = pickedDate;
+                                  _filterAttendance();
+                                });
+                              }
+                            },
+                            child: Text("From: ${_formatDate(_startDate)}"),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              final DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: _endDate,
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2400),
+                              );
+                              if (pickedDate != null &&
+                                  pickedDate != _endDate) {
+                                setState(() {
+                                  _endDate = pickedDate;
+                                  _filterAttendance();
+                                });
+                              }
+                            },
+                            child: Text("To: ${_formatDate(_endDate)}"),
+                          ),
+                        ],
+                      ),
                       Expanded(
                         child: ListView.builder(
                           itemCount: attendancewithidlist.length,
@@ -325,7 +167,8 @@ class _AttendanceReportState extends State<AttendanceReport> {
                                                   ),
                                                   TextSpan(
                                                     text:
-                                                        "${attendancewithidlist[index].date}",
+                                                        // ignore: unnecessary_string_interpolations
+                                                        "${_formatDate(DateTime.parse(attendancewithidlist[index].date.toString()))}",
                                                     style: const TextStyle(
                                                       fontStyle:
                                                           FontStyle.italic,
@@ -367,29 +210,25 @@ class _AttendanceReportState extends State<AttendanceReport> {
                                       ],
                                     ),
                                     const Spacer(),
-                                    IconButton(
-                                      onPressed: () {
-                                        // Handle edit job
+                                    // IconButton(
+                                    //   onPressed: () {
+                                    //     // Handle edit job
 
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AttendanceReportDeatil(
-                                                        uid:
-                                                            attendancewithidlist[
-                                                                    index]
-                                                                .uid,
-                                                        Date:
-                                                            attendancewithidlist[
-                                                                    index]
-                                                                .date)));
-                                      },
-                                      icon: const Icon(
-                                        Icons.details,
-                                      ),
-                                      tooltip: 'Job Details',
-                                    ),
+                                    //     Navigator.push(
+                                    //         context,
+                                    //         MaterialPageRoute(
+                                    //             builder: (context) =>
+                                    //                 AttendanceReportDeatil(
+                                    //                     Date:
+                                    //                         attendancereordlist[
+                                    //                                 index]
+                                    //                             .date)));
+                                    //   },
+                                    //   icon: const Icon(
+                                    //     Icons.details,
+                                    //   ),
+                                    //   tooltip: 'Job Details',
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -431,73 +270,10 @@ class _AttendanceReportState extends State<AttendanceReport> {
       for (Map<String, dynamic> index in uniqueData) {
         attendancewithidlist.add(AttendanceWithIdModel.fromJson(index));
       }
+      _filterAttendance();
       return attendancewithidlist;
     } else {
       return attendancewithidlist;
     }
   }
-
-  // Future<List<AttendanceWithIdModel>> attendancebyid(int id) async {
-  //   final response = await http.get(Uri.parse(
-  //       'http://$ip/HrmPractise02/api/Attendance/AttendanceGet?uid=$id'));
-  //   var Data = jsonDecode(response.body.toString());
-  //   print(Data);
-
-  //   if (response.statusCode == 200) {
-  //     attendancewithidlist.clear();
-  //     if (Data is Map<String, dynamic>) {
-  //       List<dynamic> attendanceRecords = Data["attendanceRecords"] ?? [];
-  //       for (Map<String, dynamic> index in attendanceRecords) {
-  //         attendancewithidlist.add(AttendanceWithIdModel.fromJson(index));
-  //       }
-  //       return attendancewithidlist;
-  //     } else {
-  //       print('Invalid response format');
-  //     }
-  //   } else {
-  //     print('Request failed with status: ${response.statusCode}');
-  //   }
-  //   return attendancewithidlist;
-  // }
-
-//   Future<List<AttendanceRecord>> attendancebyid(int id) async {
-//     //response keyword khud sa bnaya ha
-//     final response = await http.get(Uri.parse(
-//         'http://$ip/HrmPractise02/api/Attendance/AlldatewithidAttendanceGet?uid=$id')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
-//     var Data = jsonDecode(response.body.toString());
-//     print(Data); // decode kar ka data variable ma store kar rahay hn
-//     if (response.statusCode == 200) {
-//       attendancereordlist.clear();
-//       if (Data is List) {
-//         for (Map<String, dynamic> index in Data) {
-//           attendancereordlist.add(AttendanceRecord.fromJson(index));
-//         }
-//         return attendancereordlist;
-//       } else {
-//         print('Invalid response format');
-//       }
-//     } else {
-//       print('Request failed with status: ${response.statusCode}');
-//     }
-//     return attendancereordlist;
-//     // ignore: prefer_typing_uninitialized_variables
-//   }
-// }
-  // Future<List<AllAttendanceModel>> attendancebyid(int id) async {
-  //   //response keyword khud sa bnaya ha
-  //   final response = await http.get(Uri.parse(
-  //       'http://$ip/HrmPractise02/api/Attendance/AttendanceGet?uid=$id')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
-  //   var Data = jsonDecode(response.body
-  //       .toString()); // decode kar ka data variable ma store kar rahay hn
-  //   if (response.statusCode == 200) {
-  //     allattendancelist.clear();
-  //     for (Map<String, dynamic> index in Data) {
-  //       allattendancelist.add(AllAttendanceModel.fromJson(index));
-  //     }
-  //     return allattendancelist;
-  //   } else {
-  //     return allattendancelist;
-  //   }
-  // }
-
 }

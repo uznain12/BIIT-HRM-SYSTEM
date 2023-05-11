@@ -6,6 +6,7 @@ import 'package:fyp_practise_project/Models/Attendance_Model.dart';
 import 'package:fyp_practise_project/uri.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class AttendanceReportDeatil extends StatefulWidget {
   int? uid;
@@ -32,15 +33,15 @@ class _AttendanceReportDeatilState extends State<AttendanceReportDeatil> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          'Job Detail',
+          'Attendance Detail',
         ),
         centerTitle: true,
       ),
       body: Container(
-        decoration: BoxDecoration(color: Colors.white),
+        decoration: const BoxDecoration(color: Colors.white),
         child: SingleChildScrollView(
             child: SizedBox(
           height: MediaQuery.of(context).size.height,
@@ -48,62 +49,45 @@ class _AttendanceReportDeatilState extends State<AttendanceReportDeatil> {
               future: attendancebyid(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: attendancewithidlist.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.height * 0.02,
-                                left: MediaQuery.of(context).size.width * 0.02,
-                                right: MediaQuery.of(context).size.width * 0.02,
-                              ),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade300,
-                                  border: Border.all(
-                                    width: 2,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                    left: MediaQuery.of(context).size.width *
-                                        0.02,
-                                    top: MediaQuery.of(context).size.height *
-                                        0.02,
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(height: 4),
-                                      const SizedBox(height: 12),
-                                      Text(
-                                        "Time In: ${attendancewithidlist[index].checkin}",
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      Text(
-                                        "Time Out: ${attendancewithidlist[index].checkout ?? '-'}",
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 6),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.05,
+                          left: MediaQuery.of(context).size.width * 0.09,
+                          right: MediaQuery.of(context).size.width * 0),
+                      child: DataTable(
+                        headingRowColor:
+                            MaterialStateProperty.all(Colors.grey[200]),
+                        dividerThickness: 1.0,
+                        // ignore: prefer_const_literals_to_create_immutables
+                        columns: [
+                          const DataColumn(
+                              label: Text('Date',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold))),
+                          const DataColumn(
+                              label: Text('Time In',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold))),
+                          const DataColumn(
+                              label: Text('Time Out',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold))),
+                        ],
+                        rows: attendancewithidlist
+                            .map(
+                              (attendance) => DataRow(cells: [
+                                DataCell(Text(DateFormat('yyyy-MM-dd').format(
+                                    DateTime.parse(attendance.date
+                                        .toString())))), // Assuming there's a 'date' property in AttendanceWithIdModel
+                                DataCell(Text(attendance.checkin)),
+                                DataCell(Text(attendance.checkout ?? '-')),
+                              ]),
+                            )
+                            .toList(),
                       ),
-                    ],
+                    ),
                   );
                 } else {
                   return Center(child: CircularProgressIndicator());

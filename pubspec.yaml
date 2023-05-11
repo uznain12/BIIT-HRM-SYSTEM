@@ -40,12 +40,14 @@ dependencies:
   modal_progress_hud_nsn: ^0.3.0
   http: ^0.13.5
   image_picker: ^0.8.7+2
-  
+
+
   json_annotation: 
   json_serializable: 
   shared_preferences: ^2.1.0
   persistent_bottom_nav_bar:
   file_picker: ^5.2.11
+  
   
 dev_dependencies:
   flutter_test:

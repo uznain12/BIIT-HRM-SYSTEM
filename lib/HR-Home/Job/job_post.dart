@@ -249,6 +249,7 @@ class _JobPostState extends State<JobPost> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           JobPost();
+                          Navigator.pop(context);
                         }
                       },
                       child: Text("Save")),
@@ -269,16 +270,45 @@ class _JobPostState extends State<JobPost> {
       "LastDateOfApply": _lastDateofapplyController.text,
       "Location": _locationController.text,
       "Description": _descriptionController.text,
-
-      // Change this to the appropriate value
     };
-    var boddy = jsonEncode(data);
+    var body = jsonEncode(data);
     var urlParse = Uri.parse(url);
     try {
       http.Response response = await http.post(urlParse,
-          body: boddy, headers: {"Content-Type": "application/json"});
+          body: body, headers: {"Content-Type": "application/json"});
       var dataa = jsonDecode(response.body);
       print(dataa);
+
+      if (response.statusCode == 200) {
+        // Check if the response status code is 200 (successful)
+        // Clear the controllers
+        _salaryController.clear();
+        _experienceController.clear();
+        _lastDateofapplyController.clear();
+        _locationController.clear();
+        _descriptionController.clear();
+
+        // Clear the selected qualification and title
+        setState(() {
+          _selectedqualification = null;
+          _title = null;
+        });
+
+        // Show a success message using a Snackbar
+        final snackBar = SnackBar(
+          content: Text('Job posted successfully!'),
+          action: SnackBarAction(
+            label: 'OK',
+            onPressed: () {
+              // You can add any action here, or leave it empty if no action is required.
+            },
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+
+      // Optionally, show a success message, for example using a snackbar
+
     } catch (e) {
       print('Error occurred: $e');
     }

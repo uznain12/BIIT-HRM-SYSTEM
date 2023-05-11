@@ -10,9 +10,7 @@ import 'package:fyp_practise_project/Login-SignUp/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
-  int? uid;
-  SplashScreen({required this.uid});
-  //const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -30,6 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
     SharedPreferences sp = await SharedPreferences.getInstance();
     bool islogin = sp.getBool('islogin') ?? false;
     String role = sp.getString('role') ?? '';
+    int uid = sp.getInt("uid") ?? 0;
     if (islogin) {
       if (role == 'applicant') {
         Timer(Duration(seconds: 3), () {
@@ -37,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
               context,
               MaterialPageRoute(
                   builder: (context) => ApplicantDashboard(
-                        uid: widget.uid,
+                        uid: uid,
                       )));
         });
       } else if (role == 'hr') {
@@ -46,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
               context,
               MaterialPageRoute(
                   builder: (context) => AdminDashboard(
-                        uid: widget.uid,
+                        uid: uid,
                       )));
         });
       } else if (role == 'guard') {
@@ -55,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
               context,
               MaterialPageRoute(
                   builder: (context) => GuardDashboard(
-                        uid: widget.uid,
+                        uid: uid,
                       )));
         });
       } else if (role == 'employee') {
@@ -64,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen> {
               context,
               MaterialPageRoute(
                   builder: (context) => HiredEmployeeDashboard(
-                        uid: widget.uid,
+                        uid: uid,
                       )));
         });
       }

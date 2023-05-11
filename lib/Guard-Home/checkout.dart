@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fyp_practise_project/Models/attendance_model.dart';
 import 'package:fyp_practise_project/Models/login_signup_model.dart';
 import 'package:fyp_practise_project/uri.dart';
+import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -337,7 +338,9 @@ class _GuardCheckOutState extends State<GuardCheckOut> {
       if (data.isNotEmpty) {
         final user = AttendanceWithIdModel.fromJson(data[0]);
 
-        _checkoutdateController.text = user.date.toString();
+        DateTime date = DateTime.parse(user.date.toString());
+        String formattedDate = DateFormat('yyyy-MM-dd').format(date);
+        _checkoutdateController.text = formattedDate;
 
         // Load the image from the previous URL, if exists
 

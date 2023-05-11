@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:fyp_practise_project/Guard-Home/attendance.dart';
-import 'package:fyp_practise_project/Guard-Home/attendance_report.dart';
 
 import 'package:fyp_practise_project/Guard-Home/checkin.dart';
 
@@ -13,8 +12,7 @@ import 'package:fyp_practise_project/uri.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:fyp_practise_project/Models/login_signup_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -196,6 +194,7 @@ class _GuardDashboardState extends State<GuardDashboard> {
                           ),
                           itemBuilder: (context, index) {
                             if (_searchQuery.isNotEmpty &&
+                                // ignore: prefer_interpolation_to_compose_strings
                                 !((userlistbyrole[index].fname?.toLowerCase() ??
                                             '') +
                                         ' ' +
