@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:fyp_practise_project/Guard-Home/attendance.dart';
+import 'package:fyp_practise_project/HR-Home/Job/all_posted_jobs.dart';
 import 'package:http/http.dart' as http;
 import 'package:fyp_practise_project/Applicant-Home/Job/job_get.dart';
 import 'package:fyp_practise_project/Models/login_signup_model.dart';
@@ -111,7 +113,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ApplicantApplyJob(
+                      builder: (context) => AllPostedJobs(
                         uid: widget.uid,
                       ),
                     ),
@@ -141,11 +143,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 ),
                 onTap: () {
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => JobPost(),
-                    ),
-                  );
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AttendanceMainPage(
+                                uid: widget.uid,
+                              )));
                 },
               ),
               ListTile(
@@ -306,12 +308,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 children: [
                   InkWell(
                     onTap: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => AddExperience(
-                      //               uid: widget.uid,
-                      //             )));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AttendanceMainPage(
+                                    uid: widget.uid,
+                                  )));
                     },
                     child: Container(
                       height: 150,
