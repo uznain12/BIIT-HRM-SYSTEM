@@ -2,7 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:fyp_practise_project/Guard-Home/attendance.dart';
+import 'package:fyp_practise_project/HR-Home/Committe/all_employees.dart';
+import 'package:fyp_practise_project/HR-Home/Committe/committe_member.dart';
 import 'package:fyp_practise_project/HR-Home/Job/all_posted_jobs.dart';
+import 'package:fyp_practise_project/HR-Home/Leave/all_leave_applications.dart';
 import 'package:http/http.dart' as http;
 import 'package:fyp_practise_project/Applicant-Home/Job/job_get.dart';
 import 'package:fyp_practise_project/Models/login_signup_model.dart';
@@ -121,18 +124,15 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.leave_bags_at_home),
-                title: const Text(
-                  'Leave Mnagement',
-                  style: TextStyle(fontSize: 20),
-                ),
+                leading: const Icon(Icons.work),
+                title: const Text('Leave Mnagement'),
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => ApplicantProfile(),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AllLeaveApplications(),
+                    ),
+                  );
                 },
               ),
               ListTile(
@@ -151,16 +151,33 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.settings),
+                leading: const Icon(Icons.work),
                 title: const Text(
-                  'Setting',
-                  style: TextStyle(fontSize: 20),
+                  'Committe Members',
                 ),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => JobPost(),
+                      builder: (context) => Committemembers(
+                        uid: widget.uid,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.work),
+                title: const Text(
+                  'Create Committe ',
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AllEmployeesPagey(
+                        uid: widget.uid,
+                      ),
                     ),
                   );
                 },

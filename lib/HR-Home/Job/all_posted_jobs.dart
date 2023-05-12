@@ -71,7 +71,7 @@ class _AllPostedJobsState extends State<AllPostedJobs> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          'Apply For Job',
+          'All Jobs',
           style: TextStyle(
               fontFamily: 'RobotoSlab-Black',
               fontSize: 25,

@@ -248,7 +248,7 @@ class _ApplicantSignupState extends State<ApplicantSignup> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           ApplicantSignup();
-                          Navigator.pop(context);
+                          // Navigator.pop(context);
                         }
                       },
                       child: Text(
@@ -265,7 +265,7 @@ class _ApplicantSignupState extends State<ApplicantSignup> {
   }
 
   void ApplicantSignup({int? Uid}) async {
-    var url = "http://$ip/HrmPractise02/api/Education/EducationPost";
+    var url = "http://$ip/HrmPractise02/api/User/Signup";
     var data = {
       "Fname": _firstnameController.text,
       "Lname": _lastnameController.text,

@@ -8,34 +8,34 @@ import 'package:fyp_practise_project/uri.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class EmployeeLeaveApplication extends StatefulWidget {
-  int? uid;
-  EmployeeLeaveApplication({super.key, required this.uid});
+class AllLeaveApplications extends StatefulWidget {
+  AllLeaveApplications({
+    super.key,
+  });
 
   @override
-  State<EmployeeLeaveApplication> createState() =>
-      _EmployeeLeaveApplicationState();
+  State<AllLeaveApplications> createState() => _AllLeaveApplicationsState();
 }
 
-class _EmployeeLeaveApplicationState extends State<EmployeeLeaveApplication> {
+class _AllLeaveApplicationsState extends State<AllLeaveApplications> {
   List<Leavemodel> laveapplicationlist = [];
 
   late Widget _widget;
   @override
   void initState() {
     super.initState();
-    _widget = EmployeeLeaveApplication(uid: widget.uid);
+    _widget = AllLeaveApplications();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Job Applications"),
+          title: Text("Leave Applications"),
           centerTitle: true,
         ),
         body: FutureBuilder(
-            future: fetchleaveapplication(widget.uid!),
+            future: fetchleaveapplication(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
@@ -259,10 +259,10 @@ class _EmployeeLeaveApplicationState extends State<EmployeeLeaveApplication> {
             }));
   }
 
-  Future<List<Leavemodel>> fetchleaveapplication(int id) async {
+  Future<List<Leavemodel>> fetchleaveapplication() async {
     //response keyword khud sa bnaya ha
     final response = await http.get(Uri.parse(
-        'http://$ip/HrmPractise02/api/Leave/LeaveGet?uid=$id')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
+        'http://$ip/HrmPractise02/api/Leave/AllLeaveGet')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
     var Data = jsonDecode(response.body
         .toString()); // decode kar ka data variable ma store kar rahay hn
     if (response.statusCode == 200) {
