@@ -29,7 +29,28 @@ class _ApplyJobApplicantState extends State<ApplyJobApplicant> {
 
   File? document;
 
+  // Future<void> pickDocument() async {
+  //   FilePicker.platform.pickFiles(
+  //     type: FileType.custom,
+  //     allowedExtensions: ['pdf', 'doc', 'docx'],
+  //   ).then((FilePickerResult? result) {
+  //     if (result != null) {
+  //       setState(() {
+  //         document = File(result.files.single.path!);
+  //       });
+  //     } else {
+  //       print('No file selected');
+  //     }
+  //   }).catchError((error) {
+  //     print('Error picking file: $error');
+  //   });
+  // }
+
+  //new
   Future<void> pickDocument() async {
+    if (_isFilePickerActive) return;
+    _isFilePickerActive = true;
+
     FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'doc', 'docx'],
@@ -43,7 +64,7 @@ class _ApplyJobApplicantState extends State<ApplyJobApplicant> {
       }
     }).catchError((error) {
       print('Error picking file: $error');
-    });
+    }).whenComplete(() => _isFilePickerActive = false);
   }
 
   @override
@@ -127,15 +148,6 @@ class _ApplyJobApplicantState extends State<ApplyJobApplicant> {
   }
 
   void ApplyJob({int? Uid}) async {
-    if (alreadyApplied) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('You have already applied for this job'),
-        ),
-      );
-      return;
-    }
-
     if (document == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

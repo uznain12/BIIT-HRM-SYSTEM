@@ -367,146 +367,154 @@ class _ApplicantApplyJobState extends State<ApplicantApplyJob> {
                         ),
                       ),
                       Expanded(
-                        child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing:
-                                10.0, // Decreased from MediaQuery.of(context).size.height * 0.09
-                            crossAxisSpacing:
-                                1.0, // Decreased from MediaQuery.of(context).size.width * 0.09
-                            childAspectRatio: 3 / 2,
-                          ),
-                          itemCount: joblist.length,
-                          itemBuilder: (context, index) {
-                            if (_searchQuery.isNotEmpty &&
-                                !joblist[index]
-                                    .title
-                                    .toLowerCase()
-                                    .contains(_searchQuery.toLowerCase())) {
-                              return const SizedBox.shrink();
-                            }
-                            // bool displayJob = true;
-                            // if (_filters.any((filter) => filter.isSelected)) {
-                            //   displayJob = false;
-                            //   for (final filter in _filters) {
-                            //     if (filter.isSelected &&
-                            //         joblist[index]
-                            //             .title
-                            //             .toLowerCase()
-                            //             .contains(filter.name.toLowerCase())) {
-                            //       displayJob = true;
-                            //       break;
-                            //     }
-                            //   }
-                            // }
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 120),
+                          child: GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing:
+                                  10.0, // Decreased from MediaQuery.of(context).size.height * 0.09
+                              crossAxisSpacing:
+                                  1.0, // Decreased from MediaQuery.of(context).size.width * 0.09
+                              childAspectRatio: 3 / 2.5,
+                            ),
+                            itemCount: joblist.length,
+                            itemBuilder: (context, index) {
+                              if (_searchQuery.isNotEmpty &&
+                                  !joblist[index]
+                                      .title
+                                      .toLowerCase()
+                                      .contains(_searchQuery.toLowerCase())) {
+                                return const SizedBox.shrink();
+                              }
+                              // bool displayJob = true;
+                              // if (_filters.any((filter) => filter.isSelected)) {
+                              //   displayJob = false;
+                              //   for (final filter in _filters) {
+                              //     if (filter.isSelected &&
+                              //         joblist[index]
+                              //             .title
+                              //             .toLowerCase()
+                              //             .contains(filter.name.toLowerCase())) {
+                              //       displayJob = true;
+                              //       break;
+                              //     }
+                              //   }
+                              // }
 
-                            // if (!displayJob) {
-                            //   return const SizedBox.shrink();
-                            // }
-                            // bool displayJob2 = true;
-                            // if (_filters2.any((filter) => filter.isSelected)) {
-                            //   displayJob2 = false;
-                            //   for (final filter in _filters2) {
-                            //     if (filter.isSelected &&
-                            //         joblist[index]
-                            //             .title
-                            //             .toLowerCase()
-                            //             .contains(filter.name.toLowerCase())) {
-                            //       displayJob2 = true;
-                            //       break;
-                            //     }
-                            //   }
-                            // }
+                              // if (!displayJob) {
+                              //   return const SizedBox.shrink();
+                              // }
+                              // bool displayJob2 = true;
+                              // if (_filters2.any((filter) => filter.isSelected)) {
+                              //   displayJob2 = false;
+                              //   for (final filter in _filters2) {
+                              //     if (filter.isSelected &&
+                              //         joblist[index]
+                              //             .title
+                              //             .toLowerCase()
+                              //             .contains(filter.name.toLowerCase())) {
+                              //       displayJob2 = true;
+                              //       break;
+                              //     }
+                              //   }
+                              // }
 
-                            // if (!displayJob2) {
-                            //   return const SizedBox.shrink();
-                            // }
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.height * 0,
-                                bottom:
-                                    MediaQuery.of(context).size.height * 0.03,
-                                left: MediaQuery.of(context).size.width * 0.02,
-                                right: MediaQuery.of(context).size.width * 0.02,
-                              ),
-                              child: InkWell(
-                                onTap: (() {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => JobDetailScreen(
-                                              uid: widget.uid,
-                                              jid: joblist[index].jid)));
-                                }),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.grey.shade200,
-                                    border: Border.all(
-                                      width: 2,
-                                      color: Colors.blue,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(
-                                            0.2), // Shadow color with reduced opacity
-                                        offset: Offset(0,
-                                            3), // Horizontal and vertical offset of the shadow
-                                        blurRadius:
-                                            6, // Amount of blur applied to the shadow
-                                        spreadRadius:
-                                            2, // Extent of the shadow, a higher value will make the shadow larger
+                              // if (!displayJob2) {
+                              //   return const SizedBox.shrink();
+                              // }
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height * 0,
+                                  bottom:
+                                      MediaQuery.of(context).size.height * 0.03,
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.02,
+                                  right:
+                                      MediaQuery.of(context).size.width * 0.02,
+                                ),
+                                child: InkWell(
+                                  onTap: (() {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                JobDetailScreen(
+                                                    uid: widget.uid,
+                                                    jid: joblist[index].jid)));
+                                  }),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.grey.shade200,
+                                      border: Border.all(
+                                        width: 2,
+                                        color: Colors.blue,
                                       ),
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        top:
-                                            MediaQuery.of(context).size.height *
-                                                0.01,
-                                        left:
-                                            MediaQuery.of(context).size.width *
-                                                0.01),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(
-                                          height: 4,
-                                        ),
-                                        Text(
-                                          "Title: ${joblist[index].title}",
-                                          style: const TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w900,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          "Salary:${joblist[index].salary.toString()}",
-                                          style: const TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w900,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          "Location:   ${joblist[index].location}",
-                                          style: const TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w900,
-                                          ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(
+                                              0.2), // Shadow color with reduced opacity
+                                          offset: Offset(0,
+                                              3), // Horizontal and vertical offset of the shadow
+                                          blurRadius:
+                                              6, // Amount of blur applied to the shadow
+                                          spreadRadius:
+                                              2, // Extent of the shadow, a higher value will make the shadow larger
                                         ),
                                       ],
                                     ),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.01,
+                                          left: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.01),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(
+                                            height: 4,
+                                          ),
+                                          Text(
+                                            "Title: ${joblist[index].title}",
+                                            style: const TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w900,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            "Salary:${joblist[index].salary.toString()}",
+                                            style: const TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w900,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            "Location:   ${joblist[index].location}",
+                                            style: const TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w900,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ],
@@ -521,6 +529,7 @@ class _ApplicantApplyJobState extends State<ApplicantApplyJob> {
   }
 
   Future<List<JobGetModel>> getjob() async {
+    // Get the current user's UID.
     //response keyword khud sa bnaya ha
     final response = await http.get(Uri.parse(
         'http://$ip/HrmPractise02/api/Job/JobGet')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga

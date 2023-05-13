@@ -22,8 +22,9 @@ class _JobApplicationsState extends State<JobApplications> {
   final List<_Filter> _filters = [
     _Filter(name: 'Teacher', isSelected: false),
     _Filter(name: 'Guard', isSelected: false),
-    _Filter(name: 'Fts', isSelected: false),
+    _Filter(name: 'Lab Attendant', isSelected: false),
     _Filter(name: 'Assistant teacher', isSelected: false),
+    _Filter(name: 'Professor', isSelected: false),
   ];
   @override
   Widget build(BuildContext context) {
@@ -36,13 +37,28 @@ class _JobApplicationsState extends State<JobApplications> {
             future: fetchcuser(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                List<JobApplicationModel> filteredJobApplications = [];
+                if (_filters.any((filter) => filter.isSelected)) {
+                  for (final jobApplication in jobapplicationlist) {
+                    for (final filter in _filters) {
+                      if (filter.isSelected &&
+                          jobApplication.job.title.toLowerCase().trim() ==
+                              filter.name.toLowerCase().trim()) {
+                        filteredJobApplications.add(jobApplication);
+                        break;
+                      }
+                    }
+                  }
+                } else {
+                  filteredJobApplications = List.from(jobapplicationlist);
+                }
                 return Column(children: [
                   Padding(
                     padding: EdgeInsets.only(
                         left: MediaQuery.of(context).size.width * 0.47),
                     child: Container(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+                          EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
                       margin: EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
@@ -229,29 +245,10 @@ class _JobApplicationsState extends State<JobApplications> {
                               5.0, // Decreased from MediaQuery.of(context).size.height * 0.09
                           crossAxisSpacing:
                               10.0, // Decreased from MediaQuery.of(context).size.width * 0.09
-                          childAspectRatio: 3.2 / 2.5,
+                          childAspectRatio: 3.2 / 3,
                         ),
-                        itemCount: jobapplicationlist.length,
+                        itemCount: filteredJobApplications.length,
                         itemBuilder: ((context, index) {
-                          bool displayJob = true;
-                          if (_filters.any((filter) => filter.isSelected)) {
-                            displayJob = false;
-                            for (final filter in _filters) {
-                              if (filter.isSelected &&
-                                  jobapplicationlist[index]
-                                      .job
-                                      .title
-                                      .toLowerCase()
-                                      .contains(filter.name.toLowerCase())) {
-                                displayJob = true;
-                                break;
-                              }
-                            }
-                          }
-
-                          if (!displayJob) {
-                            return const SizedBox.shrink();
-                          }
                           return Padding(
                             padding: EdgeInsets.only(
                               top: MediaQuery.of(context).size.height * 0.03,
@@ -267,7 +264,7 @@ class _JobApplicationsState extends State<JobApplications> {
                                             JobApplicationDetail(
                                               uid: widget.uid,
                                               applicationid:
-                                                  jobapplicationlist[index]
+                                                  filteredJobApplications[index]
                                                       .jobApplicationId,
                                             )));
                               },
@@ -342,7 +339,7 @@ class _JobApplicationsState extends State<JobApplications> {
                                                 ),
                                                 TextSpan(
                                                   text:
-                                                      "${jobapplicationlist[index].job.title}",
+                                                      "${filteredJobApplications[index].job.title}",
                                                   style: const TextStyle(
                                                     fontStyle: FontStyle.italic,
                                                   ),
@@ -371,8 +368,8 @@ class _JobApplicationsState extends State<JobApplications> {
                                                 ),
                                                 TextSpan(
                                                   text:
-                                                      "${jobapplicationlist[index].user!.fname} "
-                                                      " ${jobapplicationlist[index].user!.lname}",
+                                                      "${filteredJobApplications[index].user!.fname} "
+                                                      " ${filteredJobApplications[index].user!.lname}",
                                                   style: const TextStyle(
                                                     fontStyle: FontStyle.italic,
                                                   ),

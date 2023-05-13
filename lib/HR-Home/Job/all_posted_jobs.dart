@@ -376,7 +376,7 @@ class _AllPostedJobsState extends State<AllPostedJobs> {
                                 10.0, // Decreased from MediaQuery.of(context).size.height * 0.09
                             crossAxisSpacing:
                                 1.0, // Decreased from MediaQuery.of(context).size.width * 0.09
-                            childAspectRatio: 3 / 2,
+                            childAspectRatio: 3 / 2.7,
                           ),
                           itemCount: joblist.length,
                           itemBuilder: (context, index) {
@@ -502,6 +502,50 @@ class _AllPostedJobsState extends State<AllPostedJobs> {
                                             fontWeight: FontWeight.w900,
                                           ),
                                         ),
+                                        Row(
+                                          children: [
+                                            IconButton(
+                                              onPressed: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      AlertDialog(
+                                                    title: const Text(
+                                                        'Delete job?'),
+                                                    content: const Text(
+                                                        'Are you sure you want to delete this job?'),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text('Cancel'),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                          _deleteJob(
+                                                              joblist[index]
+                                                                  .jid);
+                                                        },
+                                                        child: Text('Delete'),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                              icon: Icon(Icons.delete),
+                                            ),
+                                            SizedBox(
+                                              width: 30,
+                                            ),
+                                            IconButton(
+                                                onPressed: () {},
+                                                icon: Icon(Icons.edit))
+                                          ],
+                                        )
                                       ],
                                     ),
                                   ),
@@ -536,6 +580,24 @@ class _AllPostedJobsState extends State<AllPostedJobs> {
       return joblist;
     } else {
       return joblist;
+    }
+  }
+
+  Future<void> _deleteJob(int jobId) async {
+    final response = await http.delete(
+      Uri.parse('http://$ip/HrmPractise02/api/Job/DeleteJob?Jid=$jobId'),
+    );
+
+    if (response.statusCode == 200) {
+      // Refresh job list
+      setState(() {
+        joblist.removeWhere((job) => job.jid == jobId);
+      });
+    } else {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to delete job')),
+      );
     }
   }
 }
