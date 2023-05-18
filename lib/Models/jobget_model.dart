@@ -19,6 +19,7 @@ class JobGetModel {
     required this.location,
     required this.experience,
     required this.qualification,
+    required this.noofvacancie,
     this.user,
   });
 
@@ -31,6 +32,8 @@ class JobGetModel {
   String location;
   String experience;
   String qualification;
+  int noofvacancie;
+
   dynamic user;
 
   factory JobGetModel.fromJson(Map<String, dynamic> json) => JobGetModel(
@@ -42,6 +45,7 @@ class JobGetModel {
         location: json["Location"],
         experience: json["experience"] ?? '',
         qualification: json["qualification"] ?? '',
+        noofvacancie: json["noofvacancie"] ?? 0,
         user: json["User"],
       );
 
@@ -54,6 +58,7 @@ class JobGetModel {
         "Location": location,
         "experience": experience,
         "qualification": qualification,
+        "noofvacancie": noofvacancie,
         "User": user,
       };
 }

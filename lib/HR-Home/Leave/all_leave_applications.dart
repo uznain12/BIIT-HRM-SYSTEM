@@ -76,33 +76,7 @@ class _AllLeaveApplicationsState extends State<AllLeaveApplications> {
                                 //       ]),
                                 // ),
                                 // Text("First Name: ${userlist[index].fname}"),
-                                const SizedBox(height: 4),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: MediaQuery.of(context).size.width *
-                                          0.1),
-                                  child: RichText(
-                                    text: TextSpan(
-                                        style:
-                                            DefaultTextStyle.of(context).style,
-                                        children: [
-                                          const TextSpan(
-                                            text:
-                                                "Leave Type:                 ",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                "${laveapplicationlist[index].leavetype}",
-                                            style: const TextStyle(
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          ),
-                                        ]),
-                                  ),
-                                ),
+
                                 const SizedBox(height: 8),
                                 Padding(
                                   padding: EdgeInsets.only(
@@ -140,14 +114,15 @@ class _AllLeaveApplicationsState extends State<AllLeaveApplications> {
                                             DefaultTextStyle.of(context).style,
                                         children: [
                                           const TextSpan(
-                                            text: "Status :    ",
+                                            text:
+                                                "Leave Type:                 ",
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                           TextSpan(
                                             text:
-                                                "${laveapplicationlist[index].status} ",
+                                                "${laveapplicationlist[index].leavetype}",
                                             style: const TextStyle(
                                               fontStyle: FontStyle.italic,
                                             ),
@@ -155,97 +130,17 @@ class _AllLeaveApplicationsState extends State<AllLeaveApplications> {
                                         ]),
                                   ),
                                 ),
-                                const SizedBox(height: 4),
-                                // RichText(
-                                //   text: TextSpan(
-                                //       style: DefaultTextStyle.of(context).style,
-                                //       children: [
-                                //         const TextSpan(
-                                //           text: "Date Of Birth: ",
-                                //           style: TextStyle(
-                                //             fontWeight: FontWeight.bold,
-                                //           ),
-                                //         ),
-                                //         TextSpan(
-                                //           text: "${userlist[index].dob}",
-                                //           style: const TextStyle(
-                                //             fontStyle: FontStyle.italic,
-                                //           ),
-                                //         ),
-                                //       ]),
-                                // ),
-                                const SizedBox(height: 4),
-                                // RichText(
-                                //   text: TextSpan(
-                                //       style: DefaultTextStyle.of(context).style,
-                                //       children: [
-                                //         const TextSpan(
-                                //           text: "Gender : ",
-                                //           style: TextStyle(
-                                //             fontWeight: FontWeight.bold,
-                                //           ),
-                                //         ),
-                                //         TextSpan(
-                                //           text: "${userlist[index].gender}",
-                                //           style: const TextStyle(
-                                //             fontStyle: FontStyle.italic,
-                                //           ),
-                                //         ),
-                                //       ]),
-                                // ),
-                                const SizedBox(height: 4),
-                                // RichText(
-                                //   text: TextSpan(
-                                //       style: DefaultTextStyle.of(context).style,
-                                //       children: [
-                                //         const TextSpan(
-                                //           text: "Address : ",
-                                //           style: TextStyle(
-                                //             fontWeight: FontWeight.bold,
-                                //           ),
-                                //         ),
-                                //         TextSpan(
-                                //           text: "${userlist[index].address}",
-                                //           style: const TextStyle(
-                                //             fontStyle: FontStyle.italic,
-                                //           ),
-                                //         ),
-                                //       ]),
-                                // ),
+                                SizedBox(
+                                  height: 10,
+                                ),
 
-                                // Text("Last Name: ${userlist[index].lname}"),
-                                // const SizedBox(height: 4),
-                                // Text("Email: ${userlist[index].email}"),
-                                // const SizedBox(height: 4),
-                                // Text("Mobile: ${userlist[index].mobile}"),
-                                // const SizedBox(height: 4),
-                                // Text("CNIC: ${userlist[index].cnic}"),
-                                // const SizedBox(height: 4),
-                                // Text("Date Of Birth: ${userlist[index].dob}"),
-                                // const SizedBox(height: 4),
-                                // Text("Gender: ${userlist[index].gender}"),
-                                // const SizedBox(height: 4),
-                                // Text("Address: ${userlist[index].address}"),
-                                // const SizedBox(height: 4),
                                 Center(
                                   child: SizedBox(
-                                      // width: 200,
-                                      // child: ElevatedButton(
-                                      //     onPressed: () {
-                                      //       Navigator.push(
-                                      //           context,
-                                      //           MaterialPageRoute(
-                                      //               builder: (context) =>
-                                      //                   JobApplicationDetail(
-                                      //                     uid: widget.uid,
-                                      //                     applicationid:
-                                      //                         fetchleaveapplication[
-                                      //                                 index]
-                                      //                             .jid,
-                                      //                   )));
-                                      //     },
-                                      //     child: Text("Detail")),
-                                      ),
+                                    width: 200,
+                                    child: ElevatedButton(
+                                        onPressed: () {},
+                                        child: Text("Detail")),
+                                  ),
                                 )
                               ],
                             ),

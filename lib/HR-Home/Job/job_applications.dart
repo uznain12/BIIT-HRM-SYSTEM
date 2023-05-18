@@ -19,6 +19,8 @@ class _JobApplicationsState extends State<JobApplications> {
   List<JobApplicationModel> jobapplicationlist = [];
   _Filter? _selectedFilter; //This line only use for dropdownfilter
 
+  int selectedCount = 0;
+
   final List<_Filter> _filters = [
     _Filter(name: 'Teacher', isSelected: false),
     _Filter(name: 'Guard', isSelected: false),
@@ -235,7 +237,7 @@ class _JobApplicationsState extends State<JobApplications> {
                   //     ],
                   //   ),
                   // ),
-
+                  Text("$selectedCount item(s) selected"), // Add this line
                   Expanded(
                     child: GridView.builder(
                         gridDelegate:
@@ -249,252 +251,171 @@ class _JobApplicationsState extends State<JobApplications> {
                         ),
                         itemCount: filteredJobApplications.length,
                         itemBuilder: ((context, index) {
-                          return Padding(
-                            padding: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.height * 0.03,
-                              left: MediaQuery.of(context).size.width * 0.01,
-                              right: MediaQuery.of(context).size.width * 0.01,
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            JobApplicationDetail(
-                                              uid: widget.uid,
-                                              applicationid:
-                                                  filteredJobApplications[index]
-                                                      .jobApplicationId,
-                                            )));
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.grey.shade200,
-                                  border: Border.all(
-                                    width: 2,
-                                    color: Colors.blue,
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(
-                                          0.2), // Shadow color with reduced opacity
-                                      offset: Offset(0,
-                                          3), // Horizontal and vertical offset of the shadow
-                                      blurRadius:
-                                          6, // Amount of blur applied to the shadow
-                                      spreadRadius:
-                                          2, // Extent of the shadow, a higher value will make the shadow larger
-                                    ),
-                                  ],
+                          return GestureDetector(
+                            onLongPress: () {
+                              setState(() {
+                                filteredJobApplications[index].isSelected =
+                                    !filteredJobApplications[index].isSelected;
+                                if (filteredJobApplications[index].isSelected) {
+                                  selectedCount++;
+                                } else {
+                                  selectedCount--;
+                                }
+                              });
+                            },
+                            child: Container(
+                              color: filteredJobApplications[index].isSelected
+                                  ? Colors.blue
+                                  : null, // change color or style when selected
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  top:
+                                      MediaQuery.of(context).size.height * 0.03,
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.01,
+                                  right:
+                                      MediaQuery.of(context).size.width * 0.01,
                                 ),
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                      top: MediaQuery.of(context).size.height *
-                                          0.03),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // RichText(
-                                      //   text: TextSpan(
-                                      //       style: DefaultTextStyle.of(context).style,
-                                      //       children: [
-                                      //         const TextSpan(
-                                      //           text: "First Name: ",
-                                      //           style: TextStyle(
-                                      //             fontWeight: FontWeight.bold,
-                                      //           ),
-                                      //         ),
-                                      //         TextSpan(
-                                      //           text: "${userlist[index].fname}",
-                                      //           style: const TextStyle(
-                                      //             fontStyle: FontStyle.italic,
-                                      //           ),
-                                      //         ),
-                                      //       ]),
-                                      // ),
-                                      // Text("First Name: ${userlist[index].fname}"),
-                                      const SizedBox(height: 4),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.1),
-                                        child: RichText(
-                                          text: TextSpan(
-                                              style:
-                                                  DefaultTextStyle.of(context)
-                                                      .style,
-                                              children: [
-                                                const TextSpan(
-                                                  text:
-                                                      "Job Title :                 ",
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text:
-                                                      "${filteredJobApplications[index].job.title}",
-                                                  style: const TextStyle(
-                                                    fontStyle: FontStyle.italic,
-                                                  ),
-                                                ),
-                                              ]),
-                                        ),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                JobApplicationDetail(
+                                                  uid: widget.uid,
+                                                  applicationid:
+                                                      filteredJobApplications[
+                                                              index]
+                                                          .jobApplicationId,
+                                                )));
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.grey.shade200,
+                                      border: Border.all(
+                                        width: 2,
+                                        color: Colors.blue,
                                       ),
-                                      const SizedBox(height: 8),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.1),
-                                        child: RichText(
-                                          text: TextSpan(
-                                              style:
-                                                  DefaultTextStyle.of(context)
-                                                      .style,
-                                              children: [
-                                                const TextSpan(
-                                                  text: "Applicant Name :    ",
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text:
-                                                      "${filteredJobApplications[index].user!.fname} "
-                                                      " ${filteredJobApplications[index].user!.lname}",
-                                                  style: const TextStyle(
-                                                    fontStyle: FontStyle.italic,
-                                                  ),
-                                                ),
-                                              ]),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(
+                                              0.2), // Shadow color with reduced opacity
+                                          offset: Offset(0,
+                                              3), // Horizontal and vertical offset of the shadow
+                                          blurRadius:
+                                              6, // Amount of blur applied to the shadow
+                                          spreadRadius:
+                                              2, // Extent of the shadow, a higher value will make the shadow larger
                                         ),
+                                      ],
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.03),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(height: 4),
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.1),
+                                            child: RichText(
+                                              text: TextSpan(
+                                                  style: DefaultTextStyle.of(
+                                                          context)
+                                                      .style,
+                                                  children: [
+                                                    const TextSpan(
+                                                      text:
+                                                          "Job Title :                 ",
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text:
+                                                          "${filteredJobApplications[index].job.title}",
+                                                      style: const TextStyle(
+                                                        fontStyle:
+                                                            FontStyle.italic,
+                                                      ),
+                                                    ),
+                                                  ]),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.1),
+                                            child: RichText(
+                                              text: TextSpan(
+                                                  style: DefaultTextStyle.of(
+                                                          context)
+                                                      .style,
+                                                  children: [
+                                                    const TextSpan(
+                                                      text:
+                                                          "Applicant Name :    ",
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text:
+                                                          "${filteredJobApplications[index].user!.fname} "
+                                                          " ${filteredJobApplications[index].user!.lname}",
+                                                      style: const TextStyle(
+                                                        fontStyle:
+                                                            FontStyle.italic,
+                                                      ),
+                                                    ),
+                                                  ]),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          const SizedBox(height: 4),
+                                          const SizedBox(height: 4),
+                                        ],
                                       ),
-                                      const SizedBox(height: 4),
-                                      // RichText(
-                                      //   text: TextSpan(
-                                      //       style: DefaultTextStyle.of(context).style,
-                                      //       children: [
-                                      //         const TextSpan(
-                                      //           text: "CNIC:             ",
-                                      //           style: TextStyle(
-                                      //             fontWeight: FontWeight.bold,
-                                      //           ),
-                                      //         ),
-                                      //         TextSpan(
-                                      //           text: "${userlist[index].cnic}",
-                                      //           style: const TextStyle(
-                                      //             fontStyle: FontStyle.italic,
-                                      //           ),
-                                      //         ),
-                                      //       ]),
-                                      // ),
-                                      const SizedBox(height: 4),
-                                      // RichText(
-                                      //   text: TextSpan(
-                                      //       style: DefaultTextStyle.of(context).style,
-                                      //       children: [
-                                      //         const TextSpan(
-                                      //           text: "Date Of Birth: ",
-                                      //           style: TextStyle(
-                                      //             fontWeight: FontWeight.bold,
-                                      //           ),
-                                      //         ),
-                                      //         TextSpan(
-                                      //           text: "${userlist[index].dob}",
-                                      //           style: const TextStyle(
-                                      //             fontStyle: FontStyle.italic,
-                                      //           ),
-                                      //         ),
-                                      //       ]),
-                                      // ),
-                                      const SizedBox(height: 4),
-                                      // RichText(
-                                      //   text: TextSpan(
-                                      //       style: DefaultTextStyle.of(context).style,
-                                      //       children: [
-                                      //         const TextSpan(
-                                      //           text: "Gender : ",
-                                      //           style: TextStyle(
-                                      //             fontWeight: FontWeight.bold,
-                                      //           ),
-                                      //         ),
-                                      //         TextSpan(
-                                      //           text: "${userlist[index].gender}",
-                                      //           style: const TextStyle(
-                                      //             fontStyle: FontStyle.italic,
-                                      //           ),
-                                      //         ),
-                                      //       ]),
-                                      // ),
-                                      const SizedBox(height: 4),
-                                      // RichText(
-                                      //   text: TextSpan(
-                                      //       style: DefaultTextStyle.of(context).style,
-                                      //       children: [
-                                      //         const TextSpan(
-                                      //           text: "Address : ",
-                                      //           style: TextStyle(
-                                      //             fontWeight: FontWeight.bold,
-                                      //           ),
-                                      //         ),
-                                      //         TextSpan(
-                                      //           text: "${userlist[index].address}",
-                                      //           style: const TextStyle(
-                                      //             fontStyle: FontStyle.italic,
-                                      //           ),
-                                      //         ),
-                                      //       ]),
-                                      // ),
-
-                                      // Text("Last Name: ${userlist[index].lname}"),
-                                      // const SizedBox(height: 4),
-                                      // Text("Email: ${userlist[index].email}"),
-                                      // const SizedBox(height: 4),
-                                      // Text("Mobile: ${userlist[index].mobile}"),
-                                      // const SizedBox(height: 4),
-                                      // Text("CNIC: ${userlist[index].cnic}"),
-                                      // const SizedBox(height: 4),
-                                      // Text("Date Of Birth: ${userlist[index].dob}"),
-                                      // const SizedBox(height: 4),
-                                      // Text("Gender: ${userlist[index].gender}"),
-                                      // const SizedBox(height: 4),
-                                      // Text("Address: ${userlist[index].address}"),
-                                      // const SizedBox(height: 4),
-                                      // Center(
-                                      //   child: SizedBox(
-                                      //     width: 200,
-                                      //     child: ElevatedButton(
-                                      //         onPressed: () {
-                                      //           Navigator.push(
-                                      //               context,
-                                      //               MaterialPageRoute(
-                                      //                   builder: (context) =>
-                                      //                       JobApplicationDetail(
-                                      //                         uid: widget.uid,
-                                      //                         applicationid:
-                                      //                             jobapplicationlist[
-                                      //                                     index]
-                                      //                                 .jid,
-                                      //                       )));
-                                      //         },
-                                      //         child: Text("Detail")),
-                                      //   ),
-                                      // )
-                                    ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           );
                         })),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      for (var jobApplication in filteredJobApplications) {
+                        if (jobApplication.isSelected) {
+                          // Code to process this job goes here
+                          // For example, you could add it to the list of jobs assigned to a committee member
+                        }
+                        // Update the UI
+                        setState(() {
+                          jobApplication.isSelected =
+                              false; // deselect all after assigning
+                        });
+                      }
+                    },
+                    child: Text('Assign Selected Jobs'),
                   ),
                 ]);
               } else {

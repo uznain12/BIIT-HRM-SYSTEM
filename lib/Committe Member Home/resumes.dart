@@ -4,32 +4,32 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:fyp_practise_project/Applicant-Home/Job/job_detail.dart';
+
 import 'package:fyp_practise_project/Applicant-Home/app_profile.dart';
 import 'package:fyp_practise_project/Dashboards/applicant_dash.dart';
-import 'package:fyp_practise_project/Models/jobget_model.dart';
-import 'package:fyp_practise_project/uri.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fyp_practise_project/HR-Home/Job/all_posted_jobs_detail.dart';
+import 'package:fyp_practise_project/Models/job_assignment_model.dart';
 
-import 'package:intl/intl.dart';
+import 'package:fyp_practise_project/uri.dart';
+
 import 'package:http/http.dart' as http;
 
-class ApplicantApplyJob extends StatefulWidget {
+class ResumesPerUser extends StatefulWidget {
   int? uid;
-  ApplicantApplyJob({required this.uid});
+  ResumesPerUser({required this.uid});
   // const ApplicantApplyJob({super.key});
 
   @override
-  State<ApplicantApplyJob> createState() => _ApplicantApplyJobState();
+  State<ResumesPerUser> createState() => _ResumesPerUserState();
 }
 
-class _ApplicantApplyJobState extends State<ApplicantApplyJob> {
-  List<JobGetModel> joblist = [];
+class _ResumesPerUserState extends State<ResumesPerUser> {
+  List<Jobassigment> jobassinmentlist = [];
   late Widget _widget;
   @override
   void initState() {
     super.initState();
-    _widget = ApplicantApplyJob(uid: widget.uid);
+    _widget = ResumesPerUser(uid: widget.uid);
   }
 
   String _searchQuery = ''; // User for search
@@ -49,21 +49,7 @@ class _ApplicantApplyJobState extends State<ApplicantApplyJob> {
   // ];
 
   // Bottom navbar
-  int _selectedIndex = 0;
-  final List<BottomNavigationBarItem> _bottomNavBarItems = [
-    BottomNavigationBarItem(
-      icon: Icon(Icons.home),
-      label: 'Home',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.work),
-      label: 'Jobs',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.person),
-      label: 'Profile',
-    ),
-  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +57,7 @@ class _ApplicantApplyJobState extends State<ApplicantApplyJob> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          'Apply For Job',
+          'All Pending Resumes',
           style: TextStyle(
               fontFamily: 'RobotoSlab-Black',
               fontSize: 25,
@@ -79,43 +65,13 @@ class _ApplicantApplyJobState extends State<ApplicantApplyJob> {
               fontWeight: FontWeight.w900),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.grey.shade300,
-        items: _bottomNavBarItems,
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          switch (_selectedIndex) {
-            case 0:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ApplicantDashboard(uid: widget.uid),
-                ),
-              );
-              break;
-            case 2:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ApplicantProfile(uid: widget.uid),
-                ),
-              );
-              break;
-          }
-        },
-      ),
       body: Container(
         decoration: BoxDecoration(color: Colors.white),
         child: SingleChildScrollView(
             child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: FutureBuilder(
-              future: getjob(
-                context,
-              ),
+              future: getjob(widget.uid!),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(
@@ -370,188 +326,186 @@ class _ApplicantApplyJobState extends State<ApplicantApplyJob> {
                         ),
                       ),
                       Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 120),
-                          child: GridView.builder(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 1,
-                              mainAxisSpacing:
-                                  0, // Decreased from MediaQuery.of(context).size.height * 0.09
-                              crossAxisSpacing:
-                                  0, // Decreased from MediaQuery.of(context).size.width * 0.09
-                              childAspectRatio: 3.5 / 1,
-                            ),
-                            itemCount: joblist.length,
-                            itemBuilder: (context, index) {
-                              if (_searchQuery.isNotEmpty &&
-                                  !joblist[index]
-                                      .title
-                                      .toLowerCase()
-                                      .contains(_searchQuery.toLowerCase())) {
-                                return const SizedBox.shrink();
-                              }
-                              // bool displayJob = true;
-                              // if (_filters.any((filter) => filter.isSelected)) {
-                              //   displayJob = false;
-                              //   for (final filter in _filters) {
-                              //     if (filter.isSelected &&
-                              //         joblist[index]
-                              //             .title
-                              //             .toLowerCase()
-                              //             .contains(filter.name.toLowerCase())) {
-                              //       displayJob = true;
-                              //       break;
-                              //     }
-                              //   }
-                              // }
+                        child: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing:
+                                10.0, // Decreased from MediaQuery.of(context).size.height * 0.09
+                            crossAxisSpacing:
+                                1.0, // Decreased from MediaQuery.of(context).size.width * 0.09
+                            childAspectRatio: 3 / 2.7,
+                          ),
+                          itemCount: jobassinmentlist.length,
+                          itemBuilder: (context, index) {
+                            if (_searchQuery.isNotEmpty &&
+                                !jobassinmentlist[index]
+                                    .jobApplication!
+                                    .job!
+                                    .title
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(_searchQuery.toLowerCase())) {
+                              return const SizedBox.shrink();
+                            }
+                            // bool displayJob = true;
+                            // if (_filters.any((filter) => filter.isSelected)) {
+                            //   displayJob = false;
+                            //   for (final filter in _filters) {
+                            //     if (filter.isSelected &&
+                            //         joblist[index]
+                            //             .title
+                            //             .toLowerCase()
+                            //             .contains(filter.name.toLowerCase())) {
+                            //       displayJob = true;
+                            //       break;
+                            //     }
+                            //   }
+                            // }
 
-                              // if (!displayJob) {
-                              //   return const SizedBox.shrink();
-                              // }
-                              // bool displayJob2 = true;
-                              // if (_filters2.any((filter) => filter.isSelected)) {
-                              //   displayJob2 = false;
-                              //   for (final filter in _filters2) {
-                              //     if (filter.isSelected &&
-                              //         joblist[index]
-                              //             .title
-                              //             .toLowerCase()
-                              //             .contains(filter.name.toLowerCase())) {
-                              //       displayJob2 = true;
-                              //       break;
-                              //     }
-                              //   }
-                              // }
+                            // if (!displayJob) {
+                            //   return const SizedBox.shrink();
+                            // }
+                            // bool displayJob2 = true;
+                            // if (_filters2.any((filter) => filter.isSelected)) {
+                            //   displayJob2 = false;
+                            //   for (final filter in _filters2) {
+                            //     if (filter.isSelected &&
+                            //         joblist[index]
+                            //             .title
+                            //             .toLowerCase()
+                            //             .contains(filter.name.toLowerCase())) {
+                            //       displayJob2 = true;
+                            //       break;
+                            //     }
+                            //   }
+                            // }
 
-                              // if (!displayJob2) {
-                              //   return const SizedBox.shrink();
-                              // }
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                  top: MediaQuery.of(context).size.height * 0,
-                                  bottom:
-                                      MediaQuery.of(context).size.height * 0.01,
-                                  left:
-                                      MediaQuery.of(context).size.width * 0.02,
-                                  right:
-                                      MediaQuery.of(context).size.width * 0.02,
-                                ),
-                                child: InkWell(
-                                  onTap: (() {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                JobDetailScreen(
-                                                    uid: widget.uid,
-                                                    jid: joblist[index].jid)));
-                                  }),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        colors: [
-                                          Colors.blue.shade100,
-                                          Colors.grey.shade400,
-                                        ],
-                                      ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
-                                          offset: Offset(0, 3),
-                                          blurRadius: 6,
-                                          spreadRadius: 2,
-                                        ),
-                                      ],
+                            // if (!displayJob2) {
+                            //   return const SizedBox.shrink();
+                            // }
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.height * 0,
+                                bottom:
+                                    MediaQuery.of(context).size.height * 0.03,
+                                left: MediaQuery.of(context).size.width * 0.02,
+                                right: MediaQuery.of(context).size.width * 0.02,
+                              ),
+                              child: InkWell(
+                                onTap: (() {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              AllPostedJobsDetail(
+                                                  uid: widget.uid,
+                                                  jid: jobassinmentlist[index]
+                                                      .jobApplication!
+                                                      .jid)));
+                                }),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colors.grey.shade200,
+                                    border: Border.all(
+                                      width: 2,
+                                      color: Colors.blue,
                                     ),
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.01,
-                                          left: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.01),
-                                      child: Stack(children: [
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const SizedBox(
-                                              height: 4,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 20),
-                                              child: Text(
-                                                " ${joblist[index].title}          (${joblist[index].noofvacancie.toString()})",
-                                                style: const TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.w900,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 27),
-                                              child: Text(
-                                                "${joblist[index].salary.toString()} ",
-                                                style: const TextStyle(
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 4),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 27),
-                                              child: Text(
-                                                "${joblist[index].location}",
-                                                style: const TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(
+                                            0.2), // Shadow color with reduced opacity
+                                        offset: Offset(0,
+                                            3), // Horizontal and vertical offset of the shadow
+                                        blurRadius:
+                                            6, // Amount of blur applied to the shadow
+                                        spreadRadius:
+                                            2, // Extent of the shadow, a higher value will make the shadow larger
+                                      ),
+                                    ],
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        top:
+                                            MediaQuery.of(context).size.height *
+                                                0.01,
+                                        left:
+                                            MediaQuery.of(context).size.width *
+                                                0.01),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(
+                                          height: 4,
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 270, top: 10),
-                                          child: IconButton(
+                                        Text(
+                                          "Title: ${jobassinmentlist[index].jobApplication!.job!.title}",
+                                          style: const TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w900,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          "Name :${jobassinmentlist[index].jobApplication!.user!.fname.toString()}",
+                                          style: const TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w900,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          "Location:   ${jobassinmentlist[index].jobApplication!.job!.location}",
+                                          style: const TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w900,
+                                          ),
+                                        ),
+                                        Row(
+                                          children: [
+                                            IconButton(
                                               onPressed: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            JobDetailScreen(
-                                                                uid: widget.uid,
-                                                                jid: joblist[
-                                                                        index]
-                                                                    .jid)));
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      AlertDialog(
+                                                    title: const Text(
+                                                        'Delete job?'),
+                                                    content: const Text(
+                                                        'Are you sure you want to delete this job?'),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text('Cancel'),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
                                               },
-                                              icon: Icon(
-                                                FontAwesomeIcons
-                                                    .arrowAltCircleRight,
-                                                color: Colors.black,
-                                                size: 50,
-                                              )),
+                                              icon: Icon(Icons.delete),
+                                            ),
+                                            SizedBox(
+                                              width: 30,
+                                            ),
+                                            IconButton(
+                                                onPressed: () {},
+                                                icon: Icon(Icons.edit))
+                                          ],
                                         )
-                                      ]),
+                                      ],
                                     ),
                                   ),
                                 ),
-                              );
-                            },
-                          ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],
@@ -565,56 +519,20 @@ class _ApplicantApplyJobState extends State<ApplicantApplyJob> {
     );
   }
 
-  Future<List<JobGetModel>> getjob(
-    BuildContext context,
-  ) async {
-    // Get the current user's UID.
+  Future<List<Jobassigment>> getjob(int id) async {
+    //response keyword khud sa bnaya ha
     final response = await http.get(Uri.parse(
-        'http://$ip/HrmPractise02/api/Job/WithCheckfilterJobGet?uid=${widget.uid}'));
-    var Data = jsonDecode(response.body.toString());
-
+        'http://$ip/HrmPractise02/api/Jobassignment/JobassignmentwithidGet?uid=$id')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
+    var Data = jsonDecode(response.body
+        .toString()); // decode kar ka data variable ma store kar rahay hn
     if (response.statusCode == 200) {
-      joblist.clear();
+      jobassinmentlist.clear();
       for (Map<String, dynamic> index in Data) {
-        joblist.add(JobGetModel.fromJson(index));
+        jobassinmentlist.add(Jobassigment.fromJson(index));
       }
+      return jobassinmentlist;
     } else {
-      print(
-          'Error occurred: ${response.statusCode} - ${response.body}'); // print the error
-//jab necahy walay comments on karnay hn to phir navbar ka through profile ma nai jana nai to ya har jagha error dega hum na appbar ma drawer ka andr sa profile ma jana or complete karni hA PROFILE
-      // showDialog(
-      //   context: context,
-      //   builder: (BuildContext context) {
-      //     return AlertDialog(
-      //       title: Text('Message'),
-      //       content: Text('Please Complete The Profile Section First'),
-      //       actions: <Widget>[
-      //         TextButton(
-      //           child: Text('OK'),
-      //           onPressed: () {
-      //             Navigator.of(context).pop();
-      //           },
-      //         ),
-      //       ],
-      //     );
-      //   },
-      // );
-      // Consider adding a throw statement here if you want to stop execution when the profile is not complete.
+      return jobassinmentlist;
     }
-    return joblist;
   }
 }
-
-// class _Filter {
-//   String name;
-//   bool isSelected;
-
-//   _Filter({required this.name, required this.isSelected});
-// }
-
-// class _Filter2 {
-//   String name;
-//   bool isSelected;
-
-//   _Filter2({required this.name, required this.isSelected});
-// }

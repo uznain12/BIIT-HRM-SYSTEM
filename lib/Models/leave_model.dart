@@ -19,6 +19,7 @@ class Leavemodel {
   String enddate;
   String reason;
   String status;
+  DateTime applydate;
 
   Leavemodel({
     required this.user,
@@ -29,6 +30,7 @@ class Leavemodel {
     required this.enddate,
     required this.reason,
     required this.status,
+    required this.applydate,
   });
 
   factory Leavemodel.fromJson(Map<String, dynamic> json) => Leavemodel(
@@ -40,6 +42,9 @@ class Leavemodel {
         enddate: json["enddate"],
         reason: json["reason"],
         status: json["status"],
+        applydate: (json["applydate"] != null && json["applydate"].trim() != "")
+            ? DateTime.parse(json["applydate"])
+            : DateTime.now(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -51,6 +56,7 @@ class Leavemodel {
         "enddate": enddate,
         "reason": reason,
         "status": status,
+        "applydate": applydate,
       };
 }
 

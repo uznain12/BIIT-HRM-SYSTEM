@@ -231,23 +231,24 @@ class _AddExperienceState extends State<AddExperience> {
                         return null;
                       },
                     ),
-                    ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate() && isworking) {
-                            AddExperience(Uid: widget.uid);
-                          }
-                        },
-                        child: Text("Save")),
-                    ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => FetchExperience(
-                                        uid: widget.uid,
-                                      )));
-                        },
-                        child: Text("Check Experience"))
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      height: 50,
+                      width: 200,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              AddExperience(Uid: widget.uid);
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: Text(
+                            "Save",
+                            style: TextStyle(fontSize: 20),
+                          )),
+                    ),
                   ]),
                 ),
               ),

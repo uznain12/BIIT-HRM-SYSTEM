@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_practise_project/Applicant-Home/Experience/add_experience.dart';
 import 'package:fyp_practise_project/Applicant-Home/Experience/update_experience.dart';
 import 'package:fyp_practise_project/Models/experience_model.dart';
 
@@ -32,174 +33,194 @@ class _FetchExperienceState extends State<FetchExperience> {
         title: Text("Experience"),
         centerTitle: true,
       ),
-      body: FutureBuilder(
-          future: fetchexperience(widget.uid!),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                  itemCount: experiencelist.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.02,
-                          left: MediaQuery.of(context).size.width * 0.02,
-                          right: MediaQuery.of(context).size.width * 0.02),
-                      child: Container(
-                          height: 100,
-                          decoration: BoxDecoration(
-                              color: Colors.grey.shade300,
-                              border:
-                                  Border.all(width: 2, color: Colors.black)),
-                          child: Row(
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  RichText(
-                                    text: TextSpan(
-                                        style:
-                                            DefaultTextStyle.of(context).style,
-                                        children: [
-                                          const TextSpan(
-                                            text: "Company Name: ",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
+      body: Stack(children: [
+        FutureBuilder(
+            future: fetchexperience(widget.uid!),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                    itemCount: experiencelist.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height * 0.02,
+                            left: MediaQuery.of(context).size.width * 0.02,
+                            right: MediaQuery.of(context).size.width * 0.02),
+                        child: Container(
+                            height: 100,
+                            decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                border:
+                                    Border.all(width: 2, color: Colors.black)),
+                            child: Row(
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    RichText(
+                                      text: TextSpan(
+                                          style: DefaultTextStyle.of(context)
+                                              .style,
+                                          children: [
+                                            const TextSpan(
+                                              text: "Company Name: ",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                "${experiencelist[index].company}",
-                                            style: const TextStyle(
-                                              fontStyle: FontStyle.italic,
+                                            TextSpan(
+                                              text:
+                                                  "${experiencelist[index].company}",
+                                              style: const TextStyle(
+                                                fontStyle: FontStyle.italic,
+                                              ),
                                             ),
-                                          ),
-                                        ]),
-                                  ),
-                                  // Text("First Name: ${userlist[index].fname}"),
-                                  const SizedBox(height: 4),
-                                  RichText(
-                                    text: TextSpan(
-                                        style:
-                                            DefaultTextStyle.of(context).style,
-                                        children: [
-                                          const TextSpan(
-                                            text: "Job Name :   ",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
+                                          ]),
+                                    ),
+                                    // Text("First Name: ${userlist[index].fname}"),
+                                    const SizedBox(height: 4),
+                                    RichText(
+                                      text: TextSpan(
+                                          style: DefaultTextStyle.of(context)
+                                              .style,
+                                          children: [
+                                            const TextSpan(
+                                              text: "Job Name :   ",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                "${experiencelist[index].title}",
-                                            style: const TextStyle(
-                                              fontStyle: FontStyle.italic,
+                                            TextSpan(
+                                              text:
+                                                  "${experiencelist[index].title}",
+                                              style: const TextStyle(
+                                                fontStyle: FontStyle.italic,
+                                              ),
                                             ),
-                                          ),
-                                        ]),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  RichText(
-                                    text: TextSpan(
-                                        style:
-                                            DefaultTextStyle.of(context).style,
-                                        children: [
-                                          const TextSpan(
-                                            text: "Start Date :        ",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
+                                          ]),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    RichText(
+                                      text: TextSpan(
+                                          style: DefaultTextStyle.of(context)
+                                              .style,
+                                          children: [
+                                            const TextSpan(
+                                              text: "Start Date :        ",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                "${experiencelist[index].startdate.toString()}",
-                                            style: const TextStyle(
-                                              fontStyle: FontStyle.italic,
+                                            TextSpan(
+                                              text:
+                                                  "${experiencelist[index].startdate.toString()}",
+                                              style: const TextStyle(
+                                                fontStyle: FontStyle.italic,
+                                              ),
                                             ),
-                                          ),
-                                        ]),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  RichText(
-                                    text: TextSpan(
-                                        style:
-                                            DefaultTextStyle.of(context).style,
-                                        children: [
-                                          const TextSpan(
-                                            text: "End Date :             ",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
+                                          ]),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    RichText(
+                                      text: TextSpan(
+                                          style: DefaultTextStyle.of(context)
+                                              .style,
+                                          children: [
+                                            const TextSpan(
+                                              text: "End Date :             ",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                "${experiencelist[index].enddate.toString()}",
-                                            style: const TextStyle(
-                                              fontStyle: FontStyle.italic,
+                                            TextSpan(
+                                              text:
+                                                  "${experiencelist[index].enddate.toString()}",
+                                              style: const TextStyle(
+                                                fontStyle: FontStyle.italic,
+                                              ),
                                             ),
-                                          ),
-                                        ]),
-                                  ),
-                                  const SizedBox(height: 4),
-                                ],
-                              ),
-                              Spacer(),
-                              Column(
-                                children: [
-                                  IconButton(
+                                          ]),
+                                    ),
+                                    const SizedBox(height: 4),
+                                  ],
+                                ),
+                                Spacer(),
+                                Column(
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ExperienceUpdate(
+                                                        expId: experiencelist[
+                                                                index]
+                                                            .expId,
+                                                        uid: widget.uid,
+                                                      )));
+                                        },
+                                        icon: Icon(Icons.edit)),
+                                    IconButton(
                                       onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ExperienceUpdate(
-                                                      expId:
-                                                          experiencelist[index]
-                                                              .expId,
-                                                      uid: widget.uid,
-                                                    )));
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: const Text('Delete job?'),
+                                            content: const Text(
+                                                'Are you sure you want to delete this job?'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Text('Cancel'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  _deleteExperience(
+                                                      experiencelist[index]
+                                                          .expId);
+                                                },
+                                                child: Text('Delete'),
+                                              ),
+                                            ],
+                                          ),
+                                        );
                                       },
-                                      icon: Icon(Icons.edit)),
-                                  IconButton(
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          title: const Text('Delete job?'),
-                                          content: const Text(
-                                              'Are you sure you want to delete this job?'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text('Cancel'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                                _deleteExperience(
-                                                    experiencelist[index]
-                                                        .expId);
-                                              },
-                                              child: Text('Delete'),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                    icon: Icon(Icons.delete),
-                                  ),
-                                ],
-                              )
-                            ],
-                          )),
-                    );
-                  });
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
-          }),
+                                      icon: Icon(Icons.delete),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            )),
+                      );
+                    });
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            }),
+        Padding(
+          padding: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height * 0.72,
+              left: MediaQuery.of(context).size.width * 0.8),
+          child: IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddExperience(
+                              uid: widget.uid,
+                            )));
+              },
+              icon: const Icon(
+                Icons.add,
+                size: 60,
+              )),
+        )
+      ]),
     );
   }
 

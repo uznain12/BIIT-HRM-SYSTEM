@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'package:fyp_practise_project/Dashboards/commember_dash.dart';
 import 'package:fyp_practise_project/Login-SignUp/signup.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
@@ -270,6 +271,23 @@ class _LoginPageState extends State<LoginPage> {
                                           builder: ((context) =>
                                               // ignore: prefer_const_constructors
                                               AdminDashboard(
+                                                uid: uid,
+                                              )),
+                                        ),
+                                      );
+                                    } else if (role == "comemployee") {
+                                      SharedPreferences sp =
+                                          await SharedPreferences.getInstance();
+                                      sp.setString('email',
+                                          _emailcontroller.text.toString());
+                                      sp.setString('role', "comemployee");
+                                      sp.setBool('islogin', true);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: ((context) =>
+                                              // ignore: prefer_const_constructors
+                                              CommitteMemberDashBoard(
                                                 uid: uid,
                                               )),
                                         ),

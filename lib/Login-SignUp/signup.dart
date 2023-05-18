@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fyp_practise_project/Login-SignUp/login.dart';
 import 'package:path/path.dart';
 
 import 'package:fyp_practise_project/Models/login_signup_model.dart';
@@ -247,7 +248,7 @@ class _ApplicantSignupState extends State<ApplicantSignup> {
                   child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          ApplicantSignup();
+                          ApplicantSignup(context);
                           // Navigator.pop(context);
                         }
                       },
@@ -264,7 +265,7 @@ class _ApplicantSignupState extends State<ApplicantSignup> {
     );
   }
 
-  void ApplicantSignup({int? Uid}) async {
+  void ApplicantSignup(BuildContext context) async {
     var url = "http://$ip/HrmPractise02/api/User/Signup";
     var data = {
       "Fname": _firstnameController.text,
@@ -286,6 +287,27 @@ class _ApplicantSignupState extends State<ApplicantSignup> {
           body: boddy, headers: {"Content-Type": "application/json"});
       var dataa = jsonDecode(response.body);
       print(dataa);
+
+      if (response.statusCode == 200) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Success'),
+              content: Text('Your Account Created Successfully'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Login Now'),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginPage()));
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
     } catch (e) {
       print('Error occurred: $e');
     }

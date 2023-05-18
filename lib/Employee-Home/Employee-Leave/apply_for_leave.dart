@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:fyp_practise_project/Applicant-Home/Education/fetch_education.dart';
 import 'package:fyp_practise_project/uri.dart';
@@ -27,11 +29,14 @@ TextEditingController _instituteController = TextEditingController();
 TextEditingController _startDateController = TextEditingController();
 TextEditingController _endDateController = TextEditingController();
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<
+    ScaffoldState>(); // only use for show dialogbox on status code 200
 
 class _EmployeeApplyLeaveState extends State<EmployeeApplyLeave> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey, // only use for show dialogbox on status code 200
         appBar: AppBar(
           title: const Text("Apply For Leave"),
           centerTitle: true,
@@ -191,7 +196,9 @@ class _EmployeeApplyLeaveState extends State<EmployeeApplyLeave> {
                     child: ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            AddLeaverequest(Uid: widget.uid);
+                            AddLeaverequest(
+                              Uid: widget.uid,
+                            );
                             Navigator.pop(context);
                           }
                         },
@@ -207,16 +214,18 @@ class _EmployeeApplyLeaveState extends State<EmployeeApplyLeave> {
         ));
   }
 
-  void AddLeaverequest({int? Uid}) async {
+  void AddLeaverequest({
+    int? Uid,
+  }) async {
     var url = "http://$ip/HrmPractise02/api/Leave/LeavePost";
     var data = {
       "Uid": widget.uid,
       "reason": _instituteController.text,
-
       "startdate": _startDateController.text,
       "enddate": _endDateController.text,
       "leavetype": _selectedOption,
       "status": "pending", // Change this to the appropriate value
+      "applydate": DateTime.now().toIso8601String(),
     };
     var boddy = jsonEncode(data);
     var urlParse = Uri.parse(url);
@@ -225,6 +234,32 @@ class _EmployeeApplyLeaveState extends State<EmployeeApplyLeave> {
           body: boddy, headers: {"Content-Type": "application/json"});
       var dataa = jsonDecode(response.body);
       print(dataa);
+      if (response.statusCode == 200) {
+        // Reset form and clear controllers
+        _formKey.currentState?.reset();
+        _instituteController.clear();
+        _startDateController.clear();
+        _endDateController.clear();
+        _selectedOption = null; // Reset the dropdown
+
+        showDialog(
+          context: _scaffoldKey.currentContext!,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Success'),
+              content: Text('Your Leave Application Submitted'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
     } catch (e) {
       print('Error occurred: $e');
     }

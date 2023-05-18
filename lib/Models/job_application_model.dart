@@ -107,6 +107,7 @@ class JobApplicationModel {
   int jid;
   int uid;
   String name;
+  bool isSelected = false;
   String status;
   String DocumentPath;
 

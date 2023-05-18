@@ -1,34 +1,32 @@
 // ignore_for_file: prefer_const_constructors
-
-import 'package:flutter/material.dart';
-import 'package:fyp_practise_project/Guard-Home/attendance.dart';
-import 'package:fyp_practise_project/HR-Home/Committe/all_employees.dart';
-import 'package:fyp_practise_project/HR-Home/Committe/committe_member.dart';
-import 'package:fyp_practise_project/HR-Home/Job/all_posted_jobs.dart';
-import 'package:fyp_practise_project/HR-Home/Leave/all_leave_applications.dart';
-import 'package:fyp_practise_project/HR-Home/New-Committe/committe_mian.dart';
-import 'package:http/http.dart' as http;
-import 'package:fyp_practise_project/Applicant-Home/Job/job_get.dart';
-import 'package:fyp_practise_project/Models/login_signup_model.dart';
-import 'package:fyp_practise_project/User_Persoanl_Profile/users_get_profile.dart';
+import 'package:fyp_practise_project/Committe%20Member%20Home/resumes.dart';
+import 'package:fyp_practise_project/Employee-Home/Employee-Leave/apply_for_leave.dart';
+import 'package:fyp_practise_project/Employee-Home/attendance.dart';
+import 'package:fyp_practise_project/Employee-Home/Employee-Leave/employee_all_leave_applications.dart';
 import 'package:fyp_practise_project/HR-Home/Job/job_applications.dart';
 import 'package:fyp_practise_project/HR-Home/Job/job_post.dart';
 import 'package:fyp_practise_project/Login-SignUp/login.dart';
 import 'package:fyp_practise_project/uri.dart';
+import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:fyp_practise_project/Models/login_signup_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AdminDashboard extends StatefulWidget {
+class CommitteMemberDashBoard extends StatefulWidget {
   int? uid;
-  AdminDashboard({super.key, required this.uid});
+  CommitteMemberDashBoard({required this.uid});
 
   @override
-  State<AdminDashboard> createState() => _AdminDashboardState();
+  State<CommitteMemberDashBoard> createState() =>
+      _CommitteMemberDashBoardState();
 }
 
 List<LoginModel> userlist = [];
 
-class _AdminDashboardState extends State<AdminDashboard> {
+class _CommitteMemberDashBoardState extends State<CommitteMemberDashBoard> {
   @override
   void initState() {
     super.initState();
@@ -41,10 +39,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Center(
-              child: Text(
+          centerTitle: true,
+          title: Text(
             "Welcome  ${userlist.isNotEmpty ? userlist[0].fname : ''} ${userlist.isNotEmpty ? userlist[0].lname : ''}",
-          )),
+          ),
         ),
         drawer: Drawer(
           child: ListView(
@@ -71,132 +69,72 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         : const SizedBox.shrink(),
                   )),
               ListTile(
-                leading: const Icon(Icons.person),
-                title: const Text('Profile'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => UserPersonalInfo(uid: widget.uid),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.work),
-                title: const Text('Job Applications'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => JobApplications(uid: widget.uid),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.work),
-                title: const Text(
-                  'Add Job ',
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => JobPost(),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.work),
-                title: const Text(
-                  'Posted Jobs ',
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AllPostedJobs(
-                        uid: widget.uid,
-                      ),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.work),
-                title: const Text('Leave Mnagement'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AllLeaveApplications(),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.work),
-                title: const Text(
-                  'Committe ',
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MainCommittePage(
-                        uid: widget.uid,
-                      ),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
                 leading: const Icon(Icons.present_to_all),
                 title: const Text(
-                  'Attendance Report',
+                  'Attendance ',
                   style: TextStyle(fontSize: 20),
                 ),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AttendanceMainPage(
-                                uid: widget.uid,
-                              )));
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => EmployeeAttendenceScreen(),
+                  //   ),
+                  // );
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.work),
+                leading: const Icon(Icons.leave_bags_at_home),
                 title: const Text(
-                  'Committe Members',
+                  'Leaves',
+                  style: TextStyle(fontSize: 20),
                 ),
+                onTap: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => EmployeeLeaveScreen(),
+                  //   ),
+                  // );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text(
+                  'Leave Request',
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => EmployeeLeaveReqScreen(),
+                  //   ),
+                  // );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.settings),
+                title: const Text('Pending Resumes'),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Committemembers(
-                        uid: widget.uid,
-                      ),
+                      builder: (context) => ResumesPerUser(uid: widget.uid),
                     ),
                   );
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.work),
-                title: const Text(
-                  'Create Committe ',
-                ),
+                leading: const Icon(Icons.settings),
+                title: const Text('Setting'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AllEmployeesPagey(
-                        uid: widget.uid,
-                      ),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => ApplicantApplyApplications(),
+                  //   ),
+                  // );
                 },
               ),
               ListTile(
@@ -208,6 +146,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 onTap: () async {
                   SharedPreferences sp = await SharedPreferences.getInstance();
                   sp.clear();
+                  // ignore: use_build_context_synchronously
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -225,7 +164,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
             Container(
               decoration: const BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage('images/hrrbackground.jpg'),
+                      image: AssetImage('images/background.jpg'),
                       fit: BoxFit.fill)),
             ),
             Padding(
@@ -239,7 +178,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => JobApplications(
+                              builder: (context) => EmployeeApplyLeave(
                                     uid: widget.uid,
                                   )));
                     },
@@ -266,12 +205,15 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
                             Icon(
-                              Icons.work,
+                              Icons.event_note,
                               size: 60,
                               color: Colors.blue,
                             ),
+                            SizedBox(
+                              height: 6,
+                            ),
                             Text(
-                              "Job Applications",
+                              "Apply For Leave",
                               style: TextStyle(
                                   fontSize: 18,
                                   fontFamily: 'RobotoSlab-VariableFont_wght'),
@@ -289,7 +231,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AllLeaveApplications()));
+                              builder: (context) => EmployeeLeaveApplication(
+                                    uid: widget.uid,
+                                  )));
                     },
                     child: Container(
                       height: 150,
@@ -343,7 +287,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AttendanceMainPage(
+                              builder: (context) => EmployeeAttendanceReport(
                                     uid: widget.uid,
                                   )));
                     },
@@ -439,21 +383,21 @@ class _AdminDashboardState extends State<AdminDashboard> {
           ],
         ));
   }
+}
 
-  Future<List<LoginModel>> fetchcuser(int id) async {
-    //response keyword khud sa bnaya ha
-    final response = await http.get(Uri.parse(
-        'http://$ip/HrmPractise02/api/User/UserGet?id=$id')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
-    var Data = jsonDecode(response.body
-        .toString()); // decode kar ka data variable ma store kar rahay hn
-    if (response.statusCode == 200) {
-      userlist.clear();
-      for (Map<String, dynamic> index in Data) {
-        userlist.add(LoginModel.frommap(index));
-      }
-      return userlist;
-    } else {
-      return userlist;
+Future<List<LoginModel>> fetchcuser(int id) async {
+  //response keyword khud sa bnaya ha
+  final response = await http.get(Uri.parse(
+      'http://$ip/HrmPractise02/api/User/UserGet?id=$id')); // is ma aik variable bnaya ha response ka name sa or phir get method ka through api ko hit kar rahay hn is ka data aik data variable ma store karway ga
+  var Data = jsonDecode(response.body
+      .toString()); // decode kar ka data variable ma store kar rahay hn
+  if (response.statusCode == 200) {
+    userlist.clear();
+    for (Map<String, dynamic> index in Data) {
+      userlist.add(LoginModel.frommap(index));
     }
+    return userlist;
+  } else {
+    return userlist;
   }
 }

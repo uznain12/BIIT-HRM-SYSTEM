@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:fyp_practise_project/Employee-Home/apply_for_leave.dart';
+import 'package:fyp_practise_project/Employee-Home/Employee-Leave/apply_for_leave.dart';
 import 'package:fyp_practise_project/Employee-Home/attendance.dart';
-import 'package:fyp_practise_project/Employee-Home/leave_application.dart';
+import 'package:fyp_practise_project/Employee-Home/Employee-Leave/employee_all_leave_applications.dart';
 import 'package:fyp_practise_project/HR-Home/Job/job_applications.dart';
 import 'package:fyp_practise_project/HR-Home/Job/job_post.dart';
 import 'package:fyp_practise_project/Login-SignUp/login.dart';
@@ -265,7 +265,7 @@ class _HiredEmployeeDashboardState extends State<HiredEmployeeDashboard> {
             Padding(
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.39,
-                  left: MediaQuery.of(context).size.width * 0.05),
+                  left: MediaQuery.of(context).size.width * 0.29),
               child: Row(
                 children: [
                   InkWell(
@@ -319,50 +319,6 @@ class _HiredEmployeeDashboardState extends State<HiredEmployeeDashboard> {
                   SizedBox(
                     width: 30,
                   ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => JobPost()));
-                    },
-                    child: Container(
-                      height: 150,
-                      width: 150,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        gradient: LinearGradient(
-                          colors: [Colors.grey.shade400, Colors.grey.shade200],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade500,
-                            blurRadius: 5,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(
-                              Icons.work_outline_rounded,
-                              size: 60,
-                              color: Colors.blue,
-                            ),
-                            Text(
-                              "Job Post",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: 'RobotoSlab-VariableFont_wght',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
                 ],
               ),
             )

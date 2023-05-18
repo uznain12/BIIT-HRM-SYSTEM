@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_practise_project/Applicant-Home/Education/add_education.dart';
+import 'package:fyp_practise_project/Applicant-Home/Education/fetch_education.dart';
 import 'package:fyp_practise_project/Applicant-Home/Experience/add_experience.dart';
+import 'package:fyp_practise_project/Applicant-Home/Experience/fetch_experience.dart';
 import 'package:fyp_practise_project/Applicant-Home/Personal/personal_info.dart';
 
 class ApplicantProfile extends StatefulWidget {
@@ -88,7 +90,7 @@ class _ApplicantProfileState extends State<ApplicantProfile> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AddEducation(
+                              builder: (context) => FetchEducation(
                                     uid: widget.uid,
                                   )));
                     },
@@ -144,7 +146,7 @@ class _ApplicantProfileState extends State<ApplicantProfile> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AddExperience(
+                              builder: (context) => FetchExperience(
                                     uid: widget.uid,
                                   )));
                     },
