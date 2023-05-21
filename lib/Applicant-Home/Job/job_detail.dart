@@ -62,7 +62,7 @@ class _JobDetailScreenState extends State<JobDetailScreen> {
                                 right: MediaQuery.of(context).size.width * 0.02,
                               ),
                               child: Container(
-                                height: 440,
+                                height: 500,
                                 decoration: BoxDecoration(
                                   color: Colors.grey.shade300,
                                   border: Border.all(
@@ -105,7 +105,51 @@ class _JobDetailScreenState extends State<JobDetailScreen> {
                                               ),
                                             ]),
                                       ),
-                                      // Text("First Name: ${userlist[index].fname}"),
+
+                                      const SizedBox(height: 6),
+                                      RichText(
+                                        text: TextSpan(
+                                            style: DefaultTextStyle.of(context)
+                                                .style,
+                                            children: [
+                                              const TextSpan(
+                                                text: "Qualification:  ",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16),
+                                              ),
+                                              TextSpan(
+                                                text:
+                                                    "${jobdetaillist[index].qualification}",
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ]),
+                                      ),
+
+                                      const SizedBox(height: 6),
+                                      RichText(
+                                        text: TextSpan(
+                                            style: DefaultTextStyle.of(context)
+                                                .style,
+                                            children: [
+                                              const TextSpan(
+                                                text: "Vacancies:  ",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16),
+                                              ),
+                                              TextSpan(
+                                                text:
+                                                    "${jobdetaillist[index].noofvacancie}",
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ]),
+                                      ),
+
                                       const SizedBox(height: 6),
                                       RichText(
                                         text: TextSpan(

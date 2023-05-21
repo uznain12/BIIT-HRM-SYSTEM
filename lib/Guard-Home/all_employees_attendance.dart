@@ -35,7 +35,8 @@ class _AttendanceMainPageState extends State<AttendanceMainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text("")),
+        title: Center(child: Text("All Employees")),
+        centerTitle: true,
       ),
       body: Stack(
         children: [

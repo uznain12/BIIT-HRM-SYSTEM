@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_practise_project/Applicant-Home/Personal/update_personal.dart';
 import 'package:fyp_practise_project/Dashboards/hr_dash.dart';
+import 'package:fyp_practise_project/HR-Home/New-Committe/committe_mian.dart';
 import 'package:fyp_practise_project/Models/login_signup_model.dart';
 import 'package:fyp_practise_project/uri.dart';
 import 'package:path/path.dart';
@@ -39,7 +40,7 @@ class _NewCreateCommitteHeadState extends State<NewCreateCommitteHead> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Add To Committe"),
+          title: Text("Create Committe"),
           centerTitle: true,
         ),
         body: Column(children: [
@@ -306,12 +307,23 @@ class _NewCreateCommitteHeadState extends State<NewCreateCommitteHead> {
                                         ),
                                         const SizedBox(height: 30),
                                         Center(
-                                          child: ElevatedButton(
-                                              onPressed: () {
-                                                // UpdateUser(context);
-                                                AddCommitte(Uid: widget.uid);
-                                              },
-                                              child: Text("Add To Committe")),
+                                          child: SizedBox(
+                                            height: 50,
+                                            width: 300,
+                                            child: ElevatedButton(
+                                                onPressed: () {
+                                                  // UpdateUser(context);
+                                                  AddCommitte(Uid: widget.uid);
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              MainCommittePage(
+                                                                uid: widget.uid,
+                                                              )));
+                                                },
+                                                child: Text("Create Committe")),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -360,6 +372,7 @@ class _NewCreateCommitteHeadState extends State<NewCreateCommitteHead> {
           body: boddy, headers: {"Content-Type": "application/json"});
       var dataa = jsonDecode(response.body);
       print(dataa);
+      setState(() {}); // call setState() here
     } catch (e) {
       print('Error occurred: $e');
     }

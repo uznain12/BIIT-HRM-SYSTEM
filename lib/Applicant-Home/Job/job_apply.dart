@@ -158,7 +158,7 @@ class _ApplyJobApplicantState extends State<ApplyJobApplicant> {
     }
 
     var url =
-        "http://$ip/HrmPractise02/api/JobApplication/JobFileApplicationPost";
+        "http://$ip/HrmPractise02/api/JobApplication/JobFileApplicationWithFilterPost2";
     var request = http.MultipartRequest('POST', Uri.parse(url));
 
     if (document != null) {

@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:fyp_practise_project/Guard-Home/attendance_report.dart';
 import 'package:fyp_practise_project/HR-Home/Committe/create_commite_member.dart';
-import 'package:fyp_practise_project/HR-Home/New-Committe/new_create_commite_head.dart';
+import 'package:fyp_practise_project/HR-Home/New-Committe/add_new_commite_head.dart';
 
 import 'package:fyp_practise_project/uri.dart';
 import 'package:http/http.dart' as http;

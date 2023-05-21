@@ -7,22 +7,21 @@ import 'dart:convert';
 
 class ExperienceUpdate extends StatefulWidget {
   int? uid;
-  int? expId;
-  ExperienceUpdate({required this.uid, required this.expId});
+  int? expoId;
+  ExperienceUpdate({required this.uid, required this.expoId});
 
   @override
   State<ExperienceUpdate> createState() => _ExperienceUpdateState();
 }
 
 class _ExperienceUpdateState extends State<ExperienceUpdate> {
+  bool isworking = false;
   final TextEditingController _companyController = TextEditingController();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _startDateController = TextEditingController();
   final TextEditingController _endDateController = TextEditingController();
   final TextEditingController _OtherskillController = TextEditingController();
   final TextEditingController _currentWorkController = TextEditingController();
-  final TextEditingController _hasExperienceController =
-      TextEditingController();
 
   @override
   void initState() {
@@ -97,6 +96,27 @@ class _ExperienceUpdateState extends State<ExperienceUpdate> {
                   },
                 ),
               ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 30,
+                  ),
+                  Checkbox(
+                    value: isworking,
+                    onChanged: (value) {
+                      setState(() {
+                        isworking = value!;
+                      });
+                    },
+                  ),
+                  const Text(
+                    'Working Now',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
@@ -163,29 +183,33 @@ class _ExperienceUpdateState extends State<ExperienceUpdate> {
   }
 
   Future<void> fetchExperience() async {
-    try {
-      final response = await http.get(Uri.parse(
-          'http://$ip/HrmPractise02/api/Expereince/ExperienceGet?uid=${widget.uid}&expId=${widget.expId}'));
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        if (data.isNotEmpty) {
-          for (final item in data) {
-            final experience = ExperienceModel.fromJson(item);
-            _companyController.text = experience.company.toString();
-            _titleController.text = experience.title.toString();
+    final response = await http.get(Uri.parse(
+        'http://$ip/HrmPractise02/api/Expereince/ExperienceGet?uid=${widget.uid}&expId=${widget.expoId}'));
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      if (data.isNotEmpty) {
+        for (var item in data) {
+          final experience = ExperienceModel.fromJson(item);
+          if (experience.expId == widget.expoId) {
+            // assuming 'id' is the field that contains the experience id
+            _companyController.text = experience.company;
+            _titleController.text = experience.title;
             _startDateController.text = experience.startdate.toString();
             _endDateController.text = experience.enddate.toString();
-            _OtherskillController.text = experience.otherskill.toString();
+            _OtherskillController.text = experience.otherskill;
             _currentWorkController.text = experience.currentwork.toString();
-            _hasExperienceController.text =
-                experience.hasexperienced.toString();
+            setState(() {
+              isworking = experience.currentwork.toLowerCase() == 'true';
+            });
+
+            break; // stop the loop as we found the record we were looking for
           }
         }
-      } else {
-        throw Exception('Failed to load Experience');
       }
-    } catch (e) {
-      print('Error fetching experience: $e');
+    } else {
+      print('Failed to load Experience. Status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      throw Exception('Failed to load Experience');
     }
   }
 
@@ -193,7 +217,7 @@ class _ExperienceUpdateState extends State<ExperienceUpdate> {
     var url = "http://$ip/HrmPractise02/api/Expereince/UpdateExperience";
     var data = {
       "Uid": widget.uid,
-      "ExpID": widget.expId,
+      "ExpID": widget.expoId,
       "Company": _companyController.text,
       "Title": _titleController.text,
       "Startdate": _startDateController.text,

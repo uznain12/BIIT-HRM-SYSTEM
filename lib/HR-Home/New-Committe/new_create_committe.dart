@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fyp_practise_project/Applicant-Home/Personal/update_personal.dart';
-import 'package:fyp_practise_project/Dashboards/hr_dash.dart';
 import 'package:fyp_practise_project/HR-Home/New-Committe/all_employess.dart';
-import 'package:fyp_practise_project/HR-Home/New-Committe/all_head.dart';
 import 'package:fyp_practise_project/Models/committe_model.dart';
-import 'package:fyp_practise_project/Models/login_signup_model.dart';
 import 'package:fyp_practise_project/uri.dart';
-import 'package:path/path.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -23,21 +16,20 @@ class NewCreateCommitte extends StatefulWidget {
 }
 
 class _NewCreateCommitteState extends State<NewCreateCommitte> {
-  final TextEditingController _committeetitleController =
-      TextEditingController();
   List<CommitteModel> committelist = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Create Committe"),
+          title: const Text("Committe Details"),
           centerTitle: true,
         ),
         body: Stack(
           children: [
             Container(
               height: 150,
+
               // decoration: BoxDecoration(color: Colors.grey.shade500),
               child: Column(
                 children: [
@@ -96,7 +88,7 @@ class _NewCreateCommitteState extends State<NewCreateCommitte> {
                                                                     context)
                                                                 .size
                                                                 .width *
-                                                            0.3),
+                                                            0.2),
                                                     child: Text(
                                                       " ${committelist[index].committeeTitle}",
                                                       style: const TextStyle(
@@ -109,22 +101,35 @@ class _NewCreateCommitteState extends State<NewCreateCommitte> {
                                                     height: 10,
                                                   ),
                                                   Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.07),
-                                                    child: Text(
-                                                      "Committe Head: ${committelist[index].user!.fname} ${committelist[index].user!.lname}",
-                                                      style: const TextStyle(
-                                                          fontSize: 17,
-                                                          fontWeight:
-                                                              FontWeight.w900),
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 5),
+                                                    child: RichText(
+                                                      text: TextSpan(
+                                                          style: DefaultTextStyle
+                                                                  .of(context)
+                                                              .style,
+                                                          children: [
+                                                            const TextSpan(
+                                                              text:
+                                                                  "Committee Head: ",
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: 18),
+                                                            ),
+                                                            TextSpan(
+                                                              text:
+                                                                  "${committelist[index].user!.fname}  ${committelist[index].user!.lname}",
+                                                              style: const TextStyle(
+                                                                  fontStyle:
+                                                                      FontStyle
+                                                                          .italic,
+                                                                  fontSize: 18),
+                                                            ),
+                                                          ]),
                                                     ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
                                                   ),
                                                   Padding(
                                                     padding: EdgeInsets.only(
@@ -136,7 +141,7 @@ class _NewCreateCommitteState extends State<NewCreateCommitte> {
                                                     child: Row(
                                                       children: [
                                                         const Text(
-                                                          "Add Committee Member",
+                                                          "Add Committee Members",
                                                           style: TextStyle(
                                                               fontSize: 20,
                                                               color:

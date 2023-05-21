@@ -73,8 +73,7 @@ class _AttendanceReportState extends State<AttendanceReport> {
       ),
       body: Container(
         decoration: BoxDecoration(color: Colors.white),
-        child: SingleChildScrollView(
-            child: SizedBox(
+        child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: FutureBuilder(
               future: attendancebyid(widget.selectedEmployee.uid!),
@@ -231,7 +230,7 @@ class _AttendanceReportState extends State<AttendanceReport> {
                   return Center(child: CircularProgressIndicator());
                 }
               }),
-        )),
+        ),
       ),
     );
   }

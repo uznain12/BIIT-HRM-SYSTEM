@@ -13,25 +13,29 @@ import 'package:fyp_practise_project/uri.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
-class JobApplicationDetail extends StatefulWidget {
+class ApplicantJobDetail extends StatefulWidget {
   int? uid;
   int? applicationid;
-  JobApplicationDetail({required this.uid, required this.applicationid});
+  int? memberid;
+  ApplicantJobDetail(
+      {required this.uid, required this.applicationid, required this.memberid});
   // const ApplicantApplyJob({super.key});
 
   @override
-  State<JobApplicationDetail> createState() => _JobApplicationDetailState();
+  State<ApplicantJobDetail> createState() => _ApplicantJobDetailState();
 }
 
-class _JobApplicationDetailState extends State<JobApplicationDetail> {
+class _ApplicantJobDetailState extends State<ApplicantJobDetail> {
   List<JobApplicationModel> Jobapplicationdetaillist = [];
+  TextEditingController _remarksController = TextEditingController();
   late Widget _widget;
   @override
   void initState() {
     super.initState();
-    _widget = JobApplicationDetail(
+    _widget = ApplicantJobDetail(
       uid: widget.uid,
       applicationid: widget.applicationid,
+      memberid: widget.memberid,
     );
   }
 
@@ -554,6 +558,27 @@ class _JobApplicationDetailState extends State<JobApplicationDetail> {
                                               ),
                                             ]),
                                       ),
+                                      const SizedBox(
+                                        height: 6,
+                                      ),
+                                      TextFormField(
+                                        controller: _remarksController,
+                                        decoration: const InputDecoration(
+                                          prefixIcon: Icon(Icons.school_sharp),
+                                          prefixIconConstraints: BoxConstraints(
+                                            minWidth: 54,
+                                            minHeight: 54,
+                                          ),
+                                          labelText: 'Remarks',
+                                          border: OutlineInputBorder(),
+                                        ),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter Your Remarks';
+                                          }
+                                          return null;
+                                        },
+                                      ),
                                       Padding(
                                         padding: EdgeInsets.only(
                                             left: MediaQuery.of(context)
@@ -569,10 +594,10 @@ class _JobApplicationDetailState extends State<JobApplicationDetail> {
                                           height: 50,
                                           child: ElevatedButton(
                                               onPressed: () {
-                                                shortlist();
+                                                Addremarks();
                                               },
                                               child: const Text(
-                                                "Short List",
+                                                "Submit",
                                                 style: TextStyle(
                                                     fontFamily:
                                                         'RobotoSlab-Black',
@@ -616,11 +641,31 @@ class _JobApplicationDetailState extends State<JobApplicationDetail> {
     }
   }
 
-  void shortlist() async {
-    var url = "http://$ip/HrmPractise02/api/Shortlist/SHortlistPost";
+  // void shortlist() async {
+  //   var url = "http://$ip/HrmPractise02/api/Shortlist/SHortlistPost";
+  //   var data = {
+  //     "Uid": widget.uid,
+  //     "ApplicationID": widget.applicationid,
+  //   };
+  //   var boddy = jsonEncode(data);
+  //   var urlParse = Uri.parse(url);
+  //   try {
+  //     http.Response response = await http.post(urlParse,
+  //         body: boddy, headers: {"Content-Type": "application/json"});
+  //     var dataa = jsonDecode(response.body);
+  //     print(dataa);
+  //   } catch (e) {
+  //     print('Error occurred: $e');
+  //   }
+  // }
+
+  void Addremarks({int? CommitteeMemberId, JobApplicationID}) async {
+    var url = "http://$ip/HrmPractise02/api/Remark/RemarkPost";
     var data = {
-      "Uid": widget.uid,
-      "ApplicationID": widget.applicationid,
+      "CommitteeMemberId": widget.memberid,
+      "JobApplicationID": widget.applicationid,
+      "Remarks": _remarksController.text,
+      // Change this to the appropriate value
     };
     var boddy = jsonEncode(data);
     var urlParse = Uri.parse(url);

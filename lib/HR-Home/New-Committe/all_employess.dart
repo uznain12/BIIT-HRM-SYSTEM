@@ -1,10 +1,6 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:fyp_practise_project/Guard-Home/attendance_report.dart';
-import 'package:fyp_practise_project/HR-Home/Committe/create_commite_member.dart';
-import 'package:fyp_practise_project/HR-Home/New-Committe/new_create_commite_head.dart';
-import 'package:fyp_practise_project/HR-Home/New-Committe/new_create_commite_members.dart';
+import 'package:fyp_practise_project/HR-Home/New-Committe/add_new_commite_members.dart';
 import 'package:fyp_practise_project/Models/committe_model.dart' hide Image;
-
 import 'package:fyp_practise_project/uri.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -33,7 +29,8 @@ class _AllEmployeesForCommiitteState extends State<AllEmployeesForCommiitte> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text("")),
+        centerTitle: true,
+        title: Center(child: Text("Select Committee Members")),
       ),
       body: Stack(
         children: [
@@ -80,8 +77,22 @@ class _AllEmployeesForCommiitteState extends State<AllEmployeesForCommiitte> {
                   builder: (context, snapshot) {
                     // If the snapshot has data, build the grid
                     if (snapshot.hasData) {
+                      List<LoginModel> filteredUsers = [];
+                      if (_searchQuery.isNotEmpty) {
+                        for (final user in userlistbyrole) {
+                          if (((user.fname?.toLowerCase() ?? '') +
+                                  ' ' +
+                                  (user.lname?.toLowerCase() ?? ''))
+                              .contains(_searchQuery.toLowerCase())) {
+                            filteredUsers.add(user);
+                          }
+                        }
+                      } else {
+                        filteredUsers = List.from(userlistbyrole);
+                      }
+
                       return GridView.builder(
-                          itemCount: userlistbyrole.length,
+                          itemCount: filteredUsers.length,
                           // Define the grid with 2 columns and spacing
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
@@ -94,18 +105,6 @@ class _AllEmployeesForCommiitteState extends State<AllEmployeesForCommiitte> {
                             childAspectRatio: 3 / 2.5,
                           ),
                           itemBuilder: (context, index) {
-                            if (_searchQuery.isNotEmpty &&
-                                !((userlistbyrole[index].fname?.toLowerCase() ??
-                                            '') +
-                                        ' ' +
-                                        (userlistbyrole[index]
-                                                .lname
-                                                ?.toLowerCase() ??
-                                            ''))
-                                    .contains(_searchQuery.toLowerCase())) {
-                              return const SizedBox.shrink();
-                            }
-
                             // Create a card for each employee
                             return InkWell(
                               onTap: (() async {
@@ -122,25 +121,21 @@ class _AllEmployeesForCommiitteState extends State<AllEmployeesForCommiitte> {
                                         builder: (context) =>
                                             NewCreateCommitteMember(
                                               committeid: widget.committeid,
-                                              uid: userlistbyrole[index].uid,
-                                              fname:
-                                                  userlistbyrole[index].fname,
-                                              lname:
-                                                  userlistbyrole[index].lname,
-                                              email:
-                                                  userlistbyrole[index].email,
-                                              pass: userlistbyrole[index]
-                                                  .password,
+                                              uid: filteredUsers[index].uid,
+                                              fname: filteredUsers[index].fname,
+                                              lname: filteredUsers[index].lname,
+                                              email: filteredUsers[index].email,
+                                              pass:
+                                                  filteredUsers[index].password,
                                               gender:
-                                                  userlistbyrole[index].gender,
-                                              cnic: userlistbyrole[index].cnic,
+                                                  filteredUsers[index].gender,
+                                              cnic: filteredUsers[index].cnic,
                                               contatc:
-                                                  userlistbyrole[index].mobile,
-                                              image:
-                                                  userlistbyrole[index].image,
+                                                  filteredUsers[index].mobile,
+                                              image: filteredUsers[index].image,
                                               address:
-                                                  userlistbyrole[index].address,
-                                              dob: userlistbyrole[index].dob,
+                                                  filteredUsers[index].address,
+                                              dob: filteredUsers[index].dob,
                                             )));
                               }),
                               child: Card(
@@ -155,9 +150,9 @@ class _AllEmployeesForCommiitteState extends State<AllEmployeesForCommiitte> {
                                   children: [
                                     Container(
                                       height: 90,
-                                      child: (userlistbyrole[index].image !=
+                                      child: (filteredUsers[index].image !=
                                                   null &&
-                                              userlistbyrole[index]
+                                              filteredUsers[index]
                                                   .image
                                                   .trim()
                                                   .isNotEmpty)
@@ -167,8 +162,7 @@ class _AllEmployeesForCommiitteState extends State<AllEmployeesForCommiitte> {
                                                 height: 100,
                                                 width: 100,
                                                 image: NetworkImage(imagepath +
-                                                    userlistbyrole[index]
-                                                        .image),
+                                                    filteredUsers[index].image),
                                               ),
                                             )
                                           : const Icon(Icons.person, size: 100),
@@ -178,7 +172,7 @@ class _AllEmployeesForCommiitteState extends State<AllEmployeesForCommiitte> {
 
                                     // Display the employee's name
                                     Text(
-                                      "${userlistbyrole[index].fname} ${userlistbyrole[index].lname}",
+                                      "${filteredUsers[index].fname} ${filteredUsers[index].lname}",
                                       style: TextStyle(
                                           fontSize: 15, color: Colors.black),
                                     ),
@@ -202,7 +196,7 @@ class _AllEmployeesForCommiitteState extends State<AllEmployeesForCommiitte> {
   Future<List<LoginModel>> fetchcuserbyrole() async {
     try {
       final response = await http
-          .get(Uri.parse('http://$ip/HrmPractise02/api/User/UserbyroleGet'));
+          .get(Uri.parse('http://$ip/HrmPractise02/api/User/UserroleGet'));
       var Data = jsonDecode(response.body.toString());
       if (response.statusCode == 200) {
         userlistbyrole.clear();

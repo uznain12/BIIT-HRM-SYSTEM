@@ -25,6 +25,7 @@ List<String> _options = [
 TextEditingController _instituteController = TextEditingController();
 TextEditingController _boardController = TextEditingController();
 TextEditingController _startDateController = TextEditingController();
+TextEditingController _majorController = TextEditingController();
 TextEditingController _endDateController = TextEditingController();
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -81,6 +82,27 @@ class _AddEducationState extends State<AddEducation> {
                         return null;
                       },
                     ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: _majorController,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.school_sharp),
+                      prefixIconConstraints: BoxConstraints(
+                        minWidth: 54,
+                        minHeight: 54,
+                      ),
+                      labelText: 'Major',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Major';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(
                     height: 10,
@@ -182,7 +204,7 @@ class _AddEducationState extends State<AddEducation> {
                             }
                           },
                           decoration: const InputDecoration(
-                            labelText: 'End Date',
+                            labelText: 'Passing Date',
                             prefixIcon: Icon(Icons.calendar_today),
                             prefixIconConstraints: BoxConstraints(
                               minWidth: 54,
@@ -231,6 +253,7 @@ class _AddEducationState extends State<AddEducation> {
       "Uid": widget.uid,
       "Institute": _instituteController.text,
       "Board": _boardController.text,
+      "major": _majorController.text,
       "Startdate": _startDateController.text,
       "Enddate": _endDateController.text,
       "Degree": _selectedOption,

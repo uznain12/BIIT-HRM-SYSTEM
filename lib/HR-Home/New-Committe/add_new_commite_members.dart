@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fyp_practise_project/Applicant-Home/Personal/update_personal.dart';
-import 'package:fyp_practise_project/Dashboards/hr_dash.dart';
 import 'package:fyp_practise_project/Models/login_signup_model.dart';
 import 'package:fyp_practise_project/uri.dart';
-import 'package:path/path.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -295,9 +290,11 @@ class _NewCreateCommitteMemberState extends State<NewCreateCommitteMember> {
                                               onPressed: () {
                                                 // UpdateUser(context);
                                                 AddCommittemember(
-                                                    Uid: widget.uid);
+                                                    Uid: widget.uid,
+                                                    context: context);
                                               },
-                                              child: Text("Add To Committe")),
+                                              child: const Text(
+                                                  "Add To Committe")),
                                         ),
                                       ],
                                     ),
@@ -308,7 +305,7 @@ class _NewCreateCommitteMemberState extends State<NewCreateCommitteMember> {
                           );
                         }));
                   } else {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
                 }),
           ),
@@ -332,7 +329,7 @@ class _NewCreateCommitteMemberState extends State<NewCreateCommitteMember> {
     }
   }
 
-  void AddCommittemember({int? Uid}) async {
+  void AddCommittemember({int? Uid, required BuildContext context}) async {
     var url =
         "http://$ip/HrmPractise02/api/Committeemembers/Createcommittemember";
     var data = {
@@ -348,6 +345,27 @@ class _NewCreateCommitteMemberState extends State<NewCreateCommitteMember> {
           body: boddy, headers: {"Content-Type": "application/json"});
       var dataa = jsonDecode(response.body);
       print(dataa);
+      if (response.statusCode == 200) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Success'),
+              content: const Text('User added to committee successfully.'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.pop(context);
+
+                    setState(() {}); // Rebuild the widget
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
     } catch (e) {
       print('Error occurred: $e');
     }

@@ -1,16 +1,18 @@
 // ignore_for_file: prefer_const_constructors
+
+import 'package:fyp_practise_project/Employee-Home/Employee-Committee/comittee_home.dart';
 import 'package:fyp_practise_project/Employee-Home/Employee-Leave/apply_for_leave.dart';
-import 'package:fyp_practise_project/Employee-Home/attendance.dart';
+import 'package:fyp_practise_project/Employee-Home/Employee-Personal/employye_profile.dart';
+import 'package:fyp_practise_project/Employee-Home/Employee-Attendance/attendance.dart';
 import 'package:fyp_practise_project/Employee-Home/Employee-Leave/employee_all_leave_applications.dart';
-import 'package:fyp_practise_project/HR-Home/Job/job_applications.dart';
-import 'package:fyp_practise_project/HR-Home/Job/job_post.dart';
+
 import 'package:fyp_practise_project/Login-SignUp/login.dart';
+import 'package:fyp_practise_project/User_Persoanl_Profile/users_get_profile.dart';
 import 'package:fyp_practise_project/uri.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:fyp_practise_project/Models/login_signup_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -67,48 +69,67 @@ class _HiredEmployeeDashboardState extends State<HiredEmployeeDashboard> {
                         : const SizedBox.shrink(),
                   )),
               ListTile(
-                leading: const Icon(Icons.present_to_all),
-                title: const Text(
-                  'Attendance ',
-                  style: TextStyle(fontSize: 20),
-                ),
+                leading: const Icon(Icons.person),
+                title: const Text('Profile'),
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => EmployeeAttendenceScreen(),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          EmployeePersonalInfo(uid: widget.uid),
+                    ),
+                  );
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.leave_bags_at_home),
-                title: const Text(
-                  'Leaves',
-                  style: TextStyle(fontSize: 20),
-                ),
+                leading: const Icon(Icons.done),
+                title: const Text('Attendance'),
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => EmployeeLeaveScreen(),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          EmployeeAttendanceReport(uid: widget.uid),
+                    ),
+                  );
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.logout),
-                title: const Text(
-                  'Leave Request',
-                  style: TextStyle(fontSize: 20),
-                ),
+                leading: const Icon(Icons.assignment),
+                title: const Text('Leaves'),
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => EmployeeLeaveReqScreen(),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          EmployeeLeaveApplication(uid: widget.uid),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.request_quote),
+                title: const Text('Leave Request'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EmployeeApplyLeave(uid: widget.uid),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.group),
+                title: const Text('Committee'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          EmployeeMainCommittePage(uid: widget.uid),
+                    ),
+                  );
                 },
               ),
               ListTile(

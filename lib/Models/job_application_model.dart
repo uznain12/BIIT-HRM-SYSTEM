@@ -207,7 +207,7 @@ class Education {
         board: json["Board"],
         startdate: json["Startdate"] ?? '',
         enddate: json["Enddate"] ?? '',
-        hasaddededucation: json["hasaddededucation"],
+        hasaddededucation: json["hasaddededucation"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {

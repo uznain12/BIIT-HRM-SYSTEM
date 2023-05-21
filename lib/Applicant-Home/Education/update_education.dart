@@ -15,11 +15,18 @@ class EducationUpdate extends StatefulWidget {
 }
 
 class _EducationUpdateState extends State<EducationUpdate> {
-  final TextEditingController _degreeController = TextEditingController();
+  final TextEditingController _majorController = TextEditingController();
   final TextEditingController _instituteController = TextEditingController();
   final TextEditingController _boardController = TextEditingController();
   final TextEditingController _startController = TextEditingController();
   final TextEditingController _endController = TextEditingController();
+  String? _selectedOption;
+  List<String> _options = [
+    'Matric',
+    'Inter',
+    'Bachelor',
+    'Master',
+  ]; // op
 
   @override
   void initState() {
@@ -39,12 +46,47 @@ class _EducationUpdateState extends State<EducationUpdate> {
           padding: EdgeInsets.all(16),
           child: Column(
             children: [
+              InputDecorator(
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.school),
+                  prefixIconConstraints: BoxConstraints(
+                    minWidth: 54,
+                    minHeight: 54,
+                  ),
+                  border: OutlineInputBorder(),
+                ),
+                child: DropdownButtonFormField<String>(
+                  hint: const Text(
+                    "Degree",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  isExpanded: true,
+                  value: _selectedOption,
+                  items: _options.map((String option) {
+                    return DropdownMenuItem(
+                      value: option,
+                      child: Text(option),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedOption = newValue;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select a degree';
+                    }
+                    return null;
+                  },
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  controller: _degreeController,
+                  controller: _majorController,
                   decoration: const InputDecoration(
-                    labelText: 'Degree',
+                    labelText: 'Major',
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -137,18 +179,47 @@ class _EducationUpdateState extends State<EducationUpdate> {
     );
   }
 
+  // Future<void> fetchEducation() async {
+  //   final response = await http.get(Uri.parse(
+  //       'http://$ip/HrmPractise02/api/Education/EducationGet?uid=${widget.uid}&eduID=${widget.eduID}'));
+  //   if (response.statusCode == 200) {
+  //     final List<dynamic> data = jsonDecode(response.body);
+  //     if (data.isNotEmpty) {
+  //       final education = EducationGetModel.fromJson(data[0]);
+  //       setState(() {
+  //         _selectedOption = education.degree;
+  //       });
+  //       _majorController.text = education.major;
+  //       _instituteController.text = education.institute;
+  //       _boardController.text = education.board;
+  //       _startController.text = education.startdate.toString();
+  //       _endController.text = education.enddate.toString();
+  //     }
+  //   } else {
+  //     throw Exception('Failed to load education');
+  //   }
+  // }
   Future<void> fetchEducation() async {
     final response = await http.get(Uri.parse(
         'http://$ip/HrmPractise02/api/Education/EducationGet?uid=${widget.uid}&eduID=${widget.eduID}'));
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
       if (data.isNotEmpty) {
-        final education = EducationGetModel.fromJson(data[0]);
-        _degreeController.text = education.degree;
-        _instituteController.text = education.institute;
-        _boardController.text = education.board;
-        _startController.text = education.startdate.toString();
-        _endController.text = education.enddate.toString();
+        for (var item in data) {
+          final education = EducationGetModel.fromJson(item);
+          if (education.eduId == widget.eduID) {
+            // assuming 'id' is the field that contains the education id
+            setState(() {
+              _selectedOption = education.degree;
+            });
+            _majorController.text = education.major;
+            _instituteController.text = education.institute;
+            _boardController.text = education.board;
+            _startController.text = education.startdate.toString();
+            _endController.text = education.enddate.toString();
+            break; // stop the loop as we found the record we were looking for
+          }
+        }
       }
     } else {
       throw Exception('Failed to load education');
@@ -164,8 +235,9 @@ class _EducationUpdateState extends State<EducationUpdate> {
       "Board": _boardController.text,
       "Startdate": _startController.text,
       "Enddate": _endController.text,
-      "Degree": _degreeController.text,
-      "hasaddededucation": "true", // Change this to the appropriate value
+      "Degree": _selectedOption,
+      "major": _majorController.text,
+      // Change this to the appropriate value
     };
     var boddy = jsonEncode(data);
     var urlParse = Uri.parse(url);

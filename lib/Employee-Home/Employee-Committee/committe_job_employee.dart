@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_practise_project/Employee-Home/Employee-Committee/committe_job_applicant_detail.dart';
 import 'package:fyp_practise_project/HR-Home/New-Committe/all_head.dart';
 
 import 'package:fyp_practise_project/HR-Home/New-Committe/new_create_committe.dart';
-import 'package:fyp_practise_project/Models/committe_model.dart';
+
+import 'package:fyp_practise_project/Models/committee_with_member_for_employ_Model.dart';
 
 import 'package:fyp_practise_project/uri.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class MainCommittePage extends StatefulWidget {
+class CommitteJobforEmployeeMarking extends StatefulWidget {
   int? uid;
-  MainCommittePage({
-    super.key,
-    required this.uid,
-  });
+  int? commid;
+  int? memberid;
+  CommitteJobforEmployeeMarking(
+      {super.key,
+      required this.uid,
+      required this.commid,
+      required this.memberid});
 
   @override
-  State<MainCommittePage> createState() => _MainCommittePageState();
+  State<CommitteJobforEmployeeMarking> createState() =>
+      _CommitteJobforEmployeeMarkingState();
 }
 
-class _MainCommittePageState extends State<MainCommittePage> {
-  List<CommitteModel> committelist = [];
+class _CommitteJobforEmployeeMarkingState
+    extends State<CommitteJobforEmployeeMarking> {
+  List<Foremployeecommitteewithmember> employeecommittelist = [];
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +44,15 @@ class _MainCommittePageState extends State<MainCommittePage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
-                        itemCount: committelist.length,
+                        itemCount: employeecommittelist
+                            .expand(
+                                (c) => c.committee!.jobApplicationCommittees!)
+                            .length,
                         itemBuilder: (context, index) {
+                          var jobapplication = employeecommittelist
+                              .expand(
+                                  (c) => c.committee!.jobApplicationCommittees!)
+                              .toList()[index];
                           return Padding(
                             padding: EdgeInsets.only(
                                 top: MediaQuery.of(context).size.height * 0.02,
@@ -50,14 +64,15 @@ class _MainCommittePageState extends State<MainCommittePage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => NewCreateCommitte(
-                                              uid: widget.uid,
-                                              comid: committelist[index]
-                                                  .committeeId,
-                                            )));
+                                        builder: (context) =>
+                                            ApplicantJobDetail(
+                                                uid: widget.uid,
+                                                applicationid: jobapplication
+                                                    .jobApplicationId,
+                                                memberid: widget.memberid)));
                               },
                               child: Container(
-                                  height: 80,
+                                  height: 100,
                                   decoration: BoxDecoration(
                                       color: Colors.grey.shade300,
                                       border: Border.all(
@@ -83,7 +98,7 @@ class _MainCommittePageState extends State<MainCommittePage> {
                                                       .style,
                                                   children: [
                                                     const TextSpan(
-                                                      text: "Committee :  ",
+                                                      text: "Job Title :  ",
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold,
@@ -91,7 +106,34 @@ class _MainCommittePageState extends State<MainCommittePage> {
                                                     ),
                                                     TextSpan(
                                                       text:
-                                                          "${committelist[index].committeeTitle}",
+                                                          "${jobapplication.jobApplication!.job!.title}",
+                                                      style: const TextStyle(
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                          fontSize: 18),
+                                                    ),
+                                                  ]),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 18, left: 5),
+                                            child: RichText(
+                                              text: TextSpan(
+                                                  style: DefaultTextStyle.of(
+                                                          context)
+                                                      .style,
+                                                  children: [
+                                                    const TextSpan(
+                                                      text: "Applicant :  ",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 20),
+                                                    ),
+                                                    TextSpan(
+                                                      text:
+                                                          "${jobapplication.jobApplication!.user!.fname} ${jobapplication.jobApplication!.user!.lname}",
                                                       style: const TextStyle(
                                                           fontStyle:
                                                               FontStyle.italic,
@@ -102,52 +144,6 @@ class _MainCommittePageState extends State<MainCommittePage> {
                                           ),
                                         ],
                                       ),
-                                      Spacer(),
-                                      Column(
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(top: 8),
-                                            child: IconButton(
-                                              onPressed: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      AlertDialog(
-                                                    title: const Text(
-                                                        'Delete Committee?'),
-                                                    content: const Text(
-                                                        'Are you sure you want to delete this Committee?'),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        child: Text('Cancel'),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                          _deletecommitte(
-                                                              committelist[
-                                                                      index]
-                                                                  .committeeId!);
-                                                        },
-                                                        child: Text('Delete'),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              },
-                                              icon: Icon(
-                                                Icons.delete,
-                                                size: 30,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      )
                                     ],
                                   )),
                             ),
@@ -179,41 +175,23 @@ class _MainCommittePageState extends State<MainCommittePage> {
         ));
   }
 
-  Future<List<CommitteModel>> getcommitte() async {
+  Future<List<Foremployeecommitteewithmember>> getcommitte() async {
     // Get the current user's UID.
-    final response = await http.get(
-        Uri.parse('http://$ip/HrmPractise02/api/Committee/AllCommitteeGet'));
+    final response = await http.get(Uri.parse(
+        'http://$ip/HrmPractise02/api/Committeemembers/CommitteeWithMemberGet?uid=${widget.uid}&CommitteeId=${widget.commid}'));
     var Data = jsonDecode(response.body.toString());
 
     if (response.statusCode == 200) {
-      committelist.clear();
+      employeecommittelist.clear();
       for (Map<String, dynamic> index in Data) {
-        committelist.add(CommitteModel.fromJson(index));
+        employeecommittelist
+            .add(Foremployeecommitteewithmember.fromJson(index));
       }
     } else {
       print(
           'Error occurred: ${response.statusCode} - ${response.body}'); // print the error
 
     }
-    return committelist;
-  }
-
-  Future<void> _deletecommitte(int Id) async {
-    final response = await http.delete(
-      Uri.parse(
-          'http://$ip/HrmPractise02/api/Committee/DeleteCommitte?CommitteeId=$Id'),
-    );
-
-    if (response.statusCode == 200) {
-      // Refresh job list
-      setState(() {
-        committelist.removeWhere((job) => job.committeeId == Id);
-      });
-    } else {
-      // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to delete job')),
-      );
-    }
+    return employeecommittelist;
   }
 }

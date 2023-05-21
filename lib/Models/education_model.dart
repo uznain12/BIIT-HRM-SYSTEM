@@ -20,11 +20,13 @@ class EducationGetModel {
     required this.startdate,
     required this.enddate,
     required this.hasaddededucation,
+    required this.major,
   });
 
   int eduId;
   int uid;
   String degree;
+  String major;
   String institute;
   String board;
   String startdate;
@@ -36,17 +38,19 @@ class EducationGetModel {
         eduId: json["EduID"],
         uid: json["Uid"] ?? 0,
         degree: json["Degree"],
+        major: json["major"] ?? '',
         institute: json["Institute"],
         board: json["Board"],
         startdate: json["Startdate"] ?? '',
         enddate: json["Enddate"] ?? '',
-        hasaddededucation: json["hasaddededucation"],
+        hasaddededucation: json["hasaddededucation"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
         "EduID": eduId,
         "Uid": uid,
         "Degree": degree,
+        "major": major,
         "Institute": institute,
         "Board": board,
         "Startdate": startdate,

@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:fyp_practise_project/Committe%20Member%20Home/resumes.dart';
 import 'package:fyp_practise_project/Employee-Home/Employee-Leave/apply_for_leave.dart';
-import 'package:fyp_practise_project/Employee-Home/attendance.dart';
+import 'package:fyp_practise_project/Employee-Home/Employee-Attendance/attendance.dart';
 import 'package:fyp_practise_project/Employee-Home/Employee-Leave/employee_all_leave_applications.dart';
 import 'package:fyp_practise_project/HR-Home/Job/job_applications.dart';
 import 'package:fyp_practise_project/HR-Home/Job/job_post.dart';

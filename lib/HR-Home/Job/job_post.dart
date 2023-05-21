@@ -21,19 +21,22 @@ List<String> _qualificationoption = [
   'Inter',
   'Bachelor',
   'Master',
+  'PHD',
 ]; // op
 
 String? _title;
 List<String> _titleoptions = [
-  'Teacher',
-  'Assistant Teacher',
-  'Guard',
-  'Lab Attendant',
   'Professor',
+  'Assistant Professor',
+  'Lectruer',
+  'Junior Lecturer',
+  'Lab Attendant',
+  'Guard',
 ]; //
 
 TextEditingController _salaryController = TextEditingController();
 TextEditingController _experienceController = TextEditingController();
+TextEditingController _vacancieController = TextEditingController();
 TextEditingController _lastDateofapplyController = TextEditingController();
 TextEditingController _locationController = TextEditingController();
 TextEditingController _descriptionController = TextEditingController();
@@ -50,9 +53,9 @@ class _JobPostState extends State<JobPost> {
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.07,
-                left: MediaQuery.of(context).size.height * 0.01,
-                right: MediaQuery.of(context).size.height * 0.01),
+                top: MediaQuery.of(context).size.height * 0.04,
+                left: MediaQuery.of(context).size.height * 0.02,
+                right: MediaQuery.of(context).size.height * 0.02),
             child: Container(
               child: Form(
                 key: _formKey,
@@ -136,7 +139,7 @@ class _JobPostState extends State<JobPost> {
                   TextFormField(
                     controller: _salaryController,
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.school_sharp),
+                      prefixIcon: Icon(Icons.attach_money),
                       prefixIconConstraints: BoxConstraints(
                         minWidth: 54,
                         minHeight: 54,
@@ -157,7 +160,7 @@ class _JobPostState extends State<JobPost> {
                   TextFormField(
                     controller: _experienceController,
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.school),
+                      prefixIcon: Icon(Icons.star),
                       prefixIconConstraints: BoxConstraints(
                         minWidth: 54,
                         minHeight: 54,
@@ -176,6 +179,27 @@ class _JobPostState extends State<JobPost> {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: _vacancieController,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.people),
+                      prefixIconConstraints: BoxConstraints(
+                        minWidth: 54,
+                        minHeight: 54,
+                      ),
+                      labelText: 'Number Of Vacancies',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Required Number Vacancies';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
                     controller: _lastDateofapplyController,
                     onTap: () async {
                       FocusScope.of(context).requestFocus(FocusNode());
@@ -183,7 +207,7 @@ class _JobPostState extends State<JobPost> {
                           context: context,
                           initialDate: DateTime.now(),
                           firstDate: DateTime(1900),
-                          lastDate: DateTime.now());
+                          lastDate: DateTime(2030));
                       if (picked != null) {
                         setState(() {
                           _lastDateofapplyController.text =
@@ -211,7 +235,7 @@ class _JobPostState extends State<JobPost> {
                   TextFormField(
                     controller: _locationController,
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.school_sharp),
+                      prefixIcon: Icon(Icons.location_on),
                       prefixIconConstraints: BoxConstraints(
                         minWidth: 54,
                         minHeight: 54,
@@ -230,7 +254,7 @@ class _JobPostState extends State<JobPost> {
                   TextFormField(
                     controller: _descriptionController,
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.school_sharp),
+                      prefixIcon: Icon(Icons.description),
                       prefixIconConstraints: BoxConstraints(
                         minWidth: 54,
                         minHeight: 54,
@@ -267,6 +291,7 @@ class _JobPostState extends State<JobPost> {
       "qualification": _selectedqualification,
       "Salary": _salaryController.text,
       "experience": _experienceController.text,
+      "noofvacancie": _vacancieController.text,
       "LastDateOfApply": _lastDateofapplyController.text,
       "Location": _locationController.text,
       "Description": _descriptionController.text,

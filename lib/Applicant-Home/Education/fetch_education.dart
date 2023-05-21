@@ -46,91 +46,203 @@ class _FetchEducationState extends State<FetchEducation> {
                             left: MediaQuery.of(context).size.width * 0.02,
                             right: MediaQuery.of(context).size.width * 0.02),
                         child: Container(
-                            height: 100,
+                            height: 250,
                             decoration: BoxDecoration(
                                 color: Colors.grey.shade300,
                                 border:
                                     Border.all(width: 2, color: Colors.black)),
                             child: Row(
                               children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(
-                                      height: 4,
-                                    ),
-                                    Text(
-                                      "Title: ${educationlist[index].degree}",
-                                      style: const TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w900),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      "Salary:${educationlist[index].startdate.toString()}",
-                                      style: const TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w900),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      "Location:   ${educationlist[index].institute}",
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w900),
-                                    ),
-                                  ],
-                                ),
-                                Spacer(),
-                                Column(
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EducationUpdate(
-                                                        eduID:
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      RichText(
+                                        text: TextSpan(
+                                            style: DefaultTextStyle.of(context)
+                                                .style,
+                                            children: [
+                                              const TextSpan(
+                                                text: "Degree:            ",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16),
+                                              ),
+                                              TextSpan(
+                                                text:
+                                                    "${educationlist[index].degree}",
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ]),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      RichText(
+                                        text: TextSpan(
+                                            style: DefaultTextStyle.of(context)
+                                                .style,
+                                            children: [
+                                              const TextSpan(
+                                                text: "Major:              ",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16),
+                                              ),
+                                              TextSpan(
+                                                text:
+                                                    "${educationlist[index].major}",
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ]),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Center(
+                                        child: RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text: "Institue:           ",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16),
+                                                ),
+                                                TextSpan(
+                                                  text:
+                                                      "${educationlist[index].institute}",
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      RichText(
+                                        text: TextSpan(
+                                            style: DefaultTextStyle.of(context)
+                                                .style,
+                                            children: [
+                                              const TextSpan(
+                                                text: "Board:              ",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16),
+                                              ),
+                                              TextSpan(
+                                                text:
+                                                    "${educationlist[index].board}",
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ]),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      RichText(
+                                        text: TextSpan(
+                                            style: DefaultTextStyle.of(context)
+                                                .style,
+                                            children: [
+                                              const TextSpan(
+                                                text: "Start Date:       ",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16),
+                                              ),
+                                              TextSpan(
+                                                text:
+                                                    "${educationlist[index].startdate}",
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ]),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      RichText(
+                                        text: TextSpan(
+                                            style: DefaultTextStyle.of(context)
+                                                .style,
+                                            children: [
+                                              const TextSpan(
+                                                text: "Passing Year:  ",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16),
+                                              ),
+                                              TextSpan(
+                                                text:
+                                                    "${educationlist[index].enddate}",
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ]),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Row(
+                                        children: [
+                                          IconButton(
+                                              onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            EducationUpdate(
+                                                              eduID:
+                                                                  educationlist[
+                                                                          index]
+                                                                      .eduId,
+                                                              uid: widget.uid,
+                                                            )));
+                                              },
+                                              icon: Icon(Icons.edit)),
+                                          IconButton(
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    AlertDialog(
+                                                  title:
+                                                      const Text('Delete job?'),
+                                                  content: const Text(
+                                                      'Are you sure you want to delete this job?'),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text('Cancel'),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                        _deleteJob(
                                                             educationlist[index]
-                                                                .eduId,
-                                                        uid: widget.uid,
-                                                      )));
-                                        },
-                                        icon: Icon(Icons.edit)),
-                                    IconButton(
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) => AlertDialog(
-                                            title: const Text('Delete job?'),
-                                            content: const Text(
-                                                'Are you sure you want to delete this job?'),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Text('Cancel'),
-                                              ),
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                  _deleteJob(
-                                                      educationlist[index]
-                                                          .eduId);
-                                                },
-                                                child: Text('Delete'),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                      icon: Icon(Icons.delete),
-                                    ),
-                                  ],
-                                )
+                                                                .eduId);
+                                                      },
+                                                      child: Text('Delete'),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                            icon: Icon(Icons.delete),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ],
                             )),
                       );
