@@ -3,8 +3,7 @@ import 'package:fyp_practise_project/Employee-Home/Employee-Committee/committe_j
 import 'package:fyp_practise_project/HR-Home/New-Committe/all_head.dart';
 
 import 'package:fyp_practise_project/HR-Home/New-Committe/new_create_committe.dart';
-
-import 'package:fyp_practise_project/Models/committee_with_member_for_employ_Model.dart';
+import 'package:fyp_practise_project/Models/committee_with_member_for_employ_Model2.dart';
 
 import 'package:fyp_practise_project/uri.dart';
 
@@ -30,7 +29,7 @@ class _EmployeeMainCommittePageState extends State<EmployeeMainCommittePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Committe Home"),
+          title: Text("Your Committees"),
           centerTitle: true,
         ),
         body: Stack(

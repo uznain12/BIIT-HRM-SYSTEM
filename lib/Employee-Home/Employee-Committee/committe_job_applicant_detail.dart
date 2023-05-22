@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:math';
 import 'dart:convert';
 import 'dart:io';
@@ -27,7 +28,22 @@ class ApplicantJobDetail extends StatefulWidget {
 
 class _ApplicantJobDetailState extends State<ApplicantJobDetail> {
   List<JobApplicationModel> Jobapplicationdetaillist = [];
-  TextEditingController _remarksController = TextEditingController();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  String? _selectedOption;
+  final List<String> _options = [
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+  ]; // op/ op
   late Widget _widget;
   @override
   void initState() {
@@ -72,540 +88,596 @@ class _ApplicantJobDetailState extends State<ApplicantJobDetail> {
                                 left: MediaQuery.of(context).size.width * 0.02,
                                 right: MediaQuery.of(context).size.width * 0.02,
                               ),
-                              child: Container(
-                                height: 1000,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade300,
-                                  border: Border.all(
-                                    width: 2,
-                                    color: Colors.black,
+                              child: Form(
+                                key: _formKey,
+                                child: Container(
+                                  height: 1000,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade300,
+                                    border: Border.all(
+                                      width: 2,
+                                      color: Colors.black,
+                                    ),
                                   ),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                    left: MediaQuery.of(context).size.width *
-                                        0.02,
-                                    top: MediaQuery.of(context).size.height *
-                                        0.02,
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(
-                                        height: 4,
-                                      ),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text:
-                                                    "Job Title :                 ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text:
-                                                    "${Jobapplicationdetaillist[index].job.title}",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      const Center(
-                                          child: Text(
-                                        "Applicatn Persoanl Information",
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.blue),
-                                      )),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: "Name :            ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text:
-                                                    "${Jobapplicationdetaillist[index].user!.fname} "
-                                                    " ${Jobapplicationdetaillist[index].user!.lname}",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: "Email:              ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text:
-                                                    "${Jobapplicationdetaillist[index].user!.email}",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: "Gender:           ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text:
-                                                    "${Jobapplicationdetaillist[index].user!.gender}",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: "Conatct:          ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text:
-                                                    "${Jobapplicationdetaillist[index].user!.mobile}",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: "DOB:                ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text:
-                                                    "${Jobapplicationdetaillist[index].user!.dob}",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: "Address:         ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text:
-                                                    "${Jobapplicationdetaillist[index].user!.address}",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      const Center(
-                                          child: Text(
-                                        "Applicatn Educational Information",
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.blue),
-                                      )),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: "Degree:         ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: Jobapplicationdetaillist[
-                                                            index]
-                                                        .user!
-                                                        .educations
-                                                        .isNotEmpty
-                                                    ? "${Jobapplicationdetaillist[index].user!.educations[0].degree}"
-                                                    : "Not provided",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: "Institute:         ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: Jobapplicationdetaillist[
-                                                            index]
-                                                        .user!
-                                                        .educations
-                                                        .isNotEmpty
-                                                    ? "${Jobapplicationdetaillist[index].user!.educations[0].institute}"
-                                                    : "Not provided",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: "Board:         ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: Jobapplicationdetaillist[
-                                                            index]
-                                                        .user!
-                                                        .educations
-                                                        .isNotEmpty
-                                                    ? "${Jobapplicationdetaillist[index].user!.educations[0].board}"
-                                                    : "Not provided",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: "start date:         ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: Jobapplicationdetaillist[
-                                                            index]
-                                                        .user!
-                                                        .educations
-                                                        .isNotEmpty
-                                                    ? "${Jobapplicationdetaillist[index].user!.educations[0].startdate}"
-                                                    : "Not provided",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: "End Date:         ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: Jobapplicationdetaillist[
-                                                            index]
-                                                        .user!
-                                                        .educations
-                                                        .isNotEmpty
-                                                    ? "${Jobapplicationdetaillist[index].user!.educations[0].enddate}"
-                                                    : "Not provided",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      const Center(
-                                          child: Text(
-                                        "Applicatn Previous Experience",
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.blue),
-                                      )),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: "Company:         ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: Jobapplicationdetaillist[
-                                                            index]
-                                                        .user!
-                                                        .experiences
-                                                        .isNotEmpty
-                                                    ? "${Jobapplicationdetaillist[index].user!.experiences[0].company}"
-                                                    : "Not provided",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: "Title:         ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: Jobapplicationdetaillist[
-                                                            index]
-                                                        .user!
-                                                        .experiences
-                                                        .isNotEmpty
-                                                    ? "${Jobapplicationdetaillist[index].user!.experiences[0].title}"
-                                                    : "Not provided",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: "Start Date:         ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: Jobapplicationdetaillist[
-                                                            index]
-                                                        .user!
-                                                        .experiences
-                                                        .isNotEmpty
-                                                    ? "${Jobapplicationdetaillist[index].user!.experiences[0].startdate}"
-                                                    : "Not provided",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: " Till Now:         ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: Jobapplicationdetaillist[
-                                                            index]
-                                                        .user!
-                                                        .experiences
-                                                        .isNotEmpty
-                                                    ? "${Jobapplicationdetaillist[index].user!.experiences[0].currentwork}"
-                                                    : "Not provided",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: "End Date:         ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: Jobapplicationdetaillist[
-                                                            index]
-                                                        .user!
-                                                        .experiences
-                                                        .isNotEmpty
-                                                    ? "${Jobapplicationdetaillist[index].user!.experiences[0].enddate}"
-                                                    : "Not provided",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: DefaultTextStyle.of(context)
-                                                .style,
-                                            children: [
-                                              const TextSpan(
-                                                text: "Other Skills:         ",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: Jobapplicationdetaillist[
-                                                            index]
-                                                        .user!
-                                                        .experiences
-                                                        .isNotEmpty
-                                                    ? "${Jobapplicationdetaillist[index].user!.experiences[0].otherskill}"
-                                                    : "Not provided",
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      const SizedBox(
-                                        height: 6,
-                                      ),
-                                      TextFormField(
-                                        controller: _remarksController,
-                                        decoration: const InputDecoration(
-                                          prefixIcon: Icon(Icons.school_sharp),
-                                          prefixIconConstraints: BoxConstraints(
-                                            minWidth: 54,
-                                            minHeight: 54,
-                                          ),
-                                          labelText: 'Remarks',
-                                          border: OutlineInputBorder(),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                      left: MediaQuery.of(context).size.width *
+                                          0.02,
+                                      top: MediaQuery.of(context).size.height *
+                                          0.02,
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(
+                                          height: 4,
                                         ),
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'Please enter Your Remarks';
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.2,
-                                            top: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.2),
-                                        child: SizedBox(
-                                          width: 200,
-                                          height: 50,
-                                          child: ElevatedButton(
-                                              onPressed: () {
-                                                Addremarks();
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text:
+                                                      "Job Title :                 ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text:
+                                                      "${Jobapplicationdetaillist[index].job.title}",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        const Center(
+                                            child: Text(
+                                          "Applicatn Persoanl Information",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blue),
+                                        )),
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text: "Name :            ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text:
+                                                      "${Jobapplicationdetaillist[index].user!.fname} "
+                                                      " ${Jobapplicationdetaillist[index].user!.lname}",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text: "Email:              ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text:
+                                                      "${Jobapplicationdetaillist[index].user!.email}",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text: "Gender:           ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text:
+                                                      "${Jobapplicationdetaillist[index].user!.gender}",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text: "Conatct:          ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text:
+                                                      "${Jobapplicationdetaillist[index].user!.mobile}",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text: "DOB:                ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text:
+                                                      "${Jobapplicationdetaillist[index].user!.dob}",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text: "Address:         ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text:
+                                                      "${Jobapplicationdetaillist[index].user!.address}",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        const Center(
+                                            child: Text(
+                                          "Applicatn Educational Information",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blue),
+                                        )),
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text: "Degree:         ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: Jobapplicationdetaillist[
+                                                              index]
+                                                          .user!
+                                                          .educations
+                                                          .isNotEmpty
+                                                      ? "${Jobapplicationdetaillist[index].user!.educations[0].degree}"
+                                                      : "Not provided",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text: "Institute:         ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: Jobapplicationdetaillist[
+                                                              index]
+                                                          .user!
+                                                          .educations
+                                                          .isNotEmpty
+                                                      ? "${Jobapplicationdetaillist[index].user!.educations[0].institute}"
+                                                      : "Not provided",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text: "Board:         ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: Jobapplicationdetaillist[
+                                                              index]
+                                                          .user!
+                                                          .educations
+                                                          .isNotEmpty
+                                                      ? "${Jobapplicationdetaillist[index].user!.educations[0].board}"
+                                                      : "Not provided",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text: "start date:         ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: Jobapplicationdetaillist[
+                                                              index]
+                                                          .user!
+                                                          .educations
+                                                          .isNotEmpty
+                                                      ? "${Jobapplicationdetaillist[index].user!.educations[0].startdate}"
+                                                      : "Not provided",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text: "End Date:         ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: Jobapplicationdetaillist[
+                                                              index]
+                                                          .user!
+                                                          .educations
+                                                          .isNotEmpty
+                                                      ? "${Jobapplicationdetaillist[index].user!.educations[0].enddate}"
+                                                      : "Not provided",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        const Center(
+                                            child: Text(
+                                          "Applicatn Previous Experience",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blue),
+                                        )),
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text: "Company:         ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: Jobapplicationdetaillist[
+                                                              index]
+                                                          .user!
+                                                          .experiences
+                                                          .isNotEmpty
+                                                      ? "${Jobapplicationdetaillist[index].user!.experiences[0].company}"
+                                                      : "Not provided",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text: "Title:         ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: Jobapplicationdetaillist[
+                                                              index]
+                                                          .user!
+                                                          .experiences
+                                                          .isNotEmpty
+                                                      ? "${Jobapplicationdetaillist[index].user!.experiences[0].title}"
+                                                      : "Not provided",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text: "Start Date:         ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: Jobapplicationdetaillist[
+                                                              index]
+                                                          .user!
+                                                          .experiences
+                                                          .isNotEmpty
+                                                      ? "${Jobapplicationdetaillist[index].user!.experiences[0].startdate}"
+                                                      : "Not provided",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text: " Till Now:         ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: Jobapplicationdetaillist[
+                                                              index]
+                                                          .user!
+                                                          .experiences
+                                                          .isNotEmpty
+                                                      ? "${Jobapplicationdetaillist[index].user!.experiences[0].currentwork}"
+                                                      : "Not provided",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text: "End Date:         ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: Jobapplicationdetaillist[
+                                                              index]
+                                                          .user!
+                                                          .experiences
+                                                          .isNotEmpty
+                                                      ? "${Jobapplicationdetaillist[index].user!.experiences[0].enddate}"
+                                                      : "Not provided",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        RichText(
+                                          text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                const TextSpan(
+                                                  text:
+                                                      "Other Skills:         ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: Jobapplicationdetaillist[
+                                                              index]
+                                                          .user!
+                                                          .experiences
+                                                          .isNotEmpty
+                                                      ? "${Jobapplicationdetaillist[index].user!.experiences[0].otherskill}"
+                                                      : "Not provided",
+                                                  style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 20),
+                                          child: InputDecorator(
+                                            decoration: const InputDecoration(
+                                              prefixIcon: Icon(
+                                                Icons.comment,
+                                                color: Colors.blue,
+                                              ),
+                                              prefixIconConstraints:
+                                                  BoxConstraints(
+                                                minWidth: 54,
+                                                minHeight: 54,
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.red),
+                                              ),
+                                            ),
+                                            child:
+                                                DropdownButtonFormField<String>(
+                                              hint: const Text(
+                                                "Your Remarks",
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.red),
+                                              ),
+                                              isExpanded: true,
+                                              value: _selectedOption,
+                                              items:
+                                                  _options.map((String option) {
+                                                return DropdownMenuItem(
+                                                  value: option,
+                                                  child: Text(option),
+                                                );
+                                              }).toList(),
+                                              onChanged: (newValue) {
+                                                setState(() {
+                                                  _selectedOption = newValue;
+                                                });
                                               },
-                                              child: const Text(
-                                                "Submit",
-                                                style: TextStyle(
-                                                    fontFamily:
-                                                        'RobotoSlab-Black',
-                                                    fontSize: 18),
-                                              )),
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.isEmpty) {
+                                                  return 'Please Give Your Remarks';
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.2,
+                                              top: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.2),
+                                          child: SizedBox(
+                                            width: 200,
+                                            height: 50,
+                                            child: ElevatedButton(
+                                                onPressed: () {
+                                                  if (_formKey.currentState!
+                                                      .validate()) {
+                                                    Addremarks();
+                                                  }
+                                                },
+                                                child: const Text(
+                                                  "Submit",
+                                                  style: TextStyle(
+                                                      fontFamily:
+                                                          'RobotoSlab-Black',
+                                                      fontSize: 18),
+                                                )),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -664,7 +736,7 @@ class _ApplicantJobDetailState extends State<ApplicantJobDetail> {
     var data = {
       "CommitteeMemberId": widget.memberid,
       "JobApplicationID": widget.applicationid,
-      "Remarks": _remarksController.text,
+      "Remarks": _selectedOption,
       // Change this to the appropriate value
     };
     var boddy = jsonEncode(data);

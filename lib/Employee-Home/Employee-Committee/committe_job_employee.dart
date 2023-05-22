@@ -15,11 +15,13 @@ class CommitteJobforEmployeeMarking extends StatefulWidget {
   int? uid;
   int? commid;
   int? memberid;
-  CommitteJobforEmployeeMarking(
-      {super.key,
-      required this.uid,
-      required this.commid,
-      required this.memberid});
+
+  CommitteJobforEmployeeMarking({
+    super.key,
+    required this.uid,
+    required this.commid,
+    required this.memberid,
+  });
 
   @override
   State<CommitteJobforEmployeeMarking> createState() =>
@@ -34,7 +36,7 @@ class _CommitteJobforEmployeeMarkingState
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Committe Home"),
+          title: Text("Jobs For Remarks"),
           centerTitle: true,
         ),
         body: Stack(
@@ -153,24 +155,6 @@ class _CommitteJobforEmployeeMarkingState
                     return Center(child: CircularProgressIndicator());
                   }
                 }),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.72,
-                  left: MediaQuery.of(context).size.width * 0.8),
-              child: IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AllHeadsForCommiitte(
-                                  uid: widget.uid,
-                                )));
-                  },
-                  icon: const Icon(
-                    Icons.add,
-                    size: 60,
-                  )),
-            ),
           ],
         ));
   }
@@ -184,8 +168,13 @@ class _CommitteJobforEmployeeMarkingState
     if (response.statusCode == 200) {
       employeecommittelist.clear();
       for (Map<String, dynamic> index in Data) {
-        employeecommittelist
-            .add(Foremployeecommitteewithmember.fromJson(index));
+        var committeeMember = Foremployeecommitteewithmember.fromJson(index);
+        committeeMember.committee!.jobApplicationCommittees = committeeMember
+            .committee!.jobApplicationCommittees!
+            .where((jobApplicationCommittee) {
+          return jobApplicationCommittee.committeeId == widget.commid;
+        }).toList();
+        employeecommittelist.add(committeeMember);
       }
     } else {
       print(
